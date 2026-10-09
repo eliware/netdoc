@@ -1,21 +1,109 @@
 {
-  "name": "netdoc",
-  "version": "1.0.0",
-  "description": "NetDoc models systems, networks, storage, and virtualization in YAML.",
+  "name": "@eliware/netdoc",
+  "version": "11.0.0",
+  "description": "Git-versioned model for documenting network infrastructure, systems, services, and their relationships.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eliware/netdoc.git"
   },
-  "keywords": [],
-  "type": "commonjs",
+  "keywords": [
+    "netdoc",
+    "network",
+    "infrastructure",
+    "topology",
+    "documentation",
+    "yaml",
+    "git"
+  ],
+  "type": "module",
   "bugs": {
     "url": "https://github.com/eliware/netdoc/issues"
   },
   "homepage": "https://github.com/eliware/netdoc#readme",
   "dependencies": {
+    "@eliware/common": "^2.0.0",
     "@eliware/snowflake": "^2.0.0",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@eliware/test": "^11.0.0"
+  },
+  "eliware": {
+    "id": "E-1130",
+    "apply": [
+      "general",
+      "application",
+      "cli",
+      "npm-published"
+    ]
+  },
+  "author": "Eliware <eliware@eliware.org>",
+  "license": "MIT",
+  "private": false,
+  "engines": {
+    "node": "26"
+  },
+  "main": "bin/netdoc.mjs",
+  "bin": {
+    "netdoc": "bin/netdoc.mjs"
+  },
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "scripts": {
+    "test": "eliware-test",
+    "lint": "eliware-test --lint",
+    "audit": "eliware-test --audit",
+    "format": "eliware-test --format",
+    "format:check": "eliware-test --format-check",
+    "pack": "eliware-test --pack"
+  },
+  "files": [
+    "src/",
+    "docs/",
+    "README.md",
+    "AGENTS.md",
+    "LICENSE",
+    "RELEASE_NOTES.md",
+    "bin/"
+  ],
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.mjs"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.mjs"
+    ],
+    "coverageReporters": [
+      "text",
+      "json-summary"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    }
+  },
+  "prettier": {
+    "printWidth": 100,
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": false,
+    "quoteProps": "as-needed",
+    "jsxSingleQuote": false,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "bracketSameLine": false,
+    "arrowParens": "always",
+    "proseWrap": "preserve",
+    "endOfLine": "lf"
   }
 }

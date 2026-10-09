@@ -1,0 +1,12 @@
+version: "11.0"
+description: Repository-specific directives for eliware/netdoc.
+directives:
+  - id: E-1130
+    dos:
+      - Provide a read-only CLI for YAML parsing and schema validation.
+      - Provide a Snowflake ID command that prints IDs without modifying repository files.
+      - Keep each object type schema in docs/schema/ and publish the schemas with the CLI package.
+      - Keep configuration records in the separate netdoc-config repository.
+    donts:
+      - Do not add CRUD commands or write validated configuration files.
+      - Do not store secrets or credentials in schemas or diagnostics.

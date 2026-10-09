@@ -1,3 +1,4 @@
+version: "11.0"
 $schema: https://json-schema.org/draft/2020-12/schema
 allOf:
   - $ref: common.schema.yaml#/$defs/object
@@ -10,7 +11,21 @@ properties:
     minItems: 1
     uniqueItems: true
     items:
-      enum: [router, switch, firewall, wireless-access-point, wireless-controller, modem, poe-injector, load-balancer, vpn-endpoint, network-overlay, cni, other]
+      enum:
+        [
+          router,
+          switch,
+          firewall,
+          wireless-access-point,
+          wireless-controller,
+          modem,
+          poe-injector,
+          load-balancer,
+          vpn-endpoint,
+          network-overlay,
+          cni,
+          other,
+        ]
   implementation:
     enum: [physical, software, distributed]
   firmware:

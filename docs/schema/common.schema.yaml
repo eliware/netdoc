@@ -1,3 +1,4 @@
+version: "11.0"
 $schema: https://json-schema.org/draft/2020-12/schema
 $comment: IDs are positive signed 64-bit Snowflake integers from 1 through 9223372036854775807. Read and write them without precision loss. Check this range and global uniqueness. Check references, reciprocal links, and address conflicts across files. Scope IP and MAC checks by network segment. Check generated IDs before output. Do not store passwords or keys.
 $defs:
@@ -7,7 +8,7 @@ $defs:
     description: Store positive signed 64-bit Snowflake IDs as YAML integers. Add an ID only when another file must reference the object.
 
   reference:
-    $ref: '#/$defs/identifier'
+    $ref: "#/$defs/identifier"
     description: A reference to another object's NetDoc ID.
 
   evidence:
@@ -29,13 +30,13 @@ $defs:
   object:
     type: object
     properties:
-      schemaVersion:
-        const: 1
+      version:
+        const: "11.0"
       kind:
         type: string
         minLength: 1
       id:
-        $ref: '#/$defs/identifier'
+        $ref: "#/$defs/identifier"
         description: Include only when another file must reference this object.
       name:
         type: string
@@ -46,12 +47,12 @@ $defs:
       evidence:
         type: array
         items:
-          $ref: '#/$defs/evidence'
+          $ref: "#/$defs/evidence"
       notes:
         type: array
         items:
           type: string
-    required: [schemaVersion, kind, name]
+    required: [version, kind, name]
 
   size:
     type: object
@@ -90,7 +91,7 @@ $defs:
     type: object
     properties:
       capacity:
-        $ref: '#/$defs/size'
+        $ref: "#/$defs/size"
       ecc:
         type: boolean
       speed:
@@ -109,7 +110,7 @@ $defs:
           type: object
           properties:
             capacity:
-              $ref: '#/$defs/size'
+              $ref: "#/$defs/size"
             count:
               type: integer
               minimum: 1
@@ -151,7 +152,7 @@ $defs:
         type: integer
         minimum: 1
       baseClock:
-        $ref: '#/$defs/frequency'
+        $ref: "#/$defs/frequency"
     additionalProperties: false
 
   gpu:
@@ -160,7 +161,7 @@ $defs:
       model:
         type: string
       memory:
-        $ref: '#/$defs/size'
+        $ref: "#/$defs/size"
     required: [model]
     additionalProperties: false
 
@@ -176,7 +177,7 @@ $defs:
       media:
         enum: [HDD, SSD, NVMe, flash, virtual, other]
       capacity:
-        $ref: '#/$defs/size'
+        $ref: "#/$defs/size"
       raid:
         type: object
         properties:
@@ -199,7 +200,7 @@ $defs:
             device:
               type: string
             size:
-              $ref: '#/$defs/size'
+              $ref: "#/$defs/size"
             filesystem:
               type: string
             mountPoint:
@@ -214,7 +215,7 @@ $defs:
       devices:
         type: array
         items:
-          $ref: '#/$defs/storageDevice'
+          $ref: "#/$defs/storageDevice"
       mounts:
         type: array
         items:
@@ -253,7 +254,7 @@ $defs:
     type: object
     properties:
       id:
-        $ref: '#/$defs/identifier'
+        $ref: "#/$defs/identifier"
         description: Include when another file must reference this interface.
       name:
         type: string
@@ -262,9 +263,9 @@ $defs:
         enum: [ethernet, wireless, virtual-ethernet, tunnel, loopback, bridge, other]
       macAddress:
         type: string
-        pattern: '^(([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}|([0-9A-Fa-f]{2}-){5}[0-9A-Fa-f]{2})$'
+        pattern: "^(([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}|([0-9A-Fa-f]{2}-){5}[0-9A-Fa-f]{2})$"
       speed:
-        $ref: '#/$defs/dataRate'
+        $ref: "#/$defs/dataRate"
       mtu:
         type: integer
         minimum: 1
@@ -273,7 +274,7 @@ $defs:
         minLength: 1
         description: The name of a parent interface in this file.
       segmentId:
-        $ref: '#/$defs/reference'
+        $ref: "#/$defs/reference"
         description: The ID of the attached network segment.
       addresses:
         type: array
@@ -297,7 +298,7 @@ $defs:
             required: [cidr]
           additionalProperties: false
       connectsTo:
-        $ref: '#/$defs/reference'
+        $ref: "#/$defs/reference"
         description: The peer interface ID. Both interfaces must reference each other.
       externalPeer:
         type: string
@@ -368,13 +369,13 @@ $defs:
       model:
         type: string
       cpu:
-        $ref: '#/$defs/cpu'
+        $ref: "#/$defs/cpu"
       memory:
-        $ref: '#/$defs/memory'
+        $ref: "#/$defs/memory"
       gpus:
         type: array
         items:
-          $ref: '#/$defs/gpu'
+          $ref: "#/$defs/gpu"
     additionalProperties: false
 
   software:
@@ -388,7 +389,7 @@ $defs:
     additionalProperties: false
 
   operatingSystem:
-    $ref: '#/$defs/software'
+    $ref: "#/$defs/software"
 
   networkConfiguration:
     type: object
@@ -438,7 +439,7 @@ $defs:
                   type: object
                   properties:
                     peerId:
-                      $ref: '#/$defs/reference'
+                      $ref: "#/$defs/reference"
                     address:
                       type: string
                     remoteAs:
@@ -520,7 +521,7 @@ $defs:
             interfaceName:
               type: string
             nodeId:
-              $ref: '#/$defs/reference'
+              $ref: "#/$defs/reference"
           required: [address, interfaceName]
           additionalProperties: false
       firewall:
@@ -591,7 +592,7 @@ $defs:
                 interfaceName:
                   type: string
                 nodeId:
-                  $ref: '#/$defs/reference'
+                  $ref: "#/$defs/reference"
               required: [type, translation]
               additionalProperties: false
         additionalProperties: false
@@ -641,7 +642,7 @@ $defs:
                         minimum: 1
                         maximum: 65535
                       deviceId:
-                        $ref: '#/$defs/reference'
+                        $ref: "#/$defs/reference"
                     anyOf:
                       - properties:
                           address: {}

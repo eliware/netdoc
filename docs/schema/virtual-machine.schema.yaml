@@ -1,21 +1,24 @@
+version: "11.0"
 $schema: https://json-schema.org/draft/2020-12/schema
 allOf:
   - $ref: common.schema.yaml#/$defs/object
 type: object
 properties:
   kind:
-    const: physical-machine
-  roles:
-    type: array
-    minItems: 1
-    uniqueItems: true
-    items:
-      type: string
-      minLength: 1
+    const: virtual-machine
+  residentOn:
+    $ref: common.schema.yaml#/$defs/reference
+    description: The NetDoc ID of the physical hypervisor that hosts this VM.
   username:
     type: string
     minLength: 1
     description: The SSH login name. Do not store a password or key.
+  roles:
+    type: array
+    uniqueItems: true
+    items:
+      type: string
+      minLength: 1
   hardware:
     $ref: common.schema.yaml#/$defs/hardware
   storage:
@@ -28,9 +31,5 @@ properties:
       $ref: common.schema.yaml#/$defs/networkInterface
   networking:
     $ref: common.schema.yaml#/$defs/networkConfiguration
-  location:
-    $ref: common.schema.yaml#/$defs/location
-  providerAssetId:
-    type: string
 unevaluatedProperties: false
-required: [roles]
+required: [residentOn]
