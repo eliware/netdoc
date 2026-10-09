@@ -13,6 +13,9 @@
   },
   "homepage": "https://github.com/eliware/netdoc#readme",
   "dependencies": {
-    "@eliware/snowflake": "^2.0.0"
+    "@eliware/snowflake": "^2.0.0",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "yaml": "^2.9.1"
   }
 }
