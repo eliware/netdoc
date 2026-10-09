@@ -1,0 +1,33 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+allOf:
+  - $ref: common.schema.yaml#/$defs/object
+type: object
+properties:
+  kind:
+    const: network-segment
+  id:
+    $ref: common.schema.yaml#/$defs/identifier
+    description: Required because machine interfaces reference network segments by ID.
+  medium:
+    enum: [ethernet, wireless, virtual, tunnel, other]
+  vlan:
+    oneOf:
+      - type: integer
+        minimum: 1
+        maximum: 4094
+      - const: untagged
+    description: The VLAN ID on this segment, or untagged when frames have no VLAN tag.
+  ipNetworks:
+    type: array
+    items:
+      type: object
+      properties:
+        cidr:
+          type: string
+          minLength: 1
+        gateway:
+          type: string
+      required: [cidr]
+      additionalProperties: false
+unevaluatedProperties: false
+required: [id, medium, vlan]

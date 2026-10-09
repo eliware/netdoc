@@ -1,0 +1,706 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$comment: IDs are positive signed 64-bit Snowflake integers from 1 through 9223372036854775807. Read and write them without precision loss. Check this range and global uniqueness. Check references, reciprocal links, and address conflicts across files. Scope IP and MAC checks by network segment. Check generated IDs before output. Do not store passwords or keys.
+$defs:
+  identifier:
+    type: integer
+    minimum: 1
+    description: Store positive signed 64-bit Snowflake IDs as YAML integers. Add an ID only when another file must reference the object.
+
+  reference:
+    $ref: '#/$defs/identifier'
+    description: A reference to another object's NetDoc ID.
+
+  evidence:
+    type: object
+    properties:
+      source:
+        type: string
+        minLength: 1
+      basis:
+        enum: [configured, observed, reported, inferred]
+      checkedOn:
+        type: string
+        format: date
+      note:
+        type: string
+    required: [source, basis]
+    additionalProperties: false
+
+  object:
+    type: object
+    properties:
+      schemaVersion:
+        const: 1
+      kind:
+        type: string
+        minLength: 1
+      id:
+        $ref: '#/$defs/identifier'
+        description: Include only when another file must reference this object.
+      name:
+        type: string
+        minLength: 1
+        description: A display name. Names can repeat on isolated networks.
+      description:
+        type: string
+      evidence:
+        type: array
+        items:
+          $ref: '#/$defs/evidence'
+      notes:
+        type: array
+        items:
+          type: string
+    required: [schemaVersion, kind, name]
+
+  size:
+    type: object
+    properties:
+      value:
+        type: number
+        exclusiveMinimum: 0
+      unit:
+        enum: [B, KB, MB, GB, TB, KiB, MiB, GiB, TiB]
+    required: [value, unit]
+    additionalProperties: false
+
+  frequency:
+    type: object
+    properties:
+      value:
+        type: number
+        exclusiveMinimum: 0
+      unit:
+        enum: [MHz, GHz]
+    required: [value, unit]
+    additionalProperties: false
+
+  dataRate:
+    type: object
+    properties:
+      value:
+        type: number
+        exclusiveMinimum: 0
+      unit:
+        enum: [Mbps, Gbps]
+    required: [value, unit]
+    additionalProperties: false
+
+  memory:
+    type: object
+    properties:
+      capacity:
+        $ref: '#/$defs/size'
+      ecc:
+        type: boolean
+      speed:
+        type: object
+        properties:
+          value:
+            type: number
+            exclusiveMinimum: 0
+          unit:
+            enum: [MHz, MT/s]
+        required: [value, unit]
+        additionalProperties: false
+      modules:
+        type: array
+        items:
+          type: object
+          properties:
+            capacity:
+              $ref: '#/$defs/size'
+            count:
+              type: integer
+              minimum: 1
+          required: [capacity, count]
+          additionalProperties: false
+    required: [capacity]
+    additionalProperties: false
+
+  location:
+    type: object
+    properties:
+      site:
+        type: string
+      provider:
+        type: string
+      region:
+        type: string
+      datacenter:
+        type: string
+      rack:
+        type: string
+      rackUnit:
+        type: integer
+        minimum: 1
+    additionalProperties: false
+
+  cpu:
+    type: object
+    properties:
+      model:
+        type: string
+      sockets:
+        type: integer
+        minimum: 1
+      cores:
+        type: integer
+        minimum: 1
+      threads:
+        type: integer
+        minimum: 1
+      baseClock:
+        $ref: '#/$defs/frequency'
+    additionalProperties: false
+
+  gpu:
+    type: object
+    properties:
+      model:
+        type: string
+      memory:
+        $ref: '#/$defs/size'
+    required: [model]
+    additionalProperties: false
+
+  storageDevice:
+    type: object
+    properties:
+      device:
+        type: string
+      model:
+        type: string
+      serialNumber:
+        type: string
+      media:
+        enum: [HDD, SSD, NVMe, flash, virtual, other]
+      capacity:
+        $ref: '#/$defs/size'
+      raid:
+        type: object
+        properties:
+          level:
+            type: string
+          members:
+            type: array
+            items:
+              type: string
+            description: Local device names or paths in this file.
+          controller:
+            type: string
+        required: [level]
+        additionalProperties: false
+      partitions:
+        type: array
+        items:
+          type: object
+          properties:
+            device:
+              type: string
+            size:
+              $ref: '#/$defs/size'
+            filesystem:
+              type: string
+            mountPoint:
+              type: string
+          required: [device]
+          additionalProperties: false
+    additionalProperties: false
+
+  storage:
+    type: object
+    properties:
+      devices:
+        type: array
+        items:
+          $ref: '#/$defs/storageDevice'
+      mounts:
+        type: array
+        items:
+          type: object
+          properties:
+            source:
+              type: string
+            mountPoint:
+              type: string
+            filesystem:
+              type: string
+          required: [source, mountPoint]
+          additionalProperties: false
+      shares:
+        type: array
+        items:
+          type: object
+          properties:
+            protocol:
+              enum: [SMB, NFS]
+            name:
+              type: string
+            path:
+              type: string
+            clients:
+              type: array
+              items:
+                type: string
+            access:
+              enum: [read-only, read-write]
+          required: [protocol, path]
+          additionalProperties: false
+    additionalProperties: false
+
+  networkInterface:
+    type: object
+    properties:
+      id:
+        $ref: '#/$defs/identifier'
+        description: Include when another file must reference this interface.
+      name:
+        type: string
+        minLength: 1
+      type:
+        enum: [ethernet, wireless, virtual-ethernet, tunnel, loopback, bridge, other]
+      macAddress:
+        type: string
+        pattern: '^(([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}|([0-9A-Fa-f]{2}-){5}[0-9A-Fa-f]{2})$'
+      speed:
+        $ref: '#/$defs/dataRate'
+      mtu:
+        type: integer
+        minimum: 1
+      parentInterface:
+        type: string
+        minLength: 1
+        description: The name of a parent interface in this file.
+      segmentId:
+        $ref: '#/$defs/reference'
+        description: The ID of the attached network segment.
+      addresses:
+        type: array
+        items:
+          type: object
+          properties:
+            cidr:
+              type: string
+              minLength: 1
+              description: A stable IP address with its prefix length.
+            assignment:
+              enum: [static, dhcp, dhcp-reservation, virtual]
+          required: [assignment]
+          if:
+            properties:
+              assignment:
+                enum: [static, dhcp-reservation, virtual]
+          then:
+            properties:
+              cidr: {}
+            required: [cidr]
+          additionalProperties: false
+      connectsTo:
+        $ref: '#/$defs/reference'
+        description: The peer interface ID. Both interfaces must reference each other.
+      externalPeer:
+        type: string
+        minLength: 1
+        description: A label for a peer outside this inventory.
+      unused:
+        const: true
+        description: Mark a configured port with no connected peer.
+      wireless:
+        type: object
+        properties:
+          role:
+            enum: [radio, client]
+          ssid:
+            type: string
+          band:
+            type: string
+        additionalProperties: false
+      notes:
+        type: array
+        items:
+          type: string
+    required: [name, type]
+    allOf:
+      - if:
+          properties:
+            connectsTo: {}
+          required: [connectsTo]
+        then:
+          properties:
+            id: {}
+          required: [id]
+      - if:
+          properties:
+            addresses:
+              type: array
+              minItems: 1
+            type:
+              not:
+                const: loopback
+          required: [addresses, type]
+        then:
+          properties:
+            segmentId: {}
+          required: [segmentId]
+      - not:
+          properties:
+            connectsTo: {}
+            externalPeer: {}
+          required: [connectsTo, externalPeer]
+      - not:
+          properties:
+            connectsTo: {}
+            unused: {}
+          required: [connectsTo, unused]
+      - not:
+          properties:
+            externalPeer: {}
+            unused: {}
+          required: [externalPeer, unused]
+    additionalProperties: false
+
+  hardware:
+    type: object
+    properties:
+      manufacturer:
+        type: string
+      model:
+        type: string
+      cpu:
+        $ref: '#/$defs/cpu'
+      memory:
+        $ref: '#/$defs/memory'
+      gpus:
+        type: array
+        items:
+          $ref: '#/$defs/gpu'
+    additionalProperties: false
+
+  software:
+    type: object
+    properties:
+      name:
+        type: string
+      version:
+        type: string
+    required: [name]
+    additionalProperties: false
+
+  operatingSystem:
+    $ref: '#/$defs/software'
+
+  networkConfiguration:
+    type: object
+    properties:
+      routing:
+        type: object
+        properties:
+          defaultGateway:
+            type: string
+          staticRoutes:
+            type: array
+            items:
+              type: object
+              properties:
+                destination:
+                  type: string
+                nextHop:
+                  type: string
+                interfaceName:
+                  type: string
+              required: [destination]
+              anyOf:
+                - properties:
+                    nextHop: {}
+                  required: [nextHop]
+                - properties:
+                    interfaceName: {}
+                  required: [interfaceName]
+              additionalProperties: false
+          bgp:
+            type: object
+            properties:
+              localAs:
+                type: integer
+                minimum: 1
+                maximum: 4294967295
+              routerId:
+                type: string
+              advertisedPrefixes:
+                type: array
+                uniqueItems: true
+                items:
+                  type: string
+              peers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    peerId:
+                      $ref: '#/$defs/reference'
+                    address:
+                      type: string
+                    remoteAs:
+                      type: integer
+                      minimum: 1
+                      maximum: 4294967295
+                  required: [address, remoteAs]
+                  additionalProperties: false
+            required: [localAs]
+            additionalProperties: false
+          vrrp:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                vrid:
+                  type: integer
+                  minimum: 1
+                  maximum: 255
+                interfaceName:
+                  type: string
+                priority:
+                  type: integer
+                  minimum: 0
+                  maximum: 255
+                virtualAddresses:
+                  type: array
+                  minItems: 1
+                  uniqueItems: true
+                  items:
+                    type: string
+              required: [vrid, interfaceName, virtualAddresses]
+              additionalProperties: false
+            description: A shared address must have the same VRID and segment on each peer.
+        additionalProperties: false
+      tunnels:
+        type: array
+        items:
+          type: object
+          properties:
+            type:
+              enum: [wireguard, tailscale, other]
+            interfaceName:
+              type: string
+            localAddress:
+              type: string
+            listenPort:
+              type: integer
+              minimum: 1
+              maximum: 65535
+            peers:
+              type: array
+              items:
+                type: object
+                properties:
+                  endpointAddress:
+                    type: string
+                  endpointPort:
+                    type: integer
+                    minimum: 1
+                    maximum: 65535
+                  allowedNetworks:
+                    type: array
+                    items:
+                      type: string
+                additionalProperties: false
+          required: [type]
+          additionalProperties: false
+        description: Record tunnel topology. Do not store keys or credentials.
+      l2Announcements:
+        type: array
+        items:
+          type: object
+          properties:
+            address:
+              type: string
+            interfaceName:
+              type: string
+            nodeId:
+              $ref: '#/$defs/reference'
+          required: [address, interfaceName]
+          additionalProperties: false
+      firewall:
+        type: object
+        properties:
+          defaultAction:
+            enum: [allow, drop, reject]
+          zones:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                interfaceNames:
+                  type: array
+                  items:
+                    type: string
+              required: [name]
+              additionalProperties: false
+          rules:
+            type: array
+            items:
+              type: object
+              properties:
+                direction:
+                  enum: [inbound, outbound, forwarded]
+                action:
+                  enum: [allow, drop, reject]
+                protocol:
+                  type: string
+                source:
+                  type: string
+                  description: A literal address, CIDR, or any.
+                destination:
+                  type: string
+                  description: A literal address, CIDR, or any.
+                sourceZone:
+                  type: string
+                destinationZone:
+                  type: string
+                ports:
+                  type: array
+                  items:
+                    type: integer
+                    minimum: 1
+                    maximum: 65535
+              required: [action]
+              additionalProperties: false
+        additionalProperties: false
+      nat:
+        type: object
+        properties:
+          rules:
+            type: array
+            items:
+              type: object
+              properties:
+                type:
+                  enum: [source, destination]
+                source:
+                  type: string
+                destination:
+                  type: string
+                translation:
+                  type: string
+                  description: Use masquerade or an IP address.
+                interfaceName:
+                  type: string
+                nodeId:
+                  $ref: '#/$defs/reference'
+              required: [type, translation]
+              additionalProperties: false
+        additionalProperties: false
+      loadBalancing:
+        type: object
+        properties:
+          addressPools:
+            type: array
+            items:
+              oneOf:
+                - type: object
+                  properties:
+                    cidr:
+                      type: string
+                  required: [cidr]
+                  additionalProperties: false
+                - type: object
+                  properties:
+                    start:
+                      type: string
+                    end:
+                      type: string
+                  required: [start, end]
+                  additionalProperties: false
+          listeners:
+            type: array
+            items:
+              type: object
+              properties:
+                address:
+                  type: string
+                protocol:
+                  type: string
+                port:
+                  type: integer
+                  minimum: 1
+                  maximum: 65535
+                targets:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      address:
+                        type: string
+                      port:
+                        type: integer
+                        minimum: 1
+                        maximum: 65535
+                      deviceId:
+                        $ref: '#/$defs/reference'
+                    anyOf:
+                      - properties:
+                          address: {}
+                        required: [address]
+                      - properties:
+                          deviceId: {}
+                        required: [deviceId]
+                    additionalProperties: false
+              required: [protocol, port]
+              additionalProperties: false
+        additionalProperties: false
+      listeners:
+        type: array
+        items:
+          type: object
+          properties:
+            label:
+              type: string
+            address:
+              type: string
+            protocol:
+              enum: [TCP, UDP, SCTP]
+            port:
+              type: integer
+              minimum: 1
+              maximum: 65535
+          required: [protocol, port]
+          additionalProperties: false
+        description: Record network endpoints needed for Layer 4 diagrams.
+      dhcp:
+        type: object
+        properties:
+          scopes:
+            type: array
+            items:
+              type: object
+              properties:
+                network:
+                  type: string
+                rangeStart:
+                  type: string
+                rangeEnd:
+                  type: string
+                gateway:
+                  type: string
+                reservations:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      macAddress:
+                        type: string
+                      address:
+                        type: string
+                      name:
+                        type: string
+                    required: [macAddress, address]
+                    additionalProperties: false
+              required: [network]
+              additionalProperties: false
+        additionalProperties: false
+    additionalProperties: false
