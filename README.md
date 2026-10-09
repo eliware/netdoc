@@ -42,7 +42,7 @@ Run `netdoc --help` to show available commands. Run `netdoc validate <path>` to 
 
 ## Development
 
-Read [AGENTS.md](AGENTS.md), [docs/README.md](docs/README.md), [specs/README.md](specs/README.md), and [RELEASE_NOTES.md](RELEASE_NOTES.md) before changes.
+Read [AGENTS.md](AGENTS.md), [docs/README.md](docs/README.md), and [specs/README.md](specs/README.md) before making changes.
 
 Documentation: [docs](docs/README.md) · [specifications](specs/README.md)
 
@@ -60,15 +60,13 @@ The validator reads YAML and reports errors. ID generation prints to standard ou
 
 ## Configuration
 
-No runtime configuration exists. The CLI has no runtime settings or environment variables. No runtime configuration or settings defaults exist. Startup occurs when `netdoc` receives a command. Shutdown occurs when that command exits. Package metadata and workflow files are not runtime configuration.
+No runtime configuration exists. The CLI has no runtime settings or environment variables. Package metadata and workflow files are not runtime configuration.
 
 ## Operations
 
-Startup begins when a user runs a command. Shutdown occurs after the command exits. Observable workflows are local validation diagnostics and generated IDs on standard output. Operational boundaries exclude file writes, network connections, and changes to external systems.
+Startup occurs when a user runs a command. Shutdown occurs after the command exits. Observable workflows are local validation diagnostics and generated IDs on standard output. Operational boundaries exclude file writes, network connections, and changes to external systems.
 
 ## Commands
-
-Install the package with `npm install -g @eliware/netdoc`. The package version comes from `package.json.version`. Do not assume an unreleased version is available.
 
 | Command                     | Behavior                                        |
 | --------------------------- | ----------------------------------------------- |
@@ -104,12 +102,12 @@ For help or discussion, join the Eliware community:
 
 ## Links
 
-- [docs](docs/README.md)
 - [Home Page](https://github.com/eliware/netdoc#readme)
 - [GitHub repository](https://github.com/eliware/netdoc.git)
 - [Eliware](https://eliware.org)
 - [GitHub organization](https://github.com/eliware)
 - [Discord](https://discord.gg/M6aTR9eTwN)
 - [specifications](specs/README.md)
+- [docs](docs/README.md)
 - [Release Notes](RELEASE_NOTES.md)
 - [npm Package](https://www.npmjs.com/package/@eliware/netdoc)
