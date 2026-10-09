@@ -1,72 +1,85 @@
-import fs from "node:fs";
-import path from "node:path";
-import { convertBigIntsForValidation, collectYamlFiles, parseYamlFile } from "./yaml-files.mjs";
+import { formatDiagnostic, createDiagnostic } from "./diagnostics.mjs";
+import { loadInventory } from "./inventory-loader.mjs";
 import { loadSchemaValidators } from "./schema-validators.mjs";
+import { convertBigIntsForValidation } from "./yaml-files.mjs";
+import { validateIdentifiers } from "./validate-identifiers.mjs";
+import { validateReferences } from "./validate-references.mjs";
+import { validateNetworks } from "./validate-networks.mjs";
+import { validateNetworkValues } from "./network-value-checks.mjs";
+import { validateSwitchPorts } from "./validate-switch-ports.mjs";
 
-export function validateInventory(
-  args,
-  { cwd = process.cwd(), write = console.log, error = console.error, schemaDirectory } = {},
-) {
+export function validateInventory(args, options = {}) {
   if (args.length !== 1) {
-    error("Usage: netdoc validate <yaml-file-or-directory>");
+    (options.error ?? console.error)("Usage: netdoc validate <yaml-file-or-directory>");
     return 2;
   }
-  return validateTarget(args[0], { cwd, write, error, schemaDirectory });
+  return validateTarget(args[0], options);
 }
 
 export function validateTarget(
   target,
-  { cwd = process.cwd(), write = console.log, error = console.error, schemaDirectory } = {},
+  { write = console.log, error = console.error, cwd = process.cwd(), schemaDirectory } = {},
 ) {
-  if (typeof target !== "string" || target.length === 0) {
-    error(`Path does not exist: ${target}`);
-    return 2;
-  }
-  const absoluteTarget = path.resolve(cwd, target);
-  if (!fs.existsSync(absoluteTarget)) {
-    error(`Path does not exist: ${absoluteTarget}`);
-    return 2;
-  }
+  let inventory;
   let validators;
+  try {
+    inventory = loadInventory(target, { cwd });
+  } catch (cause) {
+    error(cause.message);
+    return 2;
+  }
   try {
     validators = loadSchemaValidators(schemaDirectory);
   } catch (cause) {
     error(`Could not load schemas: ${cause.message}`);
     return 2;
   }
-  const files = collectYamlFiles(absoluteTarget).sort();
-  if (files.length === 0) {
-    error(`No YAML files found: ${absoluteTarget}`);
-    return 2;
-  }
-  let errorCount = 0;
-  for (const file of files) {
-    const relativeFile = path.relative(cwd, file);
-    let data;
-    try {
-      data = parseYamlFile(file, true);
-    } catch (cause) {
-      error(`${relativeFile}: YAML parse error: ${cause.message}`);
-      errorCount += 1;
-      continue;
-    }
-    const validate = data && typeof data === "object" ? validators[data.kind] : undefined;
+  const diagnostics = [...inventory.diagnostics];
+  const schemaValidRecords = [];
+  for (const record of inventory.records) {
+    const validate = validators[record.data.kind];
     if (!validate) {
-      error(`${relativeFile}: missing or unsupported object kind`);
-      errorCount += 1;
+      diagnostics.push(
+        createDiagnostic(
+          record.file,
+          "",
+          record.data.id,
+          "Missing or unsupported object kind.",
+          "Use one of the supported schema kinds.",
+        ),
+      );
       continue;
     }
-    if (!validate(convertBigIntsForValidation(data))) {
-      for (const issue of validate.errors) {
-        error(`${relativeFile}${issue.instancePath || "/"}: ${issue.message}`);
-        errorCount += 1;
-      }
+    if (validate(convertBigIntsForValidation(record.data))) {
+      schemaValidRecords.push(record);
+      continue;
+    }
+    for (const issue of validate.errors) {
+      diagnostics.push(
+        createDiagnostic(
+          record.file,
+          issue.instancePath,
+          record.data.id,
+          issue.message,
+          `Correct the value at '${issue.instancePath || "/"}'.`,
+        ),
+      );
     }
   }
-  if (errorCount > 0) {
-    error(`Found ${errorCount} error(s) in ${files.length} YAML file(s).`);
+  const { diagnostics: idDiagnostics } = validateIdentifiers(inventory.records);
+  diagnostics.push(...idDiagnostics);
+  if (diagnostics.length === 0) {
+    const { entitiesById: validEntities } = validateIdentifiers(schemaValidRecords);
+    diagnostics.push(...validateReferences(schemaValidRecords, validEntities));
+    diagnostics.push(...validateNetworks(schemaValidRecords, validEntities));
+    diagnostics.push(...validateNetworkValues(schemaValidRecords));
+    diagnostics.push(...validateSwitchPorts(schemaValidRecords, validEntities));
+  }
+  if (diagnostics.length > 0) {
+    diagnostics.forEach((diagnostic) => error(formatDiagnostic(diagnostic)));
+    error(`Found ${diagnostics.length} error(s) in ${inventory.fileCount} YAML file(s).`);
     return 1;
   }
-  write(`Validated ${files.length} YAML file(s).`);
+  write(`Validated ${inventory.fileCount} YAML file(s).`);
   return 0;
 }

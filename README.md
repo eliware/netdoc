@@ -26,7 +26,7 @@ NetDoc provides read-only validation for infrastructure YAML and generates uniqu
 
 Package description: Git-versioned model for documenting network infrastructure, systems, services, and their relationships. Author: Eliware <eliware@eliware.org>. License: MIT.
 
-The CLI checks YAML syntax, schema rules, and object references. It does not create, update, or delete configuration records.
+The CLI checks YAML syntax, object schemas, BIGINT IDs, object references, reciprocal links, IP assignments, segment networks, and IP values. It does not edit records or connect to a network.
 
 ## Requirements
 
@@ -88,7 +88,7 @@ Validation does not edit input files. ID generation does not write files. Suppor
 | `1`  | YAML parsing or schema validation failed. |
 | `2`  | The command or input path is invalid.     |
 
-Validation diagnostics include the file and schema error. They do not include credentials by design. Supported platforms: Windows, macOS, and Linux. Validation evidence: GitHub Actions CI directly validates Ubuntu; other platform behavior is not yet directly validated.
+Validation diagnostics include each source file and YAML path. They include an object ID when one exists. They give a correction hint when one is clear. They do not include credentials. Supported platforms: Windows, macOS, and Linux. Validation evidence: GitHub Actions CI directly validates Ubuntu; other platform behavior is not yet directly validated.
 
 ## Support
 

@@ -30,6 +30,9 @@ test("requires one validation path", () => {
   expect(validateInventory([], { error })).toBe(2);
   expect(error).toHaveBeenCalledWith("Usage: netdoc validate <yaml-file-or-directory>");
   expect(validateInventory(["one", "two"], { error })).toBe(2);
+  const log = jest.spyOn(console, "error").mockImplementation(() => {});
+  expect(validateInventory([])).toBe(2);
+  expect(log).toHaveBeenCalled();
 });
 
 test("uses default validation settings for a valid file", () => {
@@ -66,6 +69,7 @@ test("reports parse errors, unsupported kinds, and schema errors", () => {
   const root = makeDirectory();
   writeRecord(root, "bad.yaml", "name: [broken\n");
   writeRecord(root, "kind.yaml", "name: unknown\n");
+  writeRecord(root, "unsupported.yaml", 'version: "11.0"\nkind: unknown\nname: unknown\n');
   writeRecord(root, "scalar.yaml", "just text\n");
   writeRecord(root, "null.yaml", "null\n");
   writeRecord(
@@ -77,10 +81,10 @@ test("reports parse errors, unsupported kinds, and schema errors", () => {
   const error = jest.fn();
   expect(validateTarget(root, { error })).toBe(1);
   expect(error).toHaveBeenCalledWith(expect.stringContaining("YAML parse error:"));
-  expect(error).toHaveBeenCalledWith(expect.stringContaining("missing or unsupported object kind"));
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("Missing or unsupported object kind"));
   expect(error).toHaveBeenCalledWith(
     expect.stringContaining("must be equal to one of the allowed values"),
   );
-  expect(error).toHaveBeenCalledWith(expect.stringContaining("required.yaml/:"));
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("required.yaml:"));
   expect(error).toHaveBeenCalledWith(expect.stringContaining("Found "));
 });

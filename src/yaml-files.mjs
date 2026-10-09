@@ -15,14 +15,18 @@ export function collectYamlFiles(target) {
 }
 
 export function parseYamlFile(file, intAsBigInt = false) {
-  const document = YAML.parseDocument(fs.readFileSync(file, "utf8"), {
+  const documents = YAML.parseAllDocuments(fs.readFileSync(file, "utf8"), {
     intAsBigInt,
     uniqueKeys: true,
   });
-  if (document.errors.length > 0) {
-    throw new Error(document.errors.map((error) => error.message).join("; "));
+  const errors = documents.flatMap((document) => document.errors);
+  if (errors.length > 0) {
+    throw new Error(errors.map((error) => error.message).join("; "));
   }
-  return document.toJS();
+  if (documents.length !== 1) {
+    throw new Error(`Expected one YAML document, found ${documents.length}.`);
+  }
+  return documents[0].toJS();
 }
 
 export function convertBigIntsForValidation(value) {

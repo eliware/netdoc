@@ -57,6 +57,13 @@ test("parses YAML with optional BigInt integers and rejects duplicate keys", () 
   expect(() => parseYamlFile(file)).toThrow();
 });
 
+test("rejects multiple YAML documents", () => {
+  const root = makeDirectory();
+  const file = path.join(root, "record.yaml");
+  fs.writeFileSync(file, "name: first\n---\nname: second\n");
+  expect(() => parseYamlFile(file)).toThrow("Expected one YAML document, found 2.");
+});
+
 test("converts nested BigInts for JSON schema validation and preserves other values", () => {
   const date = new Date("2026-01-01T00:00:00Z");
   expect(convertBigIntsForValidation({ id: 5n, values: [7n, null], date })).toEqual({
