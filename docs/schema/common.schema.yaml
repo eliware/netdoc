@@ -260,7 +260,7 @@ $defs:
         type: string
         minLength: 1
       type:
-        enum: [ethernet, wireless, virtual-ethernet, tunnel, loopback, bridge, other]
+        enum: [ethernet, wireless, virtual-ethernet, tunnel, loopback, bridge, vlan, other]
       macAddress:
         type: string
         pattern: "^(([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}|([0-9A-Fa-f]{2}-){5}[0-9A-Fa-f]{2})$"
@@ -359,6 +359,67 @@ $defs:
             externalPeer: {}
             unused: {}
           required: [externalPeer, unused]
+    additionalProperties: false
+
+  switchConfiguration:
+    type: object
+    properties:
+      management:
+        enum: [managed, unmanaged]
+        description: Whether the switch supports per-port configuration.
+      ports:
+        type: array
+        minItems: 1
+        items:
+          type: object
+          properties:
+            interfaceName:
+              type: string
+              minLength: 1
+              description: The name of an interface on this network device.
+            type:
+              enum: [physical, internal]
+              description: Use internal for a router-facing logical interface.
+            mode:
+              enum: [access, trunk]
+            segmentId:
+              $ref: "#/$defs/reference"
+              description: The segment for an access port.
+            segmentIds:
+              type: array
+              minItems: 1
+              uniqueItems: true
+              items:
+                $ref: "#/$defs/reference"
+              description: Tagged segments allowed on a trunk port.
+            pvidSegmentId:
+              $ref: "#/$defs/reference"
+              description: The segment for untagged traffic on a trunk port.
+          required: [interfaceName, type, mode]
+          allOf:
+            - if:
+                properties:
+                  mode:
+                    const: access
+                required: [mode]
+              then:
+                properties:
+                  segmentId: {}
+                  segmentIds: false
+                  pvidSegmentId: false
+                required: [segmentId]
+            - if:
+                properties:
+                  mode:
+                    const: trunk
+                required: [mode]
+              then:
+                properties:
+                  segmentId: false
+                  segmentIds: {}
+                required: [segmentIds]
+          additionalProperties: false
+    required: [management, ports]
     additionalProperties: false
 
   hardware:

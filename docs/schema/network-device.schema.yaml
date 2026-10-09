@@ -45,6 +45,8 @@ properties:
     type: array
     items:
       $ref: common.schema.yaml#/$defs/networkInterface
+  switch:
+    $ref: common.schema.yaml#/$defs/switchConfiguration
   networking:
     $ref: common.schema.yaml#/$defs/networkConfiguration
 unevaluatedProperties: false
