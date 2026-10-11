@@ -1,7 +1,7 @@
-version: "11.0"
+version: "12.0"
 description: Repository-specific directives for eliware/netdoc.
 directives:
-  - id: E-1130
+  - id: E-1130.0
     dos:
       - Provide a read-only CLI for YAML parsing and schema validation.
       - Provide a Snowflake ID command that prints IDs without modifying repository files.

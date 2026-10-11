@@ -1,11 +1,8 @@
 {
   "name": "@eliware/netdoc",
-  "version": "11.0.0",
+  "version": "12.0.0",
+  "type": "module",
   "description": "Git-versioned model for documenting network infrastructure, systems, services, and their relationships.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/eliware/netdoc.git"
-  },
   "keywords": [
     "netdoc",
     "network",
@@ -15,11 +12,36 @@
     "yaml",
     "git"
   ],
-  "type": "module",
-  "bugs": {
-    "url": "https://github.com/eliware/netdoc/issues"
+  "private": false,
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
   },
-  "homepage": "https://github.com/eliware/netdoc#readme",
+  "main": "bin/netdoc.mjs",
+  "bin": {
+    "netdoc": "bin/netdoc.mjs"
+  },
+  "files": [
+    "src/",
+    "docs/",
+    "README.md",
+    "AGENTS.md",
+    "LICENSE",
+    "RELEASE_NOTES.md",
+    "bin/",
+    "specs/"
+  ],
+  "scripts": {
+    "test": "eliware-test",
+    "lint": "eliware-test --lint",
+    "audit": "eliware-test --audit",
+    "format": "eliware-test --format",
+    "format:check": "eliware-test --format-check",
+    "pack": "eliware-test --pack"
+  },
+  "engines": {
+    "node": ">=26"
+  },
   "dependencies": {
     "@eliware/common": "^2.0.0",
     "@eliware/snowflake": "^2.0.0",
@@ -30,46 +52,6 @@
   "devDependencies": {
     "@eliware/test": "^11.0.0"
   },
-  "eliware": {
-    "id": "E-1130",
-    "apply": [
-      "general",
-      "application",
-      "cli",
-      "npm-published"
-    ]
-  },
-  "author": "Eliware <eliware@eliware.org>",
-  "license": "MIT",
-  "private": false,
-  "engines": {
-    "node": "26"
-  },
-  "main": "bin/netdoc.mjs",
-  "bin": {
-    "netdoc": "bin/netdoc.mjs"
-  },
-  "publishConfig": {
-    "provenance": true,
-    "access": "public"
-  },
-  "scripts": {
-    "test": "eliware-test",
-    "lint": "eliware-test --lint",
-    "audit": "eliware-test --audit",
-    "format": "eliware-test --format",
-    "format:check": "eliware-test --format-check",
-    "pack": "eliware-test --pack"
-  },
-  "files": [
-    "src/",
-    "docs/",
-    "README.md",
-    "AGENTS.md",
-    "LICENSE",
-    "RELEASE_NOTES.md",
-    "bin/"
-  ],
   "jest": {
     "testEnvironment": "node",
     "testMatch": [
@@ -105,5 +87,25 @@
     "arrowParens": "always",
     "proseWrap": "preserve",
     "endOfLine": "lf"
+  },
+  "author": "Eliware <eliware@eliware.org>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eliware/netdoc.git"
+  },
+  "homepage": "https://github.com/eliware/netdoc#readme",
+  "bugs": {
+    "url": "https://github.com/eliware/netdoc/issues"
+  },
+  "eliware": {
+    "id": "E-1130",
+    "apply": [
+      "general",
+      "application",
+      "cli",
+      "npm-published"
+    ],
+    "exempt": []
   }
 }

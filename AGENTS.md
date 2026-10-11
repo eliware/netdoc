@@ -16,13 +16,13 @@ Required structure: `bin/netdoc.mjs` is the executable entrypoint. `src/` contai
 
 Before changing files, read the root README.md, applicable AGENTS.md instructions, applicable documentation, specifications, implementation, and tests. These instructions apply repository-wide; closer AGENTS.md files apply to subdirectories.
 
-Use Node.js 26, npm, and native ESM `.mjs` modules. Runtime environment settings: none. The CLI accepts arguments. Package metadata is not runtime configuration.
+Use Node.js 26 or later, npm 12 or later, and native ESM `.mjs` modules. Runtime environment settings: none. The CLI accepts arguments. Package metadata is not runtime configuration.
 
 Define single responsibility as one cohesive purpose and one reason to change. Business-logic modules and coordinators are valid, including coordinators of coordinators, when each module has one responsibility. Put each distinct responsibility in a focused submodule with a mirrored test. Wire it through its owner. Do not add the new responsibility to an existing module. Refactor them when you find mixed responsibilities during ordinary review. Line counts do not establish single responsibility. Passing them does not prove cohesion or permit mixed responsibilities.
 
 ## Validation
 
-Run `npm ci` after dependency changes. Run `npm test` before handoff. Run `npm run pack` to validate package contents. Require a passing result. Run `node bin/netdoc.mjs validate <path>` to validate YAML records.
+Run `npm ci` after dependency changes. Run `npm test` before handoff. Run `npm run lint`, `npm run audit`, `npm run format`, and `npm run format:check` through Eliware Test. Run `npm run pack` to validate package contents. Require a passing result. Run `node bin/netdoc.mjs validate <path>` to validate YAML records.
 
 ## Security
 
@@ -42,4 +42,4 @@ The executable entrypoint is `bin/netdoc.mjs`; it targets `src/cli.mjs`. The com
 
 ## npm publication
 
-Package identity: `@eliware/netdoc`. Version source: `package.json.version`. The exact package files allowlist is `src/`, `docs/`, `README.md`, `AGENTS.md`, `LICENSE`, `RELEASE_NOTES.md`, and `bin/`. Run `npm run pack` (`eliware-test --pack`); require a passing result. Use npm Trusted Publishing with provenance. Verify that the exact version for `@eliware/netdoc` is visible at `registry.npmjs.org`. Eli and the project developer run TagIt preflight together. Eli decides whether the release is ready and instructs DevOps. DevOps executes the authorized release. Publication requires explicit authorization through the Operations release handoff. This guidance does not authorize publication.
+Package identity: `@eliware/netdoc`. Version source: `package.json.version`. Required package paths are `src/`, `docs/`, `README.md`, `AGENTS.md`, `LICENSE`, `RELEASE_NOTES.md`, `bin/`, and `specs/`. Run `npm run pack` (`eliware-test --pack`); require a passing result. Use npm Trusted Publishing with provenance. Verify that the exact version for `@eliware/netdoc` is visible at `registry.npmjs.org`. Eli and the project developer run TagIt preflight together. Eli decides whether the release is ready and instructs DevOps. DevOps executes the authorized release. Publication requires explicit authorization through the Operations release handoff. This guidance does not authorize publication.

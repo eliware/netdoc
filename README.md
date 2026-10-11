@@ -1,6 +1,8 @@
 # [![eliware.org](https://eliware.org/logos/brand.png)](https://discord.gg/M6aTR9eTwN)
 
-@eliware/netdoc [![npm](https://img.shields.io/npm/v/@eliware/netdoc)](https://www.npmjs.com/package/@eliware/netdoc) [![License](https://img.shields.io/github/license/eliware/netdoc)](https://github.com/eliware/netdoc/blob/main/LICENSE) [![CI](https://github.com/eliware/netdoc/actions/workflows/ci.yaml/badge.svg)](https://github.com/eliware/netdoc/actions/workflows/ci.yaml)
+## @eliware/netdoc [![npm](https://img.shields.io/npm/v/@eliware/netdoc)](https://www.npmjs.com/package/@eliware/netdoc) [![License](https://img.shields.io/github/license/eliware/netdoc)](https://github.com/eliware/netdoc/blob/main/LICENSE) [![CI](https://github.com/eliware/netdoc/actions/workflows/ci.yaml/badge.svg)](https://github.com/eliware/netdoc/actions/workflows/ci.yaml)
+
+Git-versioned model for documenting network infrastructure, systems, services, and their relationships.
 
 ## Table of Contents
 
@@ -17,42 +19,58 @@
 - [Commands](#commands)
 - [Exit codes](#exit-codes)
 - [Support](#support)
-- [License](#license)
 - [Links](#links)
+- [License](#license)
 
 ## Features
 
-NetDoc provides read-only validation for infrastructure YAML and generates unique Snowflake IDs. It owns the schemas and CLI. Inventory records belong in `netdoc-config`.
-
-Package description: Git-versioned model for documenting network infrastructure, systems, services, and their relationships. Author: Eliware <eliware@eliware.org>. License: MIT.
+NetDoc provides read-only validation for infrastructure YAML. It also generates unique Snowflake IDs. It owns the schemas and CLI. Inventory records belong in the separate `netdoc-config` repository.
 
 The CLI checks YAML syntax, object schemas, BIGINT IDs, object references, reciprocal links, IP assignments, segment networks, and IP values. It does not edit records or connect to a network.
 
 ## Requirements
 
-Use Node.js 26 and npm. Supported platforms: Windows, macOS, and Linux. Validation evidence: Ubuntu is directly validated by GitHub Actions CI; Windows and macOS are not yet directly validated.
+- Node.js 26 or later.
+- npm 12 or later for repository validation.
 
 ## Setup
 
-Install the public package with `npm install -g @eliware/netdoc`. The executable entrypoint is `bin/netdoc.mjs`, and the command is `netdoc`. The release version comes from `package.json.version`; do not assume an unreleased version is available. Run `npm ci` in a checkout to install development dependencies.
+Install the public package:
+
+```sh
+npm install --global @eliware/netdoc
+```
+
+The `netdoc` command runs `bin/netdoc.mjs`. The package version comes from `package.json`. The npm badge shows the published version. An unreleased package version is not available from npm.
 
 ## Usage
 
 Run `netdoc --help` to show available commands. Run `netdoc validate <path>` to check a YAML file or directory. Run `netdoc --generate-id` to print one ID.
 
+Run `netdoc --generate-id -n 3` to print three Snowflake IDs. Validation does not edit input files. ID generation prints IDs to standard output. See [Release Notes](RELEASE_NOTES.md) for version changes.
+
 ## Development
 
-Read [AGENTS.md](AGENTS.md), [docs/README.md](docs/README.md), and [specs/README.md](specs/README.md) before making changes.
+Use Node.js 26 or later and npm 12 or later. Install locked dependencies and run shared validation:
 
-Documentation: [docs](docs/README.md) · [specifications](specs/README.md)
+```sh
+npm ci
+npm test
+```
+
+Run `npm run lint`, `npm run format:check`, `npm run audit`, or `npm run pack` for one validation stage. Run `npm run format` to change supported files.
+
+Read [AGENTS.md](AGENTS.md), the [documentation index](docs/README.md), and the [specification index](specs/README.md) before you change the project.
+
+Ubuntu CI validates Node.js 26. Windows and macOS are supported but are not directly validated by CI.
 
 ## Testing
 
-Run `npm test` for Jest with 100% coverage, lint, formatting, audit, package checks, and profile checks through `eliware-test`. Run `npm run pack` to check package contents. CI runs `npm ci` followed by `npm test`.
+`npm test` runs Eliware validation, Jest tests, and coverage. Tests use local fixtures and mocked command calls. Tests do not connect to a network.
 
 ## Troubleshooting
 
-If `netdoc` is not found, confirm Node.js 26 is installed and the global npm path is available. Run `npm test` to validate a checkout. Use the file or directory path required by `validate`.
+If `netdoc` is not found, confirm Node.js 26 or later is installed and the global npm path is available. Run `npm test` to validate a checkout. Use the file or directory path required by `validate`.
 
 ## Security
 
@@ -60,11 +78,11 @@ The validator reads YAML and reports errors. ID generation prints to standard ou
 
 ## Configuration
 
-No runtime configuration exists. The CLI has no runtime settings or environment variables. Package metadata and workflow files are not runtime configuration.
+NetDoc has no runtime settings or environment variables. Package metadata and workflow files are not runtime configuration.
 
 ## Operations
 
-Startup occurs when a user runs a command. Shutdown occurs after the command exits. Observable workflows are local validation diagnostics and generated IDs on standard output. Operational boundaries exclude file writes, network connections, and changes to external systems.
+Startup occurs when a user runs a command. The command exits after it completes. Workflows include local validation and ID output. NetDoc does not write files, connect to a network, or change external systems.
 
 ## Commands
 
@@ -76,8 +94,6 @@ Startup occurs when a user runs a command. Shutdown occurs after the command exi
 | `netdoc --generate-id`      | Print one Snowflake ID.                         |
 | `netdoc --generate-id -n 3` | Print three Snowflake IDs.                      |
 
-Validation does not edit input files. ID generation does not write files. Supported platforms: Windows, macOS, and Linux. Validation evidence: GitHub Actions CI directly validates Ubuntu. Windows and macOS are intended but not yet directly validated.
-
 ## Exit codes
 
 | Code | Meaning                                   |
@@ -86,28 +102,25 @@ Validation does not edit input files. ID generation does not write files. Suppor
 | `1`  | YAML parsing or schema validation failed. |
 | `2`  | The command or input path is invalid.     |
 
-Validation diagnostics include each source file and YAML path. They include an object ID when one exists. They give a correction hint when one is clear. They do not include credentials. Supported platforms: Windows, macOS, and Linux. Validation evidence: GitHub Actions CI directly validates Ubuntu; other platform behavior is not yet directly validated.
+Validation diagnostics include each source file and YAML path. They include an object ID when one exists. They give a correction hint when one is clear. They do not include credentials.
 
 ## Support
 
-For help or discussion, join the Eliware community:
+For help, questions, or to chat with the author and community, visit:
 
-[![Discord](https://eliware.org/logos/discord_96.png)](https://discord.gg/M6aTR9eTwN)
+[![Discord](https://eliware.org/logos/discord_96.png)](https://discord.gg/M6aTR9eTwN)[![eliware.org](https://eliware.org/logos/eliware_96.png)](https://discord.gg/M6aTR9eTwN)
 
 **[eliware.org on Discord](https://discord.gg/M6aTR9eTwN)**
 
-## License
-
-[license](LICENSE)
-
 ## Links
 
-- [Home Page](https://github.com/eliware/netdoc#readme)
-- [GitHub repository](https://github.com/eliware/netdoc.git)
-- [Eliware](https://eliware.org)
-- [GitHub organization](https://github.com/eliware)
+- [Home Page](https://eliware.org)
+- [GitHub Org](https://github.com/eliware)
+- [GitHub Repo](https://github.com/eliware/netdoc)
+- [Bug Reports](https://github.com/eliware/netdoc/issues)
+- [npm](https://www.npmjs.com/package/@eliware/netdoc)
 - [Discord](https://discord.gg/M6aTR9eTwN)
-- [specifications](specs/README.md)
-- [docs](docs/README.md)
-- [Release Notes](RELEASE_NOTES.md)
-- [npm Package](https://www.npmjs.com/package/@eliware/netdoc)
+
+## License
+
+[MIT © Eliware](LICENSE)
