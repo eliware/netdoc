@@ -2,44 +2,50 @@
 
 ## Project
 
-Repository: `eliware/netdoc`. Purpose: provide a read-only validator and Snowflake ID generator for NetDoc infrastructure records.
+This repository is `eliware/netdoc`.
+
+It stores versioned network and system records.
 
 ## Scope and boundaries
 
-Scope: this repository owns NetDoc schemas and CLI software. Boundary: it excludes inventory records, credentials, and infrastructure changes. These instructions apply repository-wide; a closer `AGENTS.md` file applies within its subdirectory.
+Use README.md for repository purpose, scope, and ownership.
 
 ## Layout
 
-Required structure: `bin/netdoc.mjs` is the executable entrypoint. `src/` contains implementation and `tests/` mirrors it. `docs/schema/` contains schemas. `docs/` contains user guidance. `specs/` contains repository directives.
+Use README.md and specs/README.md to find repository files.
 
 ## Development
 
-Before changing files, read the root README.md, applicable AGENTS.md instructions, applicable documentation, specifications, implementation, and tests. These instructions apply repository-wide; closer AGENTS.md files apply to subdirectories.
-
-Use Node.js 26 or later, npm 12 or later, and native ESM `.mjs` modules. Runtime environment settings: none. The CLI accepts arguments. Package metadata is not runtime configuration.
-
-Define single responsibility as one cohesive purpose and one reason to change. Business-logic modules and coordinators are valid, including coordinators of coordinators, when each module has one responsibility. Put each distinct responsibility in a focused submodule with a mirrored test. Wire it through its owner. Do not add the new responsibility to an existing module. Refactor them when you find mixed responsibilities during ordinary review. Line counts do not establish single responsibility. Passing them does not prove cohesion or permit mixed responsibilities.
+Keep each source and test module focused on one responsibility.
 
 ## Validation
 
-Run `npm ci` after dependency changes. Run `npm test` before handoff. Run `npm run lint`, `npm run audit`, `npm run format`, and `npm run format:check` through Eliware Test. Run `npm run pack` to validate package contents. Require a passing result. Run `node bin/netdoc.mjs validate <path>` to validate YAML records.
+Use Node.js 26 or later and npm 12 or later.
+Use native ESM for maintained JavaScript modules.
+Run `npm test` for aggregate validation.
+Run `npm run lint` for lint checks.
+Run `npm run audit` for dependency checks.
+Run `npm run format` to format files.
+Run `npm run format:check` to check formatting.
 
 ## Security
 
-Do not store credentials, secrets, or private machine-specific paths in this repository. Never commit machine-specific paths. Do not expose secrets in diagnostics. The validator reads files. ID generation prints IDs to standard output.
+Keep credentials, secret values, private data, and runtime state out of Git.
 
 ## Changes
 
-Keep changes actionable, current, and concise. A documented project-specific deviation does not waive a convention or validation stage. Project-specific requirements must not weaken shared rules. Do not publish, release, deploy, or modify external systems without explicit authorization through the Operations release handoff.
+Keep changes within this repository scope.
+Use Eliware Operations for approval before external changes.
 
 ## Application
 
-The actual runtime entrypoint is `bin/netdoc.mjs`. Its lifecycle is a short local command, with startup on invocation and shutdown on exit. The CLI validates input before schema checks. It opens no network connections. It has no persistent state or runtime configuration. Its safe, read-only operational boundary limits commands to local reads and ID output.
+Document entrypoints, workflows, settings, startup, and shutdown in README.md.
 
 ## CLI
 
-The executable entrypoint is `bin/netdoc.mjs`; it targets `src/cli.mjs`. The command is `netdoc`. It supports `--help`, `--version`, `validate <path>`, and `--generate-id [-n COUNT]`. Validation requires one YAML file or directory and forwards that path to the validator. ID generation prints one ID by default; `-n COUNT` requires a positive safe integer. Invalid arguments return exit code 2. Schema errors return exit code 1. Successful commands return exit code 0. No command changes or deletes state, so dry-run and confirmation controls do not apply. Supported platforms: Windows, macOS, and Linux. Validation evidence: Ubuntu is directly validated by GitHub Actions CI; Windows and macOS are not yet directly validated.
+Document commands, options, arguments, defaults, errors, and exit codes in README.md.
 
 ## npm publication
 
-Package identity: `@eliware/netdoc`. Version source: `package.json.version`. Required package paths are `src/`, `docs/`, `README.md`, `AGENTS.md`, `LICENSE`, `RELEASE_NOTES.md`, `bin/`, and `specs/`. Run `npm run pack` (`eliware-test --pack`); require a passing result. Use npm Trusted Publishing with provenance. Verify that the exact version for `@eliware/netdoc` is visible at `registry.npmjs.org`. Eli and the project developer run TagIt preflight together. Eli decides whether the release is ready and instructs DevOps. DevOps executes the authorized release. Publication requires explicit authorization through the Operations release handoff. This guidance does not authorize publication.
+Include specs/ in the package.
+Document install, entrypoints, contents, and release limits in README.md.
