@@ -1,5 +1,3 @@
-import { networkAddressPoolFields } from "./network-address-pool-fields.mjs";
-
 export function networkValueFields(data) {
   const net = data.networking ?? {};
   const route = net.routing ?? {};
@@ -49,6 +47,5 @@ export function networkValueFields(data) {
       add(`/networking/loadBalancing/listeners/${i}/targets/${j}/address`, target.address),
     );
   });
-  entries.push(...networkAddressPoolFields(net));
   return entries;
 }

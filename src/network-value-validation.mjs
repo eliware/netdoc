@@ -1,11 +1,16 @@
 import { createDiagnostic } from "./diagnostics.mjs";
 import { parseAddress } from "./ip-addresses.mjs";
+import { networkAddressPoolFields } from "./network-address-pool-fields.mjs";
 import { networkValueFields } from "./network-value-fields.mjs";
 
 export function validateNetworkValues(records) {
   const diagnostics = [];
   for (const record of records) {
-    for (const [pointer, value, network] of networkValueFields(record.data)) {
+    const fields = [
+      ...networkValueFields(record.data),
+      ...networkAddressPoolFields(record.data.networking ?? {}),
+    ];
+    for (const [pointer, value, network] of fields) {
       if (value !== undefined && !valid(value, network, pointer))
         diagnostics.push(
           createDiagnostic(
