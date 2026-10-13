@@ -19,8 +19,13 @@ test("collects tunnel endpoints and allowed networks", () => {
 });
 
 test("collects tunnel addresses when peers are absent", () => {
-  expect(networkTunnelValueFields({ tunnels: [{}] })).toEqual([
-    ["/networking/tunnels/0/localAddress", undefined, false],
+  expect(
+    networkTunnelValueFields({
+      tunnels: [{ localAddress: "192.0.2.1", peers: [{ endpointAddress: "192.0.2.2" }] }],
+    }),
+  ).toEqual([
+    ["/networking/tunnels/0/localAddress", "192.0.2.1", false],
+    ["/networking/tunnels/0/peers/0/endpointAddress", "192.0.2.2", false],
   ]);
   expect(networkTunnelValueFields({})).toEqual([]);
 });

@@ -14,10 +14,5 @@ export function networkRouteValueFields(network) {
   (route.bgp?.peers ?? []).forEach((item, i) =>
     add(`/networking/routing/bgp/peers/${i}/address`, item.address),
   );
-  (route.vrrp ?? []).forEach((item, i) =>
-    (item.virtualAddresses ?? []).forEach((value, j) =>
-      add(`/networking/routing/vrrp/${i}/virtualAddresses/${j}`, value),
-    ),
-  );
   return fields;
 }

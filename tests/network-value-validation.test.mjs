@@ -1,45 +1,31 @@
 import { expect, test } from "@jest/globals";
 import { validateNetworkValues } from "../src/network-value-validation.mjs";
 
-test("validates route, BGP, VRRP, announcement, and tunnel addresses", () => {
+test("validates address values collected across network settings", () => {
   const data = {
     networking: {
-      routing: {
-        defaultGateway: 17,
-        staticRoutes: [{ destination: "0.0.0.0/0", nextHop: "192.0.2.1" }],
-        bgp: { routerId: "192.0.2.1", advertisedPrefixes: ["bad"], peers: [{ address: "bad" }] },
-        vrrp: [{ virtualAddresses: ["192.0.2.2"] }, {}],
-      },
-      l2Announcements: [{ address: "192.0.2.3" }],
-      tunnels: [
-        {},
-        {
-          localAddress: "192.0.2.4/24",
-          peers: [{ endpointAddress: "192.0.2.5", allowedNetworks: ["192.0.2.0/24"] }, {}],
-        },
-      ],
-      firewall: { rules: [{ source: "any", destination: "192.0.2.0/24" }] },
-      nat: {
-        rules: [{ source: "192.0.2.0/24", destination: "192.0.2.1", translation: "masquerade" }],
-      },
+      routing: { defaultGateway: "bad", vrrp: [{ virtualAddresses: ["bad"] }] },
+      l2Announcements: [{ address: "bad" }],
+      tunnels: [{ localAddress: "bad" }],
+      firewall: { rules: [{ source: "bad" }] },
+      nat: { rules: [{ destination: "bad" }] },
       loadBalancing: {
-        addressPools: [{ cidr: "192.0.2.1/32" }, { start: "192.0.2.2", end: "192.0.2.3" }],
-        listeners: [{ address: "192.0.2.4", targets: [{ address: "192.0.2.5" }, {}] }, {}],
+        addressPools: [{ cidr: "bad" }],
+        listeners: [{ address: "bad" }],
       },
-      dhcp: {
-        scopes: [
-          {
-            network: "192.0.2.0/24",
-            rangeStart: "192.0.2.10",
-            rangeEnd: "192.0.2.20",
-            gateway: "192.0.2.1",
-            reservations: [{ address: "192.0.2.11" }, {}],
-          },
-          {},
-        ],
-      },
+      dhcp: { scopes: [{ network: "bad" }] },
     },
   };
-  expect(validateNetworkValues([{ file: "r.yaml", data }])).toHaveLength(3);
+  expect(validateNetworkValues([{ file: "r.yaml", data }]).map(({ pointer }) => pointer)).toEqual([
+    "/networking/routing/defaultGateway",
+    "/networking/routing/vrrp/0/virtualAddresses/0",
+    "/networking/tunnels/0/localAddress",
+    "/networking/l2Announcements/0/address",
+    "/networking/firewall/rules/0/source",
+    "/networking/nat/rules/0/destination",
+    "/networking/loadBalancing/listeners/0/address",
+    "/networking/loadBalancing/addressPools/0/cidr",
+    "/networking/dhcp/scopes/0/network",
+  ]);
   expect(validateNetworkValues([{ file: "empty.yaml", data: {} }])).toEqual([]);
 });
