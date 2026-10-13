@@ -30,3 +30,13 @@ test("accepts a reference with an allowed object kind", () => {
     ),
   ).toEqual([]);
 });
+
+test("does not report a reference to an invalid target", () => {
+  expect(
+    objectReferenceDiagnostics(
+      [[1n, "/target", ["physical-machine"]]],
+      { file: "node.yaml", data: { id: 4n } },
+      new Map([[1n, { kind: "physical-machine", invalid: true }]]),
+    ),
+  ).toEqual([]);
+});

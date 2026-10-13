@@ -46,3 +46,10 @@ test("skips interfaces without a connection or ID", () => {
   };
   expect(validateConnections([record], new Map())).toEqual([]);
 });
+
+test("does not report links to invalid records", () => {
+  const record = { file: "node.yaml", data: { interfaces: [{ id: 1n, connectsTo: 2n }] } };
+  expect(
+    validateConnections([record], new Map([[2n, { kind: "interface", invalid: true }]])),
+  ).toEqual([]);
+});

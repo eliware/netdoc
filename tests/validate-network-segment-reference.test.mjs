@@ -18,3 +18,14 @@ test("reports a missing or wrong-kind segment reference", () => {
   );
   expect(diagnostics[0].message).toBe("Reference 2 does not resolve to a network-segment.");
 });
+
+test("does not report a reference to an invalid record", () => {
+  expect(
+    validateNetworkSegmentReference(
+      2n,
+      { file: "node.yaml", data: { id: 1n } },
+      "/segmentId",
+      new Map([[2n, { kind: "network-segment", invalid: true }]]),
+    ),
+  ).toEqual([]);
+});

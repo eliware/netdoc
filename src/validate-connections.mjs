@@ -20,6 +20,7 @@ export function validateConnections(records, entitiesById) {
         continue;
       }
       const peer = entitiesById.get(peerId);
+      if (peer?.invalid) continue;
       if (!peer) {
         diagnostics.push(
           createDiagnostic(

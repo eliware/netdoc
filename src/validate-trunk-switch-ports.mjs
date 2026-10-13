@@ -8,7 +8,9 @@ export function validateTrunkSwitchPorts(records, entitiesById) {
       const pointer = `/switch/ports/${index}`;
       const tagged = port.segmentIds ?? [];
       for (const [segmentIndex, id] of tagged.entries()) {
-        const segment = entitiesById.get(id)?.record?.data;
+        const target = entitiesById.get(id);
+        if (target?.invalid) continue;
+        const segment = target?.record?.data;
         if (segment?.vlan === "untagged")
           diagnostics.push(
             createDiagnostic(

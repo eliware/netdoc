@@ -20,3 +20,14 @@ test("indexes object and interface IDs with their source records", () => {
   });
   expect(indexEntities([{ file: "empty.yaml", data: {} }])).toEqual(new Map());
 });
+
+test("indexes invalid records as reference targets", () => {
+  const record = {
+    file: "invalid.yaml",
+    data: { kind: "physical-machine", id: 12n, interfaces: [null, { id: 13n, name: "eth0" }] },
+  };
+  const entities = indexEntities([], [record]);
+  expect(entities.get(12n)).toMatchObject({ invalid: true, kind: "physical-machine" });
+  expect(entities.get(13n)).toMatchObject({ invalid: true, kind: "interface" });
+  expect(indexEntities([], [{ file: "empty.yaml", data: {} }])).toEqual(new Map());
+});

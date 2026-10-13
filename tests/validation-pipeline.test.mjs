@@ -52,3 +52,28 @@ test("runs within-record checks when IDs conflict", () => {
     ]),
   );
 });
+
+test("does not report references to schema-invalid records as missing", () => {
+  const source = {
+    file: "source.yaml",
+    data: {
+      kind: "network-device",
+      id: 1n,
+      interfaces: [{ id: 11n, name: "eth0", segmentId: 2n }],
+      networking: { l2Announcements: [{ nodeId: 2n, interfaceName: "eth0" }] },
+    },
+  };
+  const invalidTarget = {
+    file: "invalid-target.yaml",
+    data: { kind: "physical-machine", id: 2n, interfaces: [{ id: 22n, name: "eth0" }] },
+  };
+  const initialDiagnostics = [{ file: invalidTarget.file, message: "Schema error" }];
+
+  expect(
+    runValidationPipeline({
+      inventoryRecords: [source, invalidTarget],
+      validRecords: [source],
+      initialDiagnostics,
+    }),
+  ).toEqual(initialDiagnostics);
+});

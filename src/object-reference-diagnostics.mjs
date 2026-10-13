@@ -3,6 +3,7 @@ import { createDiagnostic } from "./diagnostics.mjs";
 export function objectReferenceDiagnostics(checks, record, entitiesById) {
   return checks.flatMap(([id, pointer, expected]) => {
     const target = entitiesById.get(id);
+    if (target?.invalid) return [];
     if (target && expected.includes(target.kind)) return [];
     const actual = target?.kind ?? "no object";
     return [

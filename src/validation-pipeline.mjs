@@ -11,7 +11,9 @@ export function runValidationPipeline({ inventoryRecords, validRecords, initialD
   const idDiagnostics = validateIdentifiers(inventoryRecords);
   diagnostics.push(...idDiagnostics);
   const relationshipRecords = selectRelationshipValidationRecords(validRecords, idDiagnostics);
-  const validEntities = indexEntities(relationshipRecords);
+  const relationshipRecordSet = new Set(relationshipRecords);
+  const invalidRecords = inventoryRecords.filter((record) => !relationshipRecordSet.has(record));
+  const validEntities = indexEntities(relationshipRecords, invalidRecords);
   diagnostics.push(...validateReferences(relationshipRecords, validEntities));
   diagnostics.push(...validateNetworks(relationshipRecords, validEntities));
   diagnostics.push(...validateNetworkValues(validRecords));

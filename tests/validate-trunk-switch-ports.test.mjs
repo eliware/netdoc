@@ -8,7 +8,7 @@ test("checks tagged segments and PVID membership on trunk ports", () => {
       id: 1n,
       switch: {
         ports: [
-          { mode: "trunk", segmentIds: [2n, 3n], pvidSegmentId: 2n },
+          { mode: "trunk", segmentIds: [2n, 3n, 4n], pvidSegmentId: 2n },
           { mode: "trunk" },
           { mode: "access", segmentIds: [2n] },
         ],
@@ -18,6 +18,7 @@ test("checks tagged segments and PVID membership on trunk ports", () => {
   const entities = new Map([
     [2n, { record: { data: { vlan: "untagged" } } }],
     [3n, { record: { data: { vlan: 3 } } }],
+    [4n, { invalid: true }],
   ]);
   expect(validateTrunkSwitchPorts([record], entities).map(({ pointer }) => pointer)).toEqual([
     "/switch/ports/0/segmentIds/0",
