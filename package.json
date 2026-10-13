@@ -43,8 +43,8 @@
     "node": ">=26"
   },
   "dependencies": {
-    "@eliware/common": "^2.0.0",
-    "@eliware/snowflake": "^2.0.0",
+    "@eliware/common": "^12.0.1",
+    "@eliware/snowflake": "^12.0.0",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
     "yaml": "^2.9.1"
