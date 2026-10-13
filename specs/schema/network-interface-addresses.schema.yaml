@@ -1,0 +1,36 @@
+version: "11.0"
+$schema: https://json-schema.org/draft/2020-12/schema
+$defs:
+  networkInterfaceAddresses:
+    type: object
+    properties:
+      addresses:
+        type: array
+        items:
+          type: object
+          properties:
+            cidr:
+              type: string
+              minLength: 1
+              description: A stable IP address with its prefix length.
+            assignment:
+              enum:
+                - static
+                - dhcp
+                - dhcp-reservation
+                - virtual
+          required:
+            - assignment
+          if:
+            properties:
+              assignment:
+                enum:
+                  - static
+                  - dhcp-reservation
+                  - virtual
+          then:
+            properties:
+              cidr: {}
+            required:
+              - cidr
+          additionalProperties: false

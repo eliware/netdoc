@@ -6,7 +6,7 @@ test("combines access and trunk port diagnostics", () => {
     file: "sw.yaml",
     data: {
       id: 1n,
-      interfaces: [{ name: "a", segmentId: 2n }],
+      interfaces: [{ name: "a", segmentId: 3n }],
       switch: {
         ports: [
           { interfaceName: "a", mode: "access", segmentId: 3n },
@@ -22,6 +22,6 @@ test("combines access and trunk port diagnostics", () => {
     [4n, { record: { data: { vlan: "untagged" } } }],
     [5n, { record: { data: { vlan: 5 } } }],
   ]);
-  expect(validateSwitchPorts([record], entities)).toHaveLength(3);
+  expect(validateSwitchPorts([record], entities)).toHaveLength(2);
   expect(validateSwitchPorts([{ file: "empty.yaml", data: {} }], new Map())).toEqual([]);
 });

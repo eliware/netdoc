@@ -1,0 +1,66 @@
+version: "11.0"
+$schema: https://json-schema.org/draft/2020-12/schema
+$defs:
+  networkInterfaceFields:
+    type: object
+    properties:
+      id:
+        $ref: common.schema.yaml#/$defs/identifier
+        description: Include when another file must reference this interface.
+      name:
+        type: string
+        minLength: 1
+      type:
+        enum:
+          - ethernet
+          - wireless
+          - virtual-ethernet
+          - tunnel
+          - loopback
+          - bridge
+          - vlan
+          - other
+      macAddress:
+        type: string
+        pattern: ^(([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}|([0-9A-Fa-f]{2}-){5}[0-9A-Fa-f]{2})$
+      speed:
+        $ref: common.schema.yaml#/$defs/dataRate
+      mtu:
+        type: integer
+        minimum: 1
+      parentInterface:
+        type: string
+        minLength: 1
+        description: The name of a parent interface in this file.
+      segmentId:
+        $ref: common.schema.yaml#/$defs/reference
+        description: The ID of the attached network segment.
+      connectsTo:
+        $ref: common.schema.yaml#/$defs/reference
+        description: The peer interface ID. Both interfaces must reference each other.
+      externalPeer:
+        type: string
+        minLength: 1
+        description: A label for a peer outside this inventory.
+      unused:
+        const: true
+        description: Mark a configured port with no connected peer.
+      wireless:
+        type: object
+        properties:
+          role:
+            enum:
+              - radio
+              - client
+          ssid:
+            type: string
+          band:
+            type: string
+        additionalProperties: false
+      notes:
+        type: array
+        items:
+          type: string
+    required:
+      - name
+      - type

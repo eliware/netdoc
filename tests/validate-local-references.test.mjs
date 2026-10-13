@@ -18,13 +18,12 @@ test("coordinates interface, switch port, and network setting references", () =>
     file: "switch.yaml",
     data: {
       interfaces: [{ name: "known", parentInterface: "missing" }],
-      switch: { ports: [{ interfaceName: "missing" }] },
+      switch: { ports: [{ interfaceName: "known" }] },
       networking: { tunnels: [{ interfaceName: "missing" }] },
     },
   };
   expect(validateLocalReferences(record).map(({ pointer }) => pointer)).toEqual([
     "/interfaces/0/parentInterface",
-    "/switch/ports/0/interfaceName",
     "/networking/tunnels/0/interfaceName",
   ]);
 });

@@ -105,6 +105,44 @@ test("validates switch ports and network configuration", () => {
   ).toBe(false);
 });
 
+test("validates network interface fields and constraints", () => {
+  const validate = loadSchemaValidators(root)["network-device"];
+  const base = {
+    version: "11.0",
+    kind: "network-device",
+    name: "router",
+    roles: ["router"],
+    implementation: "physical",
+  };
+  const invalidInterfaces = [
+    { name: "eth0", type: "invalid" },
+    { name: "eth0", type: "ethernet", extra: true },
+    {
+      name: "eth0",
+      type: "ethernet",
+      addresses: [{ assignment: "static", cidr: "192.0.2.1/24" }],
+    },
+    { name: "eth0", type: "ethernet", connectsTo: 8 },
+    { name: "eth0", type: "ethernet", id: 7, connectsTo: 8, unused: true },
+  ];
+  for (const networkInterface of invalidInterfaces)
+    expect(validate({ ...base, interfaces: [networkInterface] })).toBe(false);
+  expect(
+    validate({
+      ...base,
+      interfaces: [
+        {
+          name: "eth0",
+          type: "ethernet",
+          macAddress: "00:11:22:33:44:55",
+          segmentId: 4,
+          addresses: [{ assignment: "static", cidr: "192.0.2.1/24" }],
+        },
+      ],
+    }),
+  ).toBe(true);
+});
+
 test("accepts hardware and storage definitions", () => {
   const validate = loadSchemaValidators(root)["physical-machine"];
   expect(
