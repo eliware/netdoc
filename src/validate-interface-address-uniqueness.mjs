@@ -13,6 +13,8 @@ export function validateInterfaceAddressUniqueness(
     return [];
   const key = `${networkInterface.segmentId}:${parsed.version}:${parsed.integer}`;
   const previous = assignments.get(key);
+  if (previous && isMatchingDhcpReservation(previous, networkInterface, addressAssignment))
+    return [];
   if (previous)
     return [
       createDiagnostic(
@@ -23,6 +25,23 @@ export function validateInterfaceAddressUniqueness(
         "Use a unique address on this segment or mark a shared address as virtual.",
       ),
     ];
-  assignments.set(key, { file: record.file, pointer });
+  assignments.set(key, {
+    file: record.file,
+    pointer,
+    assignment: addressAssignment.assignment,
+    macAddress: networkInterface.macAddress,
+  });
   return [];
+}
+
+function isMatchingDhcpReservation(previous, networkInterface, addressAssignment) {
+  const sameDhcpAddress =
+    (previous.assignment === "dhcp" && addressAssignment.assignment === "dhcp-reservation") ||
+    (previous.assignment === "dhcp-reservation" && addressAssignment.assignment === "dhcp");
+  return Boolean(
+    sameDhcpAddress &&
+    previous.macAddress &&
+    networkInterface.macAddress &&
+    previous.macAddress.toLowerCase() === networkInterface.macAddress.toLowerCase(),
+  );
 }

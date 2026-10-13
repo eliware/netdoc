@@ -63,3 +63,57 @@ test("checks DHCP reservations for duplicate addresses", () => {
   validateInterfaceAddressUniqueness(...args);
   expect(validateInterfaceAddressUniqueness(...args)[0].message).toContain("already assigned");
 });
+
+test("allows a DHCP lease that matches its MAC reservation", () => {
+  const assignments = new Map();
+  const address = { version: 4, integer: 1n };
+  const macAddress = "AA:BB:CC:DD:EE:FF";
+  const networkInterface = { segmentId: 2n, macAddress };
+  const record = { file: "node.yaml", data: { id: 1n } };
+  validateInterfaceAddressUniqueness(
+    networkInterface,
+    { assignment: "dhcp" },
+    address,
+    "192.0.2.1",
+    record,
+    "/interfaces/0/addresses/0/cidr",
+    assignments,
+  );
+  expect(
+    validateInterfaceAddressUniqueness(
+      networkInterface,
+      { assignment: "dhcp-reservation" },
+      address,
+      "192.0.2.1",
+      record,
+      "/interfaces/0/addresses/1/cidr",
+      assignments,
+    ),
+  ).toEqual([]);
+});
+
+test("reports a DHCP lease that matches a different MAC reservation", () => {
+  const assignments = new Map();
+  const address = { version: 4, integer: 1n };
+  const record = { file: "node.yaml", data: { id: 1n } };
+  validateInterfaceAddressUniqueness(
+    { segmentId: 2n, macAddress: "AA:BB:CC:DD:EE:FF" },
+    { assignment: "dhcp" },
+    address,
+    "192.0.2.1",
+    record,
+    "/interfaces/0/addresses/0/cidr",
+    assignments,
+  );
+  expect(
+    validateInterfaceAddressUniqueness(
+      { segmentId: 2n, macAddress: "11:22:33:44:55:66" },
+      { assignment: "dhcp-reservation" },
+      address,
+      "192.0.2.1",
+      record,
+      "/interfaces/1/addresses/0/cidr",
+      assignments,
+    )[0].message,
+  ).toContain("already assigned");
+});

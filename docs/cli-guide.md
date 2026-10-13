@@ -192,7 +192,7 @@ NetDoc checks each input set in this order:
 3. Check positive signed 64-bit IDs and global ID uniqueness.
 4. Check object, interface, segment, and local interface references.
 5. Check reciprocal interface links and switch port membership.
-6. Check IP and MAC address conflicts on each network segment.
+6. Check IP and MAC address conflicts on each network segment. NetDoc permits a DHCP lease and reservation to share an address when their MAC addresses match.
 7. Check IP values, network prefixes, and segment gateways.
 
 The schemas also check values such as VLAN numbers, port numbers, AS numbers, and address formats. NetDoc does not prove that a device or route works.
