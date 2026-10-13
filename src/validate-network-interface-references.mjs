@@ -3,8 +3,5 @@ import { validateLocalInterfaceNameFields } from "./validate-local-interface-nam
 
 export function validateNetworkInterfaceReferences(record) {
   const names = new Set((record.data.interfaces ?? []).map(({ name }) => name));
-  const fields = localInterfaceFields(record.data).filter(
-    ([pointer]) => !pointer.startsWith("/networking/l2Announcements/"),
-  );
-  return validateLocalInterfaceNameFields(fields, record, names);
+  return validateLocalInterfaceNameFields(localInterfaceFields(record.data), record, names);
 }

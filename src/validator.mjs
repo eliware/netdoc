@@ -1,6 +1,7 @@
 import { tryLoadInventory } from "./inventory-loader.mjs";
 import { tryLoadSchemaValidators } from "./schema-validators.mjs";
 import { validateIdentifiers } from "./validate-identifiers.mjs";
+import { indexEntities } from "./index-entities.mjs";
 import { validateReferences } from "./validate-references.mjs";
 import { validateNetworks } from "./validate-networks.mjs";
 import { validateNetworkValues } from "./network-value-validation.mjs";
@@ -26,10 +27,10 @@ export function validateTarget(
     validators,
   );
   const diagnostics = [...inventory.diagnostics, ...schemaDiagnostics];
-  const { diagnostics: idDiagnostics } = validateIdentifiers(inventory.records);
+  const idDiagnostics = validateIdentifiers(inventory.records);
   diagnostics.push(...idDiagnostics);
   if (diagnostics.length === 0) {
-    const { entitiesById: validEntities } = validateIdentifiers(validRecords);
+    const validEntities = indexEntities(validRecords);
     diagnostics.push(...validateReferences(validRecords, validEntities));
     diagnostics.push(...validateNetworks(validRecords, validEntities));
     diagnostics.push(...validateNetworkValues(validRecords));

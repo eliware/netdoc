@@ -14,10 +14,6 @@ export function localInterfaceFields(data) {
       `/networking/tunnels/${i}/interfaceName`,
       item.interfaceName,
     ]),
-    ...(network.l2Announcements ?? []).map((item, i) => [
-      `/networking/l2Announcements/${i}/interfaceName`,
-      item.interfaceName,
-    ]),
     ...(network.nat?.rules ?? []).map((item, i) => [
       `/networking/nat/rules/${i}/interfaceName`,
       item.interfaceName,

@@ -10,11 +10,10 @@ test("collects local interface references", () => {
           vrrp: [{ interfaceName: "eth2" }],
         },
         tunnels: [{ interfaceName: "eth3" }],
-        l2Announcements: [{ interfaceName: "eth4" }],
         nat: { rules: [{ interfaceName: "eth5" }] },
         firewall: { zones: [{ interfaceNames: ["eth1"] }, {}] },
       },
     }),
-  ).toHaveLength(6);
+  ).toHaveLength(5);
   expect(localInterfaceFields({})).toEqual([]);
 });

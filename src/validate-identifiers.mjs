@@ -3,20 +3,12 @@ import { createDiagnostic } from "./diagnostics.mjs";
 const maximumId = 9223372036854775807n;
 
 export function validateIdentifiers(records) {
-  const entitiesById = new Map();
+  const previousIds = new Map();
   const diagnostics = [];
   for (const record of records) {
     const objectId = record.data.id;
     if (objectId !== undefined) {
-      addIdentifier(
-        objectId,
-        record,
-        "/id",
-        record.data.kind,
-        undefined,
-        entitiesById,
-        diagnostics,
-      );
+      addIdentifier(objectId, record, "/id", previousIds, diagnostics);
     }
     (record.data.interfaces ?? []).forEach((networkInterface, index) => {
       if (networkInterface.id !== undefined) {
@@ -24,18 +16,16 @@ export function validateIdentifiers(records) {
           networkInterface.id,
           record,
           `/interfaces/${index}/id`,
-          "interface",
-          networkInterface,
-          entitiesById,
+          previousIds,
           diagnostics,
         );
       }
     });
   }
-  return { entitiesById, diagnostics };
+  return diagnostics;
 }
 
-function addIdentifier(id, record, pointer, kind, networkInterface, entitiesById, diagnostics) {
+function addIdentifier(id, record, pointer, previousIds, diagnostics) {
   if (typeof id !== "bigint") return;
   const location = { file: record.file, pointer, objectId: id };
   if (id < 1n || id > maximumId) {
@@ -50,7 +40,7 @@ function addIdentifier(id, record, pointer, kind, networkInterface, entitiesById
     );
     return;
   }
-  const previous = entitiesById.get(id);
+  const previous = previousIds.get(id);
   if (previous) {
     diagnostics.push(
       createDiagnostic(
@@ -63,5 +53,5 @@ function addIdentifier(id, record, pointer, kind, networkInterface, entitiesById
     );
     return;
   }
-  entitiesById.set(id, { file: record.file, pointer, kind, record, networkInterface });
+  previousIds.set(id, { file: record.file, pointer });
 }
