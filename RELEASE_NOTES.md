@@ -2,15 +2,31 @@
 
 ## 12.0.0 — 2026-10-13
 
+### Added
+
+- Add a CLI guide for installation, commands, validation, errors, and package contents.
+- Add published specification files and load schemas from `specs/schema/`.
+
 ### Changed
 
-- Eliware Test v12 checks the package, project files, and release workflow.
-- The package uses v12 of `@eliware/test`, `@eliware/common`, and `@eliware/snowflake`.
-- The npm package includes the specification files and object schemas.
-- The CLI loads object schemas from `specs/schema/`.
-- The user guide covers install, commands, validation checks, errors, and package limits.
-- The Knit deployment path is `/eliware/netdoc`, with a five-minute timeout.
-- Project guidance and release notes use clear, direct language.
+- Use `@eliware/test` v12 for project checks and package validation.
+- Use v12 of `@eliware/common` and `@eliware/snowflake`.
+- Include `specs/` in the published package.
+- Apply the Eliware repository conventions to project files and workflows.
+- Set the Knit deployment path to `/eliware/netdoc` and the timeout to five minutes.
+- Write end-user documentation in clear, direct language.
+- Split validator and schema code into focused modules with matching tests.
+- Keep complete test coverage for the validator modules.
+
+### Fixed
+
+- Skip follow-on reference errors for records that already have schema errors.
+- Normalize MAC addresses before NetDoc checks DHCP lease and reservation pairs.
+- Check trunk PVID segments for untagged VLAN use.
+- Reject CIDR prefixes in load balancer pool range endpoints.
+- Detect overlapping network ranges on each segment.
+- Allow distinct host addresses inside the same subnet.
+- Tighten checks for NAT values, IDs, interfaces, segments, and network values.
 
 ## 11.0.0 — 2026-10-09
 
