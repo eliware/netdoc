@@ -7,22 +7,19 @@ import { validateNetworkValues } from "./network-value-validation.mjs";
 import { validateSwitchPorts } from "./validate-switch-ports.mjs";
 import { validateRecords } from "./validate-records.mjs";
 import { reportValidationResult } from "./validation-report.mjs";
+import { reportValidationSetupError } from "./validation-setup-result.mjs";
 
 export function validateTarget(
   target,
   { write = console.log, error = console.error, cwd = process.cwd(), schemaDirectory } = {},
 ) {
   const inventoryResult = tryLoadInventory(target, { cwd });
-  if (inventoryResult.error !== undefined) {
-    error(inventoryResult.error);
-    return 2;
-  }
+  const inventoryError = reportValidationSetupError(inventoryResult, error);
+  if (inventoryError !== undefined) return inventoryError;
   const { inventory } = inventoryResult;
   const schemaResult = tryLoadSchemaValidators(schemaDirectory);
-  if (schemaResult.error !== undefined) {
-    error(schemaResult.error);
-    return 2;
-  }
+  const schemaError = reportValidationSetupError(schemaResult, error);
+  if (schemaError !== undefined) return schemaError;
   const { validators } = schemaResult;
   const { validRecords, diagnostics: schemaDiagnostics } = validateRecords(
     inventory.records,
