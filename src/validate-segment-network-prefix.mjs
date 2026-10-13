@@ -2,7 +2,7 @@ import { createDiagnostic } from "./diagnostics.mjs";
 import { parseAddress } from "./ip-addresses.mjs";
 
 export function validateSegmentNetworkPrefix(record, network, index) {
-  if (parseAddress(network.cidr)) return [];
+  if (parseAddress(network.cidr) && network.cidr.includes("/")) return [];
   return [
     createDiagnostic(
       record.file,

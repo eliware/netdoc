@@ -2,7 +2,9 @@ import { expect, test } from "@jest/globals";
 import { validateMacAddresses } from "../src/validate-mac-addresses.mjs";
 
 test("finds duplicate MAC addresses on one segment across records", () => {
-  const entities = new Map([[1n, { kind: "network-segment", record: { data: {} } }]]);
+  const entities = new Map([
+    [1n, { kind: "network-segment", record: { data: { kind: "network-segment" } } }],
+  ]);
   const records = ["a", "b"].map((name, index) => ({
     file: `${name}.yaml`,
     data: {

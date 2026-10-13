@@ -9,8 +9,8 @@ test("collects announcement and firewall address fields", () => {
     }),
   ).toEqual([
     ["/networking/l2Announcements/0/address", "192.0.2.1", false],
-    ["/networking/firewall/rules/0/source", "192.0.2.0/24", false],
-    ["/networking/firewall/rules/0/destination", "any", false],
+    ["/networking/firewall/rules/0/source", "192.0.2.0/24", false, { allowAny: true }],
+    ["/networking/firewall/rules/0/destination", "any", false, { allowAny: true }],
   ]);
   expect(networkAnnouncementFirewallValueFields({})).toEqual([]);
 });

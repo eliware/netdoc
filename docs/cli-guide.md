@@ -47,7 +47,7 @@ The npm package may not have the newest source version. An approved release publ
 | `netdoc --generate-id`          | Print one Snowflake ID.                           |
 | `netdoc --generate-id -n COUNT` | Print COUNT Snowflake IDs.                        |
 
-Run one command at a time. Replace `<path>` with a YAML file or directory. Replace `COUNT` with a positive safe integer.
+Run one command at a time. Replace `<path>` with a YAML file or directory. Set `COUNT` to an integer from 1 through 1000.
 
 ### Check a file
 

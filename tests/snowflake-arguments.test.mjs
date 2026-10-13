@@ -19,8 +19,12 @@ test.each([
   });
 });
 
-test("rejects counts above the safe integer range", () => {
+test("limits counts to one thousand IDs", () => {
+  expect(parseSnowflakeArguments(["-n", "1000"])).toEqual({ count: 1000 });
+  expect(parseSnowflakeArguments(["-n", "1001"])).toEqual({
+    error: "COUNT must be an integer from 1 through 1000.",
+  });
   expect(parseSnowflakeArguments(["-n", "999999999999999999999"])).toEqual({
-    error: "COUNT must be a positive safe integer.",
+    error: "COUNT must be an integer from 1 through 1000.",
   });
 });

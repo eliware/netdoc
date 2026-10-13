@@ -1,7 +1,12 @@
 import { createDiagnostic } from "./diagnostics.mjs";
 
 export function checkMac(networkInterface, record, pointer, segment, macs, diagnostics) {
-  if (!networkInterface.macAddress || networkInterface.segmentId === undefined) return;
+  if (
+    !networkInterface.macAddress ||
+    networkInterface.segmentId === undefined ||
+    segment?.kind !== "network-segment"
+  )
+    return;
   const normalized = networkInterface.macAddress.toLowerCase().replaceAll("-", ":");
   const key = `${networkInterface.segmentId}:${normalized}`;
   const previous = macs.get(key);

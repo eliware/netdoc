@@ -24,7 +24,8 @@ test("combines address, MAC, and segment diagnostics", () => {
       ipNetworks: [{ cidr: "192.0.2.0/24", gateway: "192.0.3.1" }],
     },
   });
-  const diagnostics = validateNetworks(records, new Map());
+  const segment = { kind: "network-segment", record: { data: { kind: "network-segment" } } };
+  const diagnostics = validateNetworks(records, new Map([[9n, segment]]));
   expect(diagnostics.map(({ file, pointer }) => [file, pointer])).toEqual([
     ["first.yaml", "/interfaces/0/addresses/0/cidr"],
     ["second.yaml", "/interfaces/0/macAddress"],

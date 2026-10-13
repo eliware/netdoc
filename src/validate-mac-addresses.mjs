@@ -9,14 +9,7 @@ export function validateMacAddresses(records, entitiesById) {
         networkInterface.segmentId === undefined
           ? undefined
           : entitiesById.get(networkInterface.segmentId);
-      checkMac(
-        networkInterface,
-        record,
-        `/interfaces/${index}`,
-        segment?.kind === "network-segment" ? segment.record.data : undefined,
-        macs,
-        diagnostics,
-      );
+      checkMac(networkInterface, record, `/interfaces/${index}`, segment, macs, diagnostics);
     }
   }
   return diagnostics;
