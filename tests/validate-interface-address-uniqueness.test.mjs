@@ -67,7 +67,7 @@ test("checks DHCP reservations for duplicate addresses", () => {
 test("allows a DHCP lease that matches its MAC reservation", () => {
   const assignments = new Map();
   const address = { version: 4, integer: 1n };
-  const macAddress = "AA:BB:CC:DD:EE:FF";
+  const macAddress = "AA-BB-CC-DD-EE-FF";
   const networkInterface = { segmentId: 2n, macAddress };
   const record = { file: "node.yaml", data: { id: 1n } };
   validateInterfaceAddressUniqueness(
@@ -81,7 +81,7 @@ test("allows a DHCP lease that matches its MAC reservation", () => {
   );
   expect(
     validateInterfaceAddressUniqueness(
-      networkInterface,
+      { ...networkInterface, macAddress: "aa:bb:cc:dd:ee:ff" },
       { assignment: "dhcp-reservation" },
       address,
       "192.0.2.1",

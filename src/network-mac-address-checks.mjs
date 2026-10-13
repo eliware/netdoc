@@ -1,4 +1,5 @@
 import { createDiagnostic } from "./diagnostics.mjs";
+import { normalizeMacAddress } from "./normalize-mac-address.mjs";
 
 export function checkMac(networkInterface, record, pointer, segment, macs, diagnostics) {
   if (
@@ -7,7 +8,7 @@ export function checkMac(networkInterface, record, pointer, segment, macs, diagn
     segment?.kind !== "network-segment"
   )
     return;
-  const normalized = networkInterface.macAddress.toLowerCase().replaceAll("-", ":");
+  const normalized = normalizeMacAddress(networkInterface.macAddress);
   const key = `${networkInterface.segmentId}:${normalized}`;
   const previous = macs.get(key);
   if (previous)

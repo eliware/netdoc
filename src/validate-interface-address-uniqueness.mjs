@@ -1,4 +1,5 @@
 import { createDiagnostic } from "./diagnostics.mjs";
+import { normalizeMacAddress } from "./normalize-mac-address.mjs";
 
 export function validateInterfaceAddressUniqueness(
   networkInterface,
@@ -42,6 +43,6 @@ function isMatchingDhcpReservation(previous, networkInterface, addressAssignment
     sameDhcpAddress &&
     previous.macAddress &&
     networkInterface.macAddress &&
-    previous.macAddress.toLowerCase() === networkInterface.macAddress.toLowerCase(),
+    normalizeMacAddress(previous.macAddress) === normalizeMacAddress(networkInterface.macAddress),
   );
 }
