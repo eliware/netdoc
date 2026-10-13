@@ -1,17 +1,18 @@
 import { expect, test } from "@jest/globals";
 import { networkValueFields } from "../src/network-value-fields.mjs";
 
-test("collects network addresses with their schema paths and prefix rules", () => {
+test("combines values from route, tunnel, and VRRP field groups", () => {
   expect(
     networkValueFields({
       networking: {
-        routing: { defaultGateway: "192.0.2.1", staticRoutes: [{ destination: "0.0.0.0/0" }] },
+        routing: { vrrp: [{ virtualAddresses: ["192.0.2.10"] }] },
+        tunnels: [{ localAddress: "192.0.2.20" }],
       },
     }),
   ).toEqual([
-    ["/networking/routing/defaultGateway", "192.0.2.1", false],
-    ["/networking/routing/staticRoutes/0/destination", "0.0.0.0/0", true],
-    ["/networking/routing/staticRoutes/0/nextHop", undefined, false],
+    ["/networking/routing/defaultGateway", undefined, false],
     ["/networking/routing/bgp/routerId", undefined, false],
+    ["/networking/routing/vrrp/0/virtualAddresses/0", "192.0.2.10", false],
+    ["/networking/tunnels/0/localAddress", "192.0.2.20", false],
   ]);
 });
