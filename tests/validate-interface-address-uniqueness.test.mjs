@@ -48,3 +48,18 @@ test.each([
     ),
   ).toEqual([]);
 });
+
+test("checks DHCP reservations for duplicate addresses", () => {
+  const assignments = new Map();
+  const args = [
+    { segmentId: 2n },
+    { assignment: "dhcp-reservation" },
+    { version: 4, integer: 1n },
+    "192.0.2.1",
+    { file: "node.yaml", data: { id: 1n } },
+    "/interfaces/0/addresses/0/cidr",
+    assignments,
+  ];
+  validateInterfaceAddressUniqueness(...args);
+  expect(validateInterfaceAddressUniqueness(...args)[0].message).toContain("already assigned");
+});

@@ -5,7 +5,11 @@ export function networkNatValueFields(network) {
   (network.nat?.rules ?? []).forEach((item, i) => {
     add(`/networking/nat/rules/${i}/source`, item.source, { allowAny: true });
     add(`/networking/nat/rules/${i}/destination`, item.destination, { allowAny: true });
-    add(`/networking/nat/rules/${i}/translation`, item.translation);
+    add(
+      `/networking/nat/rules/${i}/translation`,
+      item.translation,
+      item.type === "source" ? { allowMasquerade: true } : undefined,
+    );
   });
   return fields;
 }

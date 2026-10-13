@@ -181,7 +181,7 @@ Set each BGP peer's address and remote AS number. Set the local AS number for th
 
 Set each firewall action to `allow`, `drop`, or `reject`. Use `any`, an address, or a network prefix for rule sources and destinations.
 
-Set each NAT rule to `source` or `destination`. Set `translation` to `masquerade` or an IP address.
+Set each NAT rule to `source` or `destination`. Use `masquerade` for source NAT. Use an IP address for destination NAT.
 
 ## Validation checks
 

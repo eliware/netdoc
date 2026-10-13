@@ -5,7 +5,9 @@ test("accepts addresses, prefixes, and allowed special values", () => {
   expect(validNetworkAddressValue("192.0.2.1", false, "/gateway")).toBe(true);
   expect(validNetworkAddressValue("192.0.2.0/24", true, "/network")).toBe(true);
   expect(validNetworkAddressValue("any", false, "/source", { allowAny: true })).toBe(true);
-  expect(validNetworkAddressValue("masquerade", false, "/translation")).toBe(true);
+  expect(
+    validNetworkAddressValue("masquerade", false, "/translation", { allowMasquerade: true }),
+  ).toBe(true);
 });
 
 test("rejects invalid values and special values in other fields", () => {
@@ -18,4 +20,5 @@ test("rejects invalid values and special values in other fields", () => {
   );
   expect(validNetworkAddressValue("192.0.2.1", false, "/listener", { hostOnly: true })).toBe(true);
   expect(validNetworkAddressValue("masquerade", false, "/source")).toBe(false);
+  expect(validNetworkAddressValue("masquerade", false, "/translation")).toBe(false);
 });
