@@ -1,5 +1,6 @@
 import { createDiagnostic } from "./diagnostics.mjs";
-import { parseAddress, prefixInNetwork } from "./ip-addresses.mjs";
+import { parseAddress } from "./ip-addresses.mjs";
+import { prefixInNetwork } from "./network-containment.mjs";
 
 export function checkInterfaceAddresses(
   networkInterface,

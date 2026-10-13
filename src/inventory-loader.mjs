@@ -1,7 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createDiagnostic } from "./diagnostics.mjs";
-import { collectYamlFiles, parseYamlFile } from "./yaml-files.mjs";
+import { collectYamlFiles } from "./yaml-file-collection.mjs";
+import { parseYamlFile } from "./yaml-parser.mjs";
 
 export function loadInventory(target, { cwd = process.cwd() } = {}) {
   if (typeof target !== "string" || target.length === 0) {

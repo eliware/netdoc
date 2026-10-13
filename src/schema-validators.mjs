@@ -2,7 +2,7 @@ import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
-import { parseYamlFile } from "./yaml-files.mjs";
+import { parseYamlFile } from "./yaml-parser.mjs";
 
 const schemaFiles = [
   "physical-machine.schema.yaml",

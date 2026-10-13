@@ -1,4 +1,3 @@
-import { formatDiagnostic } from "./diagnostics.mjs";
 import { loadInventory } from "./inventory-loader.mjs";
 import { loadSchemaValidators } from "./schema-validators.mjs";
 import { validateIdentifiers } from "./validate-identifiers.mjs";
@@ -7,12 +6,12 @@ import { validateNetworks } from "./validate-networks.mjs";
 import { validateNetworkValues } from "./network-value-validation.mjs";
 import { validateSwitchPorts } from "./validate-switch-ports.mjs";
 import { validateRecords } from "./validate-records.mjs";
+import { validateInventoryArguments } from "./validate-arguments.mjs";
+import { reportValidationResult } from "./validation-report.mjs";
 
 export function validateInventory(args, options = {}) {
-  if (args.length !== 1) {
-    (options.error ?? console.error)("Usage: netdoc validate <yaml-file-or-directory>");
-    return 2;
-  }
+  const argumentResult = validateInventoryArguments(args, options.error);
+  if (argumentResult !== undefined) return argumentResult;
   return validateTarget(args[0], options);
 }
 
@@ -48,11 +47,5 @@ export function validateTarget(
     diagnostics.push(...validateNetworkValues(validRecords));
     diagnostics.push(...validateSwitchPorts(validRecords, validEntities));
   }
-  if (diagnostics.length > 0) {
-    diagnostics.forEach((diagnostic) => error(formatDiagnostic(diagnostic)));
-    error(`Found ${diagnostics.length} error(s) in ${inventory.fileCount} YAML file(s).`);
-    return 1;
-  }
-  write(`Validated ${inventory.fileCount} YAML file(s).`);
-  return 0;
+  return reportValidationResult(diagnostics, inventory.fileCount, { write, error });
 }

@@ -1,5 +1,6 @@
 import { createDiagnostic } from "./diagnostics.mjs";
-import { addressInNetwork, parseAddress } from "./ip-addresses.mjs";
+import { addressInNetwork } from "./network-containment.mjs";
+import { parseAddress } from "./ip-addresses.mjs";
 
 export function checkSegmentAddresses(record, diagnostics) {
   if (record.data.kind !== "network-segment") return;

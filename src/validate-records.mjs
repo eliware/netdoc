@@ -1,5 +1,5 @@
 import { createDiagnostic } from "./diagnostics.mjs";
-import { convertBigIntsForValidation } from "./yaml-files.mjs";
+import { convertBigIntsForValidation } from "./validation-value-conversion.mjs";
 
 export function validateRecords(records, validators) {
   const diagnostics = [];

@@ -22,6 +22,12 @@ function writeRecord(root, filename, content) {
   return file;
 }
 
+test("stops when the argument coordinator rejects the input", () => {
+  const error = jest.fn();
+  expect(validateInventory([], { error })).toBe(2);
+  expect(error).toHaveBeenCalledWith("Usage: netdoc validate <yaml-file-or-directory>");
+});
+
 const validRecord =
   'version: "11.0"\nkind: network-device\nname: router\nroles: [router]\nimplementation: physical\n';
 

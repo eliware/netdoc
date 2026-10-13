@@ -12,3 +12,16 @@ test("checks local interface names", () => {
   expect(validateLocalReferences(record)).toHaveLength(2);
   expect(validateLocalReferences({ file: "empty.yaml", data: {} }, new Map())).toEqual([]);
 });
+
+test("checks switch port interface names", () => {
+  const record = {
+    file: "switch.yaml",
+    data: {
+      interfaces: [{ name: "known" }],
+      switch: { ports: [{ interfaceName: "missing" }] },
+    },
+  };
+  expect(validateLocalReferences(record).map(({ pointer }) => pointer)).toEqual([
+    "/switch/ports/0/interfaceName",
+  ]);
+});

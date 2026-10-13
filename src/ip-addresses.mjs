@@ -12,37 +12,6 @@ export function parseAddress(value) {
   return { version, bits, prefix, integer, first: integer >> BigInt(bits - prefix), text: address };
 }
 
-export function addressInNetwork(address, network) {
-  const parsedAddress = parseAddress(address);
-  const parsedNetwork = parseAddress(network);
-  return Boolean(
-    parsedAddress &&
-    parsedNetwork &&
-    parsedAddress.version === parsedNetwork.version &&
-    parsedAddress.integer >> BigInt(parsedAddress.bits - parsedNetwork.prefix) ===
-      parsedNetwork.integer >> BigInt(parsedNetwork.bits - parsedNetwork.prefix),
-  );
-}
-
-export function prefixInNetwork(prefix, network) {
-  const parsedPrefix = parseAddress(prefix);
-  const parsedNetwork = parseAddress(network);
-  return Boolean(
-    parsedPrefix &&
-    parsedNetwork &&
-    parsedPrefix.prefix >= parsedNetwork.prefix &&
-    addressInNetwork(prefix, network),
-  );
-}
-
-export function sameAddress(left, right) {
-  const first = parseAddress(left);
-  const second = parseAddress(right);
-  return Boolean(
-    first && second && first.version === second.version && first.integer === second.integer,
-  );
-}
-
 function parseIpv4(address) {
   return address.split(".").reduce((value, part) => (value << 8n) | BigInt(part), 0n);
 }

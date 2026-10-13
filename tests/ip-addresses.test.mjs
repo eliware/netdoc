@@ -1,10 +1,5 @@
 import { expect, test } from "@jest/globals";
-import {
-  addressInNetwork,
-  parseAddress,
-  prefixInNetwork,
-  sameAddress,
-} from "../src/ip-addresses.mjs";
+import { parseAddress } from "../src/ip-addresses.mjs";
 
 test("parses IPv4 and IPv6 addresses with prefixes", () => {
   expect(parseAddress("192.0.2.1/24").version).toBe(4);
@@ -15,13 +10,7 @@ test("parses IPv4 and IPv6 addresses with prefixes", () => {
   expect(parseAddress(4)).toBeUndefined();
 });
 
-test("checks address membership and equality", () => {
-  expect(addressInNetwork("192.0.2.8", "192.0.2.0/24")).toBe(true);
-  expect(addressInNetwork("2001:db8::2", "2001:db8::/64")).toBe(true);
-  expect(addressInNetwork("192.0.3.1", "192.0.2.0/24")).toBe(false);
-  expect(prefixInNetwork("192.0.2.0/24", "192.0.2.0/24")).toBe(true);
-  expect(prefixInNetwork("192.0.0.0/16", "192.0.2.0/24")).toBe(false);
-  expect(addressInNetwork("192.0.2.1", "2001:db8::/64")).toBe(false);
-  expect(sameAddress("2001:db8::1", "2001:0db8:0:0:0:0:0:1")).toBe(true);
-  expect(sameAddress("invalid", "192.0.2.1")).toBe(false);
+test("rejects invalid address shapes and prefixes", () => {
+  expect(parseAddress("192.0.2.1/24/extra")).toBeUndefined();
+  expect(parseAddress("192.0.2.1/-1")).toBeUndefined();
 });
