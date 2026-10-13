@@ -6,8 +6,8 @@ test("checks parent interface references", () => {
     file: "router.yaml",
     data: { id: 1n, interfaces: [{ name: "eth0" }, { name: "eth0", parentInterface: "bad" }] },
   };
-  expect(validateInterfaceNameReferences(record).map(({ message }) => message)).toEqual([
-    "Interface name 'bad' does not exist in this record.",
+  expect(validateInterfaceNameReferences(record).map(({ pointer }) => pointer)).toEqual([
+    "/interfaces/1/parentInterface",
   ]);
   expect(validateInterfaceNameReferences({ file: "empty.yaml", data: {} })).toEqual([]);
 });

@@ -1,6 +1,4 @@
-import { validateInterfaceAddressFormat } from "./validate-interface-address-format.mjs";
-import { validateInterfaceAddressUniqueness } from "./validate-interface-address-uniqueness.mjs";
-import { validateInterfaceAddressSegment } from "./validate-interface-address-segment.mjs";
+import { validateInterfaceAddress } from "./validate-interface-address.mjs";
 
 export function validateInterfaceAddresses(records, entitiesById) {
   const diagnostics = [];
@@ -14,26 +12,14 @@ export function validateInterfaceAddresses(records, entitiesById) {
       for (const [addressIndex, assignment] of (networkInterface.addresses ?? []).entries()) {
         if (assignment.cidr === undefined) continue;
         const pointer = `/interfaces/${index}/addresses/${addressIndex}/cidr`;
-        const format = validateInterfaceAddressFormat(assignment.cidr, record, pointer);
-        if (format.diagnostic) {
-          diagnostics.push(format.diagnostic);
-          continue;
-        }
         diagnostics.push(
-          ...validateInterfaceAddressUniqueness(
+          ...validateInterfaceAddress(
             networkInterface,
             assignment,
-            format.parsed,
-            assignment.cidr,
-            record,
-            pointer,
-            assignments,
-          ),
-          ...validateInterfaceAddressSegment(
-            assignment.cidr,
             record,
             pointer,
             segment?.kind === "network-segment" ? segment.record.data : undefined,
+            assignments,
           ),
         );
       }
