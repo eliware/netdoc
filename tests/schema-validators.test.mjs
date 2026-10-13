@@ -24,7 +24,7 @@ test("loads a schema validator for each supported object kind", () => {
   ).toBe(true);
 });
 
-test("accepts switch ports with access, trunk, and internal router links", () => {
+test("validates switch ports and network configuration", () => {
   const validate = loadSchemaValidators(root)["network-device"];
   expect(
     validate({
@@ -61,10 +61,6 @@ test("accepts switch ports with access, trunk, and internal router links", () =>
       },
     }),
   ).toBe(true);
-});
-
-test("rejects invalid switch access and trunk port membership", () => {
-  const validate = loadSchemaValidators(root)["network-device"];
   expect(
     validate({
       version: "11.0",
@@ -81,10 +77,6 @@ test("rejects invalid switch access and trunk port membership", () => {
       },
     }),
   ).toBe(false);
-});
-
-test("accepts network configuration and rejects invalid routing values", () => {
-  const validate = loadSchemaValidators(root)["network-device"];
   const record = {
     version: "11.0",
     kind: "network-device",

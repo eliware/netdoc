@@ -1,38 +1,35 @@
 import { expect, test } from "@jest/globals";
 import { validateNetworks } from "../src/validate-networks.mjs";
 
-test("combines interface, MAC, and segment diagnostics", () => {
-  const segment = {
-    kind: "network-segment",
-    record: { data: { ipNetworks: [{ cidr: "192.0.2.0/24" }] } },
-  };
-  const entities = new Map([[1n, segment]]);
-  const records = ["a", "b"].map((name, i) => ({
+test("combines address, MAC, and segment diagnostics", () => {
+  const records = ["first", "second"].map((name, index) => ({
     file: `${name}.yaml`,
     data: {
       kind: "physical-machine",
-      id: BigInt(i + 2),
+      id: BigInt(index + 1),
       interfaces: [
         {
-          name: "eth0",
-          segmentId: 1n,
+          segmentId: 9n,
           macAddress: "AA:BB:CC:DD:EE:FF",
-          addresses: [{ cidr: "192.0.2.4/24", assignment: "static" }],
+          ...(index === 0 ? { addresses: [{ cidr: "bad", assignment: "static" }] } : {}),
         },
       ],
     },
   }));
-  records[1].data.interfaces[0].addresses.push({ cidr: "broken", assignment: "static" });
   records.push({
-    file: "invalid-segment.yaml",
-    data: { kind: "network-segment", id: 3n, ipNetworks: [{ cidr: "bad", gateway: "bad" }] },
+    file: "segment.yaml",
+    data: {
+      kind: "network-segment",
+      id: 9n,
+      ipNetworks: [{ cidr: "192.0.2.0/24", gateway: "192.0.3.1" }],
+    },
   });
-
-  const diagnostics = validateNetworks(records, entities);
-  expect(diagnostics).toHaveLength(5);
-  expect(new Set(diagnostics.map(({ file }) => file))).toEqual(
-    new Set(["b.yaml", "invalid-segment.yaml"]),
-  );
+  const diagnostics = validateNetworks(records, new Map());
+  expect(diagnostics.map(({ file, pointer }) => [file, pointer])).toEqual([
+    ["first.yaml", "/interfaces/0/addresses/0/cidr"],
+    ["second.yaml", "/interfaces/0/macAddress"],
+    ["segment.yaml", "/ipNetworks/0/gateway"],
+  ]);
 });
 
 test("allows dynamic or unsegmented interfaces and skips non-segment records", () => {
