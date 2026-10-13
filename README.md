@@ -24,14 +24,12 @@ Git-versioned model for documenting network infrastructure, systems, services, a
 
 ## Features
 
-NetDoc provides read-only validation for infrastructure YAML. It also generates unique Snowflake IDs. It owns the schemas and CLI. Inventory records belong in the separate `netdoc-config` repository.
-
-The CLI checks YAML syntax, object schemas, BIGINT IDs, object references, reciprocal links, IP assignments, segment networks, and IP values. It does not edit records or connect to a network.
+NetDoc checks infrastructure YAML and prints Snowflake IDs. Read the [user guide](docs/cli-guide.md) for command details.
 
 ## Requirements
 
 - Node.js 26 or later.
-- npm 12 or later for repository validation.
+- npm 12 or later to check this repository.
 
 ## Setup
 
@@ -41,68 +39,54 @@ Install the public package:
 npm install --global @eliware/netdoc
 ```
 
-The `netdoc` command runs `bin/netdoc.mjs`. The package version comes from `package.json`. The npm badge shows the published version. An unreleased package version is not available from npm.
+The package installs the `netdoc` command. It includes the CLI, schemas, and user guide. An approved release publishes the package to npm.
 
 ## Usage
 
-Run `netdoc --help` to show available commands. Run `netdoc validate <path>` to check a YAML file or directory. Run `netdoc --generate-id` to print one ID.
-
-Run `netdoc --generate-id -n 3` to print three Snowflake IDs. Validation does not edit input files. ID generation prints IDs to standard output. See [Release Notes](RELEASE_NOTES.md) for version changes.
+Run `netdoc --help` to list commands. Use `netdoc validate <path>` to check YAML. Use `netdoc --generate-id` to print an ID. Read the [user guide](docs/cli-guide.md) for details and [release notes](RELEASE_NOTES.md) for changes.
 
 ## Development
 
-Use Node.js 26 or later and npm 12 or later. Install locked dependencies and run shared validation:
-
-```sh
-npm ci
-npm test
-```
-
-Run `npm run lint`, `npm run format:check`, `npm run audit`, or `npm run pack` for one validation stage. Run `npm run format` to change supported files.
-
 Read [AGENTS.md](AGENTS.md), the [documentation index](docs/README.md), and the [specification index](specs/README.md) before you change the project.
-
-Ubuntu CI validates Node.js 26. Windows and macOS are supported but are not directly validated by CI.
 
 ## Testing
 
-`npm test` runs Eliware validation, Jest tests, and coverage. Tests use local fixtures and mocked command calls. Tests do not connect to a network.
+Run `npm ci` to install locked dependencies. Run `npm test` to check code, format, dependencies, package contents, and test coverage.
 
 ## Troubleshooting
 
-If `netdoc` is not found, confirm Node.js 26 or later is installed and the global npm path is available. Run `npm test` to validate a checkout. Use the file or directory path required by `validate`.
+If `netdoc` is not found, install the package again. If validation fails, read each error and correct the named YAML value.
 
 ## Security
 
-The validator reads YAML and reports errors. ID generation prints to standard output. Do not store credentials in inventory or expose secrets in diagnostics.
+Do not store credentials in inventory files. NetDoc does not print secret values.
 
 ## Configuration
 
-NetDoc has no runtime settings or environment variables. Package metadata and workflow files are not runtime configuration.
+NetDoc has no runtime settings or environment variables.
 
 ## Operations
 
-Startup occurs when a user runs a command. The command exits after it completes. Workflows include local validation and ID output. NetDoc does not write files, connect to a network, or change external systems.
+Run a command to start NetDoc. It exits when the command ends. NetDoc reads input files and writes results to the terminal. It does not change files or connect to a network.
 
 ## Commands
 
-| Command                     | Behavior                                        |
-| --------------------------- | ----------------------------------------------- |
-| `netdoc --help`             | Print help and exit with code 0.                |
-| `netdoc --version`          | Print the package version and exit with code 0. |
-| `netdoc validate <path>`    | Validate YAML files in a file or directory.     |
-| `netdoc --generate-id`      | Print one Snowflake ID.                         |
-| `netdoc --generate-id -n 3` | Print three Snowflake IDs.                      |
+| Command                  | Result                     |
+| ------------------------ | -------------------------- |
+| `netdoc --help`          | List commands.             |
+| `netdoc --version`       | Print the package version. |
+| `netdoc validate <path>` | Check YAML files.          |
+| `netdoc --generate-id`   | Print one Snowflake ID.    |
+
+See the [user guide](docs/cli-guide.md) for command options and examples.
 
 ## Exit codes
 
-| Code | Meaning                                   |
-| ---- | ----------------------------------------- |
-| `0`  | The command completed successfully.       |
-| `1`  | YAML parsing or schema validation failed. |
-| `2`  | The command or input path is invalid.     |
-
-Validation diagnostics include each source file and YAML path. They include an object ID when one exists. They give a correction hint when one is clear. They do not include credentials.
+| Code | Meaning                         |
+| ---- | ------------------------------- |
+| `0`  | The command completed.          |
+| `1`  | YAML data failed a check.       |
+| `2`  | The command or path is invalid. |
 
 ## Support
 

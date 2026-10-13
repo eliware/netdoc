@@ -4,11 +4,9 @@
 
 This repository is `eliware/netdoc`.
 
-It stores versioned network and system records.
-
 ## Scope and boundaries
 
-Use README.md for repository purpose, scope, and ownership.
+Use README.md for project purpose, scope, and ownership.
 
 ## Layout
 
@@ -30,22 +28,21 @@ Run `npm run format:check` to check formatting.
 
 ## Security
 
-Keep credentials, secret values, private data, and runtime state out of Git.
+Keep secrets, private data, and runtime state out of Git.
 
 ## Changes
 
 Keep changes within this repository scope.
-Use Eliware Operations for approval before external changes.
+Get approval before external changes.
 
 ## Application
 
-Document entrypoints, workflows, settings, startup, and shutdown in README.md.
+Use docs/ for end-user guidance.
 
 ## CLI
 
-Document commands, options, arguments, defaults, errors, and exit codes in README.md.
+Use docs/cli-guide.md for command details.
 
 ## npm publication
 
 Include specs/ in the package.
-Document install, entrypoints, contents, and release limits in README.md.
