@@ -7,10 +7,9 @@ test("checks local names and segment references", () => {
     data: {
       kind: "network-device",
       interfaces: [{ name: "eth0", parentInterface: "bad", segmentId: 7n }, { name: "eth0" }],
-      switch: { ports: [{ interfaceName: "bad", segmentIds: [8n], pvidSegmentId: 9n }] },
     },
   };
-  expect(validateLocalReferences(record, new Map())).toHaveLength(6);
+  expect(validateLocalReferences(record, new Map())).toHaveLength(3);
   expect(validateLocalReferences({ file: "empty.yaml", data: {} }, new Map())).toEqual([]);
 });
 

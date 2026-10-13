@@ -1,4 +1,5 @@
 import { expect, test } from "@jest/globals";
+import { validateLocalReferences } from "../src/validate-local-references.mjs";
 import { validateSwitchPorts } from "../src/validate-switch-ports.mjs";
 
 test("checks access segment agreement and trunk VLAN membership", () => {
@@ -24,4 +25,21 @@ test("checks access segment agreement and trunk VLAN membership", () => {
   ]);
   expect(validateSwitchPorts([record], entities)).toHaveLength(3);
   expect(validateSwitchPorts([{ file: "empty.yaml", data: {} }], new Map())).toEqual([]);
+});
+
+test("checks switch port interface and segment references", () => {
+  const record = {
+    file: "sw.yaml",
+    data: {
+      id: 1n,
+      interfaces: [{ name: "known" }],
+      switch: {
+        ports: [
+          { interfaceName: "missing", mode: "access", segmentId: 2n },
+          { interfaceName: "known", mode: "trunk", segmentIds: [3n], pvidSegmentId: 4n },
+        ],
+      },
+    },
+  };
+  expect(validateLocalReferences(record, new Map())).toHaveLength(4);
 });

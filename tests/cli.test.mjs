@@ -1,5 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
 import { runCli } from "../src/cli.mjs";
+import { validateInventory } from "../src/validator.mjs";
 
 const handlers = () => ({ validate: jest.fn(() => 0), generateIds: jest.fn(() => 0) });
 
@@ -36,4 +37,14 @@ test("reports unknown commands and returns the usage error code", () => {
   expect(log.error).toHaveBeenCalledWith("Unknown argument: unknown");
   expect(commands.validate).not.toHaveBeenCalled();
   expect(commands.generateIds).not.toHaveBeenCalled();
+});
+
+test("requires one validation path", () => {
+  const error = jest.fn();
+  expect(validateInventory([], { error })).toBe(2);
+  expect(error).toHaveBeenCalledWith("Usage: netdoc validate <yaml-file-or-directory>");
+  expect(validateInventory(["one", "two"], { error })).toBe(2);
+  const log = jest.spyOn(console, "error").mockImplementation(() => {});
+  expect(validateInventory([])).toBe(2);
+  expect(log).toHaveBeenCalled();
 });

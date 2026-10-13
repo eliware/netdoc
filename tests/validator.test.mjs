@@ -25,16 +25,6 @@ function writeRecord(root, filename, content) {
 const validRecord =
   'version: "11.0"\nkind: network-device\nname: router\nroles: [router]\nimplementation: physical\n';
 
-test("requires one validation path", () => {
-  const error = jest.fn();
-  expect(validateInventory([], { error })).toBe(2);
-  expect(error).toHaveBeenCalledWith("Usage: netdoc validate <yaml-file-or-directory>");
-  expect(validateInventory(["one", "two"], { error })).toBe(2);
-  const log = jest.spyOn(console, "error").mockImplementation(() => {});
-  expect(validateInventory([])).toBe(2);
-  expect(log).toHaveBeenCalled();
-});
-
 test("uses default validation settings for a valid file", () => {
   const root = makeDirectory();
   const file = writeRecord(root, "record.yaml", validRecord);
@@ -42,6 +32,7 @@ test("uses default validation settings for a valid file", () => {
   const error = jest.spyOn(console, "error").mockImplementation(() => {});
   expect(validateTarget(file)).toBe(0);
   expect(validateInventory([file])).toBe(0);
+  expect(validateTarget(file)).toBe(0);
   expect(write).toHaveBeenCalledWith("Validated 1 YAML file(s).");
   expect(error).not.toHaveBeenCalled();
   expect(validateInventory([file], { write: jest.fn(), error: jest.fn() })).toBe(0);

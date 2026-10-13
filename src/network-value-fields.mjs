@@ -1,33 +1,4 @@
-import { createDiagnostic } from "./diagnostics.mjs";
-import { parseAddress } from "./ip-addresses.mjs";
-
-export function validateNetworkValues(records) {
-  const diagnostics = [];
-  for (const record of records) {
-    for (const [pointer, value, network] of values(record.data)) {
-      if (value !== undefined && !valid(value, network, pointer))
-        diagnostics.push(
-          createDiagnostic(
-            record.file,
-            pointer,
-            record.data.id,
-            `Invalid IP address or network '${value}'.`,
-            "Use a valid IP address or network prefix.",
-          ),
-        );
-    }
-  }
-  return diagnostics;
-}
-
-function valid(value, network, pointer) {
-  if (typeof value !== "string") return false;
-  if (value === "any" || (value === "masquerade" && pointer.endsWith("/translation"))) return true;
-  const parsed = parseAddress(value);
-  return Boolean(parsed && (!network || value.includes("/")));
-}
-
-function values(data) {
+export function networkValueFields(data) {
   const net = data.networking ?? {};
   const route = net.routing ?? {};
   const entries = [];

@@ -15,7 +15,7 @@ function makeDirectory() {
   return directory;
 }
 
-test("loads one YAML file and a nested directory with exact integer values", () => {
+test("loads a YAML directory and a single file with exact integer values", () => {
   const root = makeDirectory();
   fs.mkdirSync(path.join(root, "nested"));
   fs.writeFileSync(path.join(root, "nested", "second.yaml"), "id: 9223372036854775807\n");
@@ -29,13 +29,12 @@ test("loads one YAML file and a nested directory with exact integer values", () 
   expect(result.records[1].data.id).toBe(9223372036854775807n);
   expect(result.fileCount).toBe(2);
   expect(result.diagnostics).toEqual([]);
-});
-
-test("loads a single YAML file with the default working directory", () => {
-  const root = makeDirectory();
   const file = path.join(root, "record.yaml");
   fs.writeFileSync(file, "kind: network-segment\n");
-  expect(loadInventory(file).records).toHaveLength(1);
+  const single = loadInventory(file);
+  expect(single.records).toHaveLength(1);
+  expect(single.fileCount).toBe(1);
+  expect(single.diagnostics).toEqual([]);
 });
 
 test("returns parse and document shape diagnostics", () => {
