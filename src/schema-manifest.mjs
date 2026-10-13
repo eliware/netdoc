@@ -1,0 +1,16 @@
+export const schemaFiles = Object.freeze([
+  "common.schema.yaml",
+  "hardware-storage.schema.yaml",
+  "network-interface.schema.yaml",
+  "switch.schema.yaml",
+  "interface-switch.schema.yaml",
+  "network-routing-tunnels.schema.yaml",
+  "network-firewall-nat.schema.yaml",
+  "network-load-balancing.schema.yaml",
+  "network-dhcp.schema.yaml",
+  "network-configuration.schema.yaml",
+  "physical-machine.schema.yaml",
+  "virtual-machine.schema.yaml",
+  "network-device.schema.yaml",
+  "network-segment.schema.yaml",
+]);
