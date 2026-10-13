@@ -6,7 +6,7 @@ Use this guide to install NetDoc, check inventory YAML, and print Snowflake IDs.
 
 NetDoc checks network and system inventory. It reads YAML files and reports errors. It does not change files or connect to devices.
 
-NetDoc supports physical machines, virtual machines, network devices, and network segments. It has no application or service record types. It can record network endpoints on infrastructure records.
+NetDoc supports physical machines, virtual machines, network devices, and network segments.
 
 ## Requirements
 

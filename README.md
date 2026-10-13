@@ -2,7 +2,7 @@
 
 ## @eliware/netdoc [![npm](https://img.shields.io/npm/v/@eliware/netdoc)](https://www.npmjs.com/package/@eliware/netdoc) [![License](https://img.shields.io/github/license/eliware/netdoc)](https://github.com/eliware/netdoc/blob/main/LICENSE) [![CI](https://github.com/eliware/netdoc/actions/workflows/ci.yaml/badge.svg)](https://github.com/eliware/netdoc/actions/workflows/ci.yaml)
 
-Git-versioned model for documenting network infrastructure, systems, services, and their relationships.
+Git-versioned inventory for network infrastructure and systems, with YAML schemas, validation, and Snowflake ID generation.
 
 ## Table of Contents
 

@@ -2,15 +2,19 @@
   "name": "@eliware/netdoc",
   "version": "12.0.0",
   "type": "module",
-  "description": "Git-versioned model for documenting network infrastructure, systems, services, and their relationships.",
+  "description": "Git-versioned inventory for network infrastructure and systems, with YAML schemas, validation, and Snowflake ID generation.",
   "keywords": [
     "netdoc",
     "network",
+    "systems",
     "infrastructure",
+    "inventory",
     "topology",
-    "documentation",
     "yaml",
-    "git"
+    "schema",
+    "validator",
+    "snowflake",
+    "cli"
   ],
   "private": false,
   "publishConfig": {
