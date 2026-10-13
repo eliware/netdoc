@@ -1,5 +1,6 @@
 import { expect, test } from "@jest/globals";
 import { validateLocalReferences } from "../src/validate-local-references.mjs";
+import { validateLocalObjectReferences } from "../src/validate-local-object-references.mjs";
 import { validateSwitchPorts } from "../src/validate-switch-ports.mjs";
 
 test("checks access segment agreement and trunk VLAN membership", () => {
@@ -41,5 +42,6 @@ test("checks switch port interface and segment references", () => {
       },
     },
   };
-  expect(validateLocalReferences(record, new Map())).toHaveLength(4);
+  expect(validateLocalReferences(record)).toHaveLength(1);
+  expect(validateLocalObjectReferences(record, new Map())).toHaveLength(3);
 });

@@ -1,10 +1,12 @@
 import { createDiagnostic } from "./diagnostics.mjs";
 import { validateLocalReferences } from "./validate-local-references.mjs";
+import { validateLocalObjectReferences } from "./validate-local-object-references.mjs";
 import { validateObjectReferences } from "./validate-object-references.mjs";
 
 export function validateReferences(records, entitiesById) {
   return records.flatMap((record) => [
-    ...validateLocalReferences(record, entitiesById),
+    ...validateLocalReferences(record),
+    ...validateLocalObjectReferences(record, entitiesById),
     ...validateObjectReferences(record, entitiesById),
     ...validateConnections(record, entitiesById),
   ]);
