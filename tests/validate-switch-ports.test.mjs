@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import { validateSwitchPorts } from "../src/validate-switch-ports.mjs";
 
-test("checks access segment agreement and trunk VLAN membership", () => {
+test("combines access and trunk port diagnostics", () => {
   const record = {
     file: "sw.yaml",
     data: {
