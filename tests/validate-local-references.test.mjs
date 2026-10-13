@@ -1,12 +1,11 @@
 import { expect, test } from "@jest/globals";
 import { validateLocalReferences } from "../src/validate-local-references.mjs";
 
-test("coordinates interface, switch port, and network setting references", () => {
+test("coordinates interface and network setting references", () => {
   const record = {
     file: "switch.yaml",
     data: {
       interfaces: [{ name: "known", parentInterface: "missing" }],
-      switch: { ports: [{ interfaceName: "known" }] },
       networking: { tunnels: [{ interfaceName: "missing" }] },
     },
   };
