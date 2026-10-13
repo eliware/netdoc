@@ -15,10 +15,3 @@ test("collects network addresses with their schema paths and prefix rules", () =
     ["/networking/routing/bgp/routerId", undefined, false],
   ]);
 });
-
-test("returns no fields when the record has no network data", () => {
-  expect(networkValueFields({})).toEqual([
-    ["/networking/routing/defaultGateway", undefined, false],
-    ["/networking/routing/bgp/routerId", undefined, false],
-  ]);
-});

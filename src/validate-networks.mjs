@@ -1,39 +1,11 @@
-import { checkMac } from "./network-mac-address-checks.mjs";
-import { checkInterfaceAddresses } from "./network-interface-address-checks.mjs";
-import { checkSegmentAddresses } from "./network-segment-address-checks.mjs";
+import { validateInterfaceAddresses } from "./validate-interface-addresses.mjs";
+import { validateMacAddresses } from "./validate-mac-addresses.mjs";
+import { validateSegmentAddresses } from "./validate-segment-addresses.mjs";
 
 export function validateNetworks(records, entitiesById) {
-  const diagnostics = [];
-  const assignments = new Map();
-  const macs = new Map();
-  for (const record of records) {
-    const segments = new Map();
-    for (const [index, networkInterface] of (record.data.interfaces ?? []).entries()) {
-      const pointer = `/interfaces/${index}`;
-      const segment =
-        networkInterface.segmentId === undefined
-          ? undefined
-          : entitiesById.get(networkInterface.segmentId);
-      if (segment?.kind === "network-segment")
-        segments.set(networkInterface.name, segment.record.data);
-      checkMac(
-        networkInterface,
-        record,
-        pointer,
-        segments.get(networkInterface.name),
-        macs,
-        diagnostics,
-      );
-      checkInterfaceAddresses(
-        networkInterface,
-        record,
-        pointer,
-        segment?.record.data,
-        assignments,
-        diagnostics,
-      );
-    }
-    checkSegmentAddresses(record, diagnostics);
-  }
-  return diagnostics;
+  return [
+    ...validateInterfaceAddresses(records, entitiesById),
+    ...validateMacAddresses(records, entitiesById),
+    ...validateSegmentAddresses(records),
+  ];
 }
