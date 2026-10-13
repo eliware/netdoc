@@ -5,10 +5,6 @@ export function validateInterfaceAddresses(records, entitiesById) {
   const assignments = new Map();
   for (const record of records) {
     for (const [index, networkInterface] of (record.data.interfaces ?? []).entries()) {
-      const segment =
-        networkInterface.segmentId === undefined
-          ? undefined
-          : entitiesById.get(networkInterface.segmentId);
       for (const [addressIndex, assignment] of (networkInterface.addresses ?? []).entries()) {
         if (assignment.cidr === undefined) continue;
         const pointer = `/interfaces/${index}/addresses/${addressIndex}/cidr`;
@@ -18,7 +14,7 @@ export function validateInterfaceAddresses(records, entitiesById) {
             assignment,
             record,
             pointer,
-            segment?.kind === "network-segment" ? segment.record.data : undefined,
+            entitiesById,
             assignments,
           ),
         );

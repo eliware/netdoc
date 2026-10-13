@@ -7,9 +7,14 @@ export function validateInterfaceAddress(
   assignment,
   record,
   pointer,
-  segment,
+  entitiesById,
   assignments,
 ) {
+  const segmentEntity =
+    networkInterface.segmentId === undefined
+      ? undefined
+      : entitiesById.get(networkInterface.segmentId);
+  const segment = segmentEntity?.kind === "network-segment" ? segmentEntity.record.data : undefined;
   const format = validateInterfaceAddressFormat(assignment.cidr, record, pointer);
   if (format.diagnostic) return [format.diagnostic];
   return [
