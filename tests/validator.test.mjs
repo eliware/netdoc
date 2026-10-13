@@ -80,3 +80,43 @@ test("reports unsupported object kinds and schema violations", () => {
   expect(error).toHaveBeenCalledWith(expect.stringContaining("required.yaml:"));
   expect(error).toHaveBeenCalledWith(expect.stringContaining("Found "));
 });
+
+test("checks valid records when another record has a schema error", () => {
+  const root = makeDirectory();
+  writeRecord(
+    root,
+    "broken.yaml",
+    'version: "11.0"\nkind: network-device\nname: broken\nroles: [unknown]\nimplementation: physical\n',
+  );
+  writeRecord(
+    root,
+    "router.yaml",
+    'version: "11.0"\nkind: network-device\nname: router\nroles: [router]\nimplementation: physical\ninterfaces:\n  - name: eth0\n    type: ethernet\n    segmentId: 99\n',
+  );
+  const error = jest.fn();
+  expect(validateTarget(root, { error })).toBe(1);
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("allowed values"));
+  expect(error).toHaveBeenCalledWith(
+    expect.stringContaining("Reference 99 does not resolve to a network-segment."),
+  );
+});
+
+test("checks record values when IDs conflict", () => {
+  const root = makeDirectory();
+  writeRecord(
+    root,
+    "first.yaml",
+    'version: "11.0"\nkind: network-device\nid: 7\nname: first\nroles: [router]\nimplementation: physical\nnetworking:\n  routing:\n    defaultGateway: bad\n',
+  );
+  writeRecord(
+    root,
+    "second.yaml",
+    'version: "11.0"\nkind: network-device\nid: 7\nname: second\nroles: [router]\nimplementation: physical\n',
+  );
+  const error = jest.fn();
+  expect(validateTarget(root, { error })).toBe(1);
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("already used"));
+  expect(error).toHaveBeenCalledWith(
+    expect.stringContaining("Invalid IP address or network 'bad'."),
+  );
+});

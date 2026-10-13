@@ -9,6 +9,7 @@ import { validateSwitchPorts } from "./validate-switch-ports.mjs";
 import { validateRecords } from "./validate-records.mjs";
 import { reportValidationResult } from "./validation-report.mjs";
 import { reportValidationSetupError } from "./validation-setup-result.mjs";
+import { selectRelationshipValidationRecords } from "./select-relationship-validation-records.mjs";
 
 export function validateTarget(
   target,
@@ -29,12 +30,11 @@ export function validateTarget(
   const diagnostics = [...inventory.diagnostics, ...schemaDiagnostics];
   const idDiagnostics = validateIdentifiers(inventory.records);
   diagnostics.push(...idDiagnostics);
-  if (diagnostics.length === 0) {
-    const validEntities = indexEntities(validRecords);
-    diagnostics.push(...validateReferences(validRecords, validEntities));
-    diagnostics.push(...validateNetworks(validRecords, validEntities));
-    diagnostics.push(...validateNetworkValues(validRecords));
-    diagnostics.push(...validateSwitchPorts(validRecords, validEntities));
-  }
+  const relationshipRecords = selectRelationshipValidationRecords(validRecords, idDiagnostics);
+  const validEntities = indexEntities(relationshipRecords);
+  diagnostics.push(...validateReferences(relationshipRecords, validEntities));
+  diagnostics.push(...validateNetworks(relationshipRecords, validEntities));
+  diagnostics.push(...validateNetworkValues(validRecords));
+  diagnostics.push(...validateSwitchPorts(relationshipRecords, validEntities));
   return reportValidationResult(diagnostics, inventory.fileCount, { write, error });
 }
