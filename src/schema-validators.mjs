@@ -18,7 +18,7 @@ const schemaByKind = {
 };
 
 export function loadSchemaValidators(
-  schemaDirectory = fileURLToPath(new URL("../docs/schema/", import.meta.url)),
+  schemaDirectory = fileURLToPath(new URL("../specs/schema/", import.meta.url)),
 ) {
   const ajv = new Ajv2020({ allErrors: true, strict: true });
   addFormats(ajv);

@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadSchemaValidators } from "../src/schema-validators.mjs";
 
-const root = fileURLToPath(new URL("../docs/schema/", import.meta.url));
+const root = fileURLToPath(new URL("../specs/schema/", import.meta.url));
 
 test("loads a schema validator for each supported object kind", () => {
   const validators = loadSchemaValidators(root);
