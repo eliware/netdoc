@@ -1,5 +1,5 @@
-import { loadInventory } from "./inventory-loader.mjs";
-import { loadSchemaValidators } from "./schema-validators.mjs";
+import { tryLoadInventory } from "./inventory-loader.mjs";
+import { tryLoadSchemaValidators } from "./schema-validators.mjs";
 import { validateIdentifiers } from "./validate-identifiers.mjs";
 import { validateReferences } from "./validate-references.mjs";
 import { validateNetworks } from "./validate-networks.mjs";
@@ -19,20 +19,18 @@ export function validateTarget(
   target,
   { write = console.log, error = console.error, cwd = process.cwd(), schemaDirectory } = {},
 ) {
-  let inventory;
-  let validators;
-  try {
-    inventory = loadInventory(target, { cwd });
-  } catch (cause) {
-    error(cause.message);
+  const inventoryResult = tryLoadInventory(target, { cwd });
+  if (inventoryResult.error !== undefined) {
+    error(inventoryResult.error);
     return 2;
   }
-  try {
-    validators = loadSchemaValidators(schemaDirectory);
-  } catch (cause) {
-    error(`Could not load schemas: ${cause.message}`);
+  const { inventory } = inventoryResult;
+  const schemaResult = tryLoadSchemaValidators(schemaDirectory);
+  if (schemaResult.error !== undefined) {
+    error(schemaResult.error);
     return 2;
   }
+  const { validators } = schemaResult;
   const { validRecords, diagnostics: schemaDiagnostics } = validateRecords(
     inventory.records,
     validators,

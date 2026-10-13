@@ -43,21 +43,19 @@ test("uses default validation settings for a valid file", () => {
   expect(validateInventory([file], { write: jest.fn(), error: jest.fn() })).toBe(0);
 });
 
-test("rejects missing and empty paths", () => {
+test("reports target setup errors", () => {
   const root = makeDirectory();
+  const file = writeRecord(root, "record.yaml", validRecord);
   const error = jest.fn();
   expect(validateTarget("missing", { cwd: root, error })).toBe(2);
   expect(validateTarget(undefined, { error })).toBe(2);
   expect(validateTarget("", { error })).toBe(2);
-  expect(validateTarget(root, { error })).toBe(2);
-  expect(error).toHaveBeenCalledWith(expect.stringContaining("No YAML files found:"));
-});
-
-test("reports schema load errors", () => {
-  const root = makeDirectory();
-  const file = writeRecord(root, "record.yaml", validRecord);
-  const error = jest.fn();
   expect(validateTarget(file, { schemaDirectory: path.join(root, "schemas"), error })).toBe(2);
+  const empty = path.join(root, "empty");
+  fs.mkdirSync(empty);
+  expect(validateTarget(empty, { error })).toBe(2);
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("Path does not exist:"));
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("No YAML files found:"));
   expect(error).toHaveBeenCalledWith(expect.stringContaining("Could not load schemas:"));
 });
 

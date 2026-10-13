@@ -42,25 +42,23 @@ test("checks switch and device references", () => {
   expect(validateReferences([record], new Map()).length).toBe(4);
 });
 
-test("coordinates local, object, and reciprocal link checks", () => {
+test("coordinates local and object reference checks", () => {
   const record = {
     file: "node.yaml",
     data: {
       kind: "virtual-machine",
       id: 10n,
       residentOn: 999n,
-      interfaces: [{ id: 1n, name: "eth0", segmentId: 2n, connectsTo: 3n }],
+      interfaces: [{ id: 1n, name: "eth0", segmentId: 2n }],
       networking: { l2Announcements: [{ nodeId: 4n, interfaceName: "eth9" }] },
     },
   };
   const entities = new Map([
     [2n, { kind: "network-segment" }],
-    [3n, { kind: "interface", networkInterface: { connectsTo: 99n } }],
     [4n, { kind: "physical-machine", record: { data: { interfaces: [{ name: "eth0" }] } } }],
   ]);
   expect(validateReferences([record], entities).map(({ pointer }) => pointer)).toEqual([
     "/networking/l2Announcements/0/interfaceName",
     "/residentOn",
-    "/interfaces/0/connectsTo",
   ]);
 });

@@ -49,3 +49,11 @@ export function loadInventory(target, { cwd = process.cwd() } = {}) {
   }
   return { records, diagnostics, fileCount: files.length };
 }
+
+export function tryLoadInventory(target, options) {
+  try {
+    return { inventory: loadInventory(target, options) };
+  } catch (cause) {
+    return { error: cause.message };
+  }
+}

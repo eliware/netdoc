@@ -2,7 +2,7 @@ import { afterEach, expect, test } from "@jest/globals";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { loadInventory } from "../src/inventory-loader.mjs";
+import { loadInventory, tryLoadInventory } from "../src/inventory-loader.mjs";
 
 let directory;
 afterEach(() => {
@@ -63,4 +63,11 @@ test("rejects a directory without YAML files", () => {
   const root = makeDirectory();
   fs.writeFileSync(path.join(root, "readme.txt"), "text\n");
   expect(() => loadInventory(root, { cwd: root })).toThrow("No YAML files found:");
+});
+
+test("returns input errors for the validation workflow", () => {
+  const root = makeDirectory();
+  expect(tryLoadInventory("missing.yaml", { cwd: root })).toEqual({
+    error: `Path does not exist: ${path.join(root, "missing.yaml")}`,
+  });
 });
