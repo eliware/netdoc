@@ -61,13 +61,27 @@ test("reports schema load errors", () => {
   expect(error).toHaveBeenCalledWith(expect.stringContaining("Could not load schemas:"));
 });
 
-test("reports parse errors, unsupported kinds, and schema errors", () => {
+test("reports YAML parse errors", () => {
   const root = makeDirectory();
   writeRecord(root, "bad.yaml", "name: [broken\n");
+  const error = jest.fn();
+  expect(validateTarget(root, { error })).toBe(1);
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("YAML parse error:"));
+});
+
+test("reports unsupported object kinds", () => {
+  const root = makeDirectory();
   writeRecord(root, "kind.yaml", "name: unknown\n");
   writeRecord(root, "unsupported.yaml", 'version: "11.0"\nkind: unknown\nname: unknown\n');
   writeRecord(root, "scalar.yaml", "just text\n");
   writeRecord(root, "null.yaml", "null\n");
+  const error = jest.fn();
+  expect(validateTarget(root, { error })).toBe(1);
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("Missing or unsupported object kind"));
+});
+
+test("reports schema violations", () => {
+  const root = makeDirectory();
   writeRecord(
     root,
     "schema.yaml",
@@ -76,8 +90,6 @@ test("reports parse errors, unsupported kinds, and schema errors", () => {
   writeRecord(root, "required.yaml", 'version: "11.0"\nkind: network-device\nname: broken\n');
   const error = jest.fn();
   expect(validateTarget(root, { error })).toBe(1);
-  expect(error).toHaveBeenCalledWith(expect.stringContaining("YAML parse error:"));
-  expect(error).toHaveBeenCalledWith(expect.stringContaining("Missing or unsupported object kind"));
   expect(error).toHaveBeenCalledWith(
     expect.stringContaining("must be equal to one of the allowed values"),
   );
