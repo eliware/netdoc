@@ -1,0 +1,362 @@
+version: "11.0"
+$schema: https://json-schema.org/draft/2020-12/schema
+$defs:
+  networkConfiguration:
+    type: object
+    properties:
+      routing:
+        type: object
+        properties:
+          defaultGateway:
+            type: string
+          staticRoutes:
+            type: array
+            items:
+              type: object
+              properties:
+                destination:
+                  type: string
+                nextHop:
+                  type: string
+                interfaceName:
+                  type: string
+              required:
+                - destination
+              anyOf:
+                - properties:
+                    nextHop: {}
+                  required:
+                    - nextHop
+                - properties:
+                    interfaceName: {}
+                  required:
+                    - interfaceName
+              additionalProperties: false
+          bgp:
+            type: object
+            properties:
+              localAs:
+                type: integer
+                minimum: 1
+                maximum: 4294967295
+              routerId:
+                type: string
+              advertisedPrefixes:
+                type: array
+                uniqueItems: true
+                items:
+                  type: string
+              peers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    peerId:
+                      $ref: common.schema.yaml#/$defs/reference
+                    address:
+                      type: string
+                    remoteAs:
+                      type: integer
+                      minimum: 1
+                      maximum: 4294967295
+                  required:
+                    - address
+                    - remoteAs
+                  additionalProperties: false
+            required:
+              - localAs
+            additionalProperties: false
+          vrrp:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                vrid:
+                  type: integer
+                  minimum: 1
+                  maximum: 255
+                interfaceName:
+                  type: string
+                priority:
+                  type: integer
+                  minimum: 0
+                  maximum: 255
+                virtualAddresses:
+                  type: array
+                  minItems: 1
+                  uniqueItems: true
+                  items:
+                    type: string
+              required:
+                - vrid
+                - interfaceName
+                - virtualAddresses
+              additionalProperties: false
+            description: A shared address must have the same VRID and segment on each peer.
+        additionalProperties: false
+      tunnels:
+        type: array
+        items:
+          type: object
+          properties:
+            type:
+              enum:
+                - wireguard
+                - tailscale
+                - other
+            interfaceName:
+              type: string
+            localAddress:
+              type: string
+            listenPort:
+              type: integer
+              minimum: 1
+              maximum: 65535
+            peers:
+              type: array
+              items:
+                type: object
+                properties:
+                  endpointAddress:
+                    type: string
+                  endpointPort:
+                    type: integer
+                    minimum: 1
+                    maximum: 65535
+                  allowedNetworks:
+                    type: array
+                    items:
+                      type: string
+                additionalProperties: false
+          required:
+            - type
+          additionalProperties: false
+        description: Record tunnel topology. Do not store keys or credentials.
+      l2Announcements:
+        type: array
+        items:
+          type: object
+          properties:
+            address:
+              type: string
+            interfaceName:
+              type: string
+            nodeId:
+              $ref: common.schema.yaml#/$defs/reference
+          required:
+            - address
+            - interfaceName
+          additionalProperties: false
+      firewall:
+        type: object
+        properties:
+          defaultAction:
+            enum:
+              - allow
+              - drop
+              - reject
+          zones:
+            type: array
+            items:
+              type: object
+              properties:
+                name:
+                  type: string
+                interfaceNames:
+                  type: array
+                  items:
+                    type: string
+              required:
+                - name
+              additionalProperties: false
+          rules:
+            type: array
+            items:
+              type: object
+              properties:
+                direction:
+                  enum:
+                    - inbound
+                    - outbound
+                    - forwarded
+                action:
+                  enum:
+                    - allow
+                    - drop
+                    - reject
+                protocol:
+                  type: string
+                source:
+                  type: string
+                  description: A literal address, CIDR, or any.
+                destination:
+                  type: string
+                  description: A literal address, CIDR, or any.
+                sourceZone:
+                  type: string
+                destinationZone:
+                  type: string
+                ports:
+                  type: array
+                  items:
+                    type: integer
+                    minimum: 1
+                    maximum: 65535
+              required:
+                - action
+              additionalProperties: false
+        additionalProperties: false
+      nat:
+        type: object
+        properties:
+          rules:
+            type: array
+            items:
+              type: object
+              properties:
+                type:
+                  enum:
+                    - source
+                    - destination
+                source:
+                  type: string
+                destination:
+                  type: string
+                translation:
+                  type: string
+                  description: Use masquerade or an IP address.
+                interfaceName:
+                  type: string
+                nodeId:
+                  $ref: common.schema.yaml#/$defs/reference
+              required:
+                - type
+                - translation
+              additionalProperties: false
+        additionalProperties: false
+      loadBalancing:
+        type: object
+        properties:
+          addressPools:
+            type: array
+            items:
+              oneOf:
+                - type: object
+                  properties:
+                    cidr:
+                      type: string
+                  required:
+                    - cidr
+                  additionalProperties: false
+                - type: object
+                  properties:
+                    start:
+                      type: string
+                    end:
+                      type: string
+                  required:
+                    - start
+                    - end
+                  additionalProperties: false
+          listeners:
+            type: array
+            items:
+              type: object
+              properties:
+                address:
+                  type: string
+                protocol:
+                  type: string
+                port:
+                  type: integer
+                  minimum: 1
+                  maximum: 65535
+                targets:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      address:
+                        type: string
+                      port:
+                        type: integer
+                        minimum: 1
+                        maximum: 65535
+                      deviceId:
+                        $ref: common.schema.yaml#/$defs/reference
+                    anyOf:
+                      - properties:
+                          address: {}
+                        required:
+                          - address
+                      - properties:
+                          deviceId: {}
+                        required:
+                          - deviceId
+                    additionalProperties: false
+              required:
+                - protocol
+                - port
+              additionalProperties: false
+        additionalProperties: false
+      listeners:
+        type: array
+        items:
+          type: object
+          properties:
+            label:
+              type: string
+            address:
+              type: string
+            protocol:
+              enum:
+                - TCP
+                - UDP
+                - SCTP
+            port:
+              type: integer
+              minimum: 1
+              maximum: 65535
+          required:
+            - protocol
+            - port
+          additionalProperties: false
+        description: Record network endpoints needed for Layer 4 diagrams.
+      dhcp:
+        type: object
+        properties:
+          scopes:
+            type: array
+            items:
+              type: object
+              properties:
+                network:
+                  type: string
+                rangeStart:
+                  type: string
+                rangeEnd:
+                  type: string
+                gateway:
+                  type: string
+                reservations:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      macAddress:
+                        type: string
+                      address:
+                        type: string
+                      name:
+                        type: string
+                    required:
+                      - macAddress
+                      - address
+                    additionalProperties: false
+              required:
+                - network
+              additionalProperties: false
+        additionalProperties: false
+    additionalProperties: false

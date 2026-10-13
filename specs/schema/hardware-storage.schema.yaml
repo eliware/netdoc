@@ -1,0 +1,118 @@
+version: "11.0"
+$schema: https://json-schema.org/draft/2020-12/schema
+$defs:
+  storageDevice:
+    type: object
+    properties:
+      device:
+        type: string
+      model:
+        type: string
+      serialNumber:
+        type: string
+      media:
+        enum:
+          - HDD
+          - SSD
+          - NVMe
+          - flash
+          - virtual
+          - other
+      capacity:
+        $ref: common.schema.yaml#/$defs/size
+      raid:
+        type: object
+        properties:
+          level:
+            type: string
+          members:
+            type: array
+            items:
+              type: string
+            description: Local device names or paths in this file.
+          controller:
+            type: string
+        required:
+          - level
+        additionalProperties: false
+      partitions:
+        type: array
+        items:
+          type: object
+          properties:
+            device:
+              type: string
+            size:
+              $ref: common.schema.yaml#/$defs/size
+            filesystem:
+              type: string
+            mountPoint:
+              type: string
+          required:
+            - device
+          additionalProperties: false
+    additionalProperties: false
+  storage:
+    type: object
+    properties:
+      devices:
+        type: array
+        items:
+          $ref: "#/$defs/storageDevice"
+      mounts:
+        type: array
+        items:
+          type: object
+          properties:
+            source:
+              type: string
+            mountPoint:
+              type: string
+            filesystem:
+              type: string
+          required:
+            - source
+            - mountPoint
+          additionalProperties: false
+      shares:
+        type: array
+        items:
+          type: object
+          properties:
+            protocol:
+              enum:
+                - SMB
+                - NFS
+            name:
+              type: string
+            path:
+              type: string
+            clients:
+              type: array
+              items:
+                type: string
+            access:
+              enum:
+                - read-only
+                - read-write
+          required:
+            - protocol
+            - path
+          additionalProperties: false
+    additionalProperties: false
+  hardware:
+    type: object
+    properties:
+      manufacturer:
+        type: string
+      model:
+        type: string
+      cpu:
+        $ref: common.schema.yaml#/$defs/cpu
+      memory:
+        $ref: common.schema.yaml#/$defs/memory
+      gpus:
+        type: array
+        items:
+          $ref: common.schema.yaml#/$defs/gpu
+    additionalProperties: false

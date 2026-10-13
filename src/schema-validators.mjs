@@ -5,6 +5,9 @@ import path from "node:path";
 import { parseYamlFile } from "./yaml-parser.mjs";
 
 const schemaFiles = [
+  "hardware-storage.schema.yaml",
+  "interface-switch.schema.yaml",
+  "network-configuration.schema.yaml",
   "physical-machine.schema.yaml",
   "virtual-machine.schema.yaml",
   "network-device.schema.yaml",
