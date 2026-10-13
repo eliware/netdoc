@@ -22,6 +22,20 @@ export function validateTrunkSwitchPorts(records, entitiesById) {
             ),
           );
       }
+      if (port.pvidSegmentId !== undefined) {
+        const target = entitiesById.get(port.pvidSegmentId);
+        const segment = target?.record?.data;
+        if (!target?.invalid && segment?.vlan !== undefined && segment.vlan !== "untagged")
+          diagnostics.push(
+            createDiagnostic(
+              record.file,
+              `${pointer}/pvidSegmentId`,
+              record.data.id,
+              `Trunk PVID segment ${port.pvidSegmentId} must use untagged traffic.`,
+              "Use a segment with vlan: untagged for the PVID.",
+            ),
+          );
+      }
       if (port.pvidSegmentId !== undefined && tagged.includes(port.pvidSegmentId))
         diagnostics.push(
           createDiagnostic(

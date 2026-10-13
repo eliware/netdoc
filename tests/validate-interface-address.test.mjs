@@ -29,7 +29,19 @@ test("runs uniqueness and segment checks for a valid address", () => {
           { kind: "network-segment", record: { data: { ipNetworks: [{ cidr: "192.0.2.0/24" }] } } },
         ],
       ]),
-      new Map([["1:4:3221226241", { file: "old.yaml", pointer: "/ip" }]]),
+      new Map([
+        [
+          "1:4",
+          [
+            {
+              file: "old.yaml",
+              pointer: "/ip",
+              assignment: "static",
+              range: { start: 3221226241n, end: 3221226241n },
+            },
+          ],
+        ],
+      ]),
     ).map(({ message }) => message),
   ).toEqual([
     expect.stringContaining("already assigned"),

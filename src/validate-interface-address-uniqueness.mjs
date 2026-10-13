@@ -12,9 +12,16 @@ export function validateInterfaceAddressUniqueness(
 ) {
   if (addressAssignment.assignment === "virtual" || networkInterface.segmentId === undefined)
     return [];
-  const key = `${networkInterface.segmentId}:${parsed.version}:${parsed.integer}`;
-  const previous = assignments.get(key);
-  if (previous && isMatchingDhcpReservation(previous, networkInterface, addressAssignment))
+  const key = `${networkInterface.segmentId}:${parsed.version}`;
+  const range = addressRange(parsed);
+  const previous = (assignments.get(key) ?? []).find((item) => rangesOverlap(item.range, range));
+  if (
+    previous &&
+    previous.range.start === range.start &&
+    previous.range.end === range.end &&
+    range.start === range.end &&
+    isMatchingDhcpReservation(previous, networkInterface, addressAssignment)
+  )
     return [];
   if (previous)
     return [
@@ -26,13 +33,27 @@ export function validateInterfaceAddressUniqueness(
         "Use a unique address on this segment or mark a shared address as virtual.",
       ),
     ];
-  assignments.set(key, {
+  const current = assignments.get(key) ?? [];
+  current.push({
     file: record.file,
     pointer,
     assignment: addressAssignment.assignment,
     macAddress: networkInterface.macAddress,
+    range,
   });
+  assignments.set(key, current);
   return [];
+}
+
+function addressRange(parsed) {
+  const hostBits = BigInt(parsed.bits - parsed.prefix);
+  const start = (parsed.integer >> hostBits) << hostBits;
+  if (parsed.integer !== start) return { start: parsed.integer, end: parsed.integer };
+  return { start, end: start + (1n << hostBits) - 1n };
+}
+
+function rangesOverlap(first, second) {
+  return first.start <= second.end && second.start <= first.end;
 }
 
 function isMatchingDhcpReservation(previous, networkInterface, addressAssignment) {

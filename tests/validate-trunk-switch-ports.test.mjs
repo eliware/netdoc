@@ -11,6 +11,7 @@ test("checks tagged segments and PVID membership on trunk ports", () => {
           { mode: "trunk", segmentIds: [2n, 3n, 4n], pvidSegmentId: 2n },
           { mode: "trunk" },
           { mode: "access", segmentIds: [2n] },
+          { mode: "trunk", pvidSegmentId: 3n },
         ],
       },
     },
@@ -23,6 +24,7 @@ test("checks tagged segments and PVID membership on trunk ports", () => {
   expect(validateTrunkSwitchPorts([record], entities).map(({ pointer }) => pointer)).toEqual([
     "/switch/ports/0/segmentIds/0",
     "/switch/ports/0/pvidSegmentId",
+    "/switch/ports/3/pvidSegmentId",
   ]);
   expect(validateTrunkSwitchPorts([{ data: {} }], new Map())).toEqual([]);
 });

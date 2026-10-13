@@ -10,7 +10,7 @@ test("validates address values collected across network settings", () => {
       firewall: { rules: [{ source: "bad" }] },
       nat: { rules: [{ destination: "bad" }] },
       loadBalancing: {
-        addressPools: [{ cidr: "bad" }],
+        addressPools: [{ cidr: "bad" }, { start: "192.0.2.20/24", end: "192.0.2.30/24" }],
         listeners: [{ address: "bad" }],
       },
       dhcp: { scopes: [{ network: "bad" }] },
@@ -25,6 +25,8 @@ test("validates address values collected across network settings", () => {
     "/networking/nat/rules/0/destination",
     "/networking/loadBalancing/listeners/0/address",
     "/networking/loadBalancing/addressPools/0/cidr",
+    "/networking/loadBalancing/addressPools/1/start",
+    "/networking/loadBalancing/addressPools/1/end",
     "/networking/dhcp/scopes/0/network",
   ]);
   expect(validateNetworkValues([{ file: "empty.yaml", data: {} }])).toEqual([]);
