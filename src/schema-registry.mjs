@@ -3,6 +3,7 @@ import addFormats from "ajv-formats";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import { parseYamlFile } from "./yaml-parser.mjs";
+import { schemaByKind } from "./schema-kind-map.mjs";
 
 const schemaFiles = [
   "hardware-storage.schema.yaml",
@@ -19,13 +20,6 @@ const schemaFiles = [
   "network-device.schema.yaml",
   "network-segment.schema.yaml",
 ];
-
-const schemaByKind = {
-  "physical-machine": "physical-machine.schema.yaml",
-  "virtual-machine": "virtual-machine.schema.yaml",
-  "network-device": "network-device.schema.yaml",
-  "network-segment": "network-segment.schema.yaml",
-};
 
 export function loadSchemaRegistry(
   schemaDirectory = fileURLToPath(new URL("../specs/schema/", import.meta.url)),

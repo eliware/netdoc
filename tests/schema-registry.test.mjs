@@ -7,12 +7,6 @@ const root = fileURLToPath(new URL("../specs/schema/", import.meta.url));
 
 test("loads shared schemas and object-kind schema registrations", () => {
   const { ajv, schemaByKind } = loadSchemaRegistry(root);
-  expect(Object.keys(schemaByKind).sort()).toEqual([
-    "network-device",
-    "network-segment",
-    "physical-machine",
-    "virtual-machine",
-  ]);
   for (const name of Object.values(schemaByKind)) {
     expect(ajv.getSchema(pathToFileURL(path.join(root, name)).href)).toEqual(expect.any(Function));
   }

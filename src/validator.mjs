@@ -6,14 +6,7 @@ import { validateNetworks } from "./validate-networks.mjs";
 import { validateNetworkValues } from "./network-value-validation.mjs";
 import { validateSwitchPorts } from "./validate-switch-ports.mjs";
 import { validateRecords } from "./validate-records.mjs";
-import { validateInventoryArguments } from "./validate-arguments.mjs";
 import { reportValidationResult } from "./validation-report.mjs";
-
-export function validateInventory(args, options = {}) {
-  const argumentResult = validateInventoryArguments(args, options.error);
-  if (argumentResult !== undefined) return argumentResult;
-  return validateTarget(args[0], options);
-}
 
 export function validateTarget(
   target,

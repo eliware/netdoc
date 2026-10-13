@@ -2,7 +2,7 @@ import { afterEach, expect, test, jest } from "@jest/globals";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { validateInventory, validateTarget } from "../src/validator.mjs";
+import { validateTarget } from "../src/validator.mjs";
 
 let directory;
 afterEach(() => {
@@ -22,12 +22,6 @@ function writeRecord(root, filename, content) {
   return file;
 }
 
-test("stops when the argument coordinator rejects the input", () => {
-  const error = jest.fn();
-  expect(validateInventory([], { error })).toBe(2);
-  expect(error).toHaveBeenCalledWith("Usage: netdoc validate <yaml-file-or-directory>");
-});
-
 const validRecord =
   'version: "11.0"\nkind: network-device\nname: router\nroles: [router]\nimplementation: physical\n';
 
@@ -37,10 +31,8 @@ test("uses default validation settings for a valid file", () => {
   const write = jest.spyOn(console, "log").mockImplementation(() => {});
   const error = jest.spyOn(console, "error").mockImplementation(() => {});
   expect(validateTarget(file)).toBe(0);
-  expect(validateInventory([file])).toBe(0);
   expect(write).toHaveBeenCalledWith("Validated 1 YAML file(s).");
   expect(error).not.toHaveBeenCalled();
-  expect(validateInventory([file], { write: jest.fn(), error: jest.fn() })).toBe(0);
 });
 
 test("reports target setup errors", () => {
