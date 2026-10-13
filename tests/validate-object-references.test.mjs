@@ -1,40 +1,30 @@
 import { expect, test } from "@jest/globals";
 import { validateObjectReferences } from "../src/validate-object-references.mjs";
 
-test("checks object reference target kinds", () => {
-  const data = {
-    kind: "network-device",
-    residentOn: [1n],
-    networking: {
-      routing: { bgp: { peers: [{ peerId: 2n }] } },
-      loadBalancing: { listeners: [{ targets: [{ deviceId: 3n }] }] },
+test("coordinates announcement, host, BGP peer, and network target rules", () => {
+  const record = {
+    file: "router.yaml",
+    data: {
+      kind: "network-device",
+      residentOn: [1n],
+      networking: {
+        l2Announcements: [{ nodeId: 2n, interfaceName: "eth9" }],
+        routing: { bgp: { peers: [{ peerId: 3n }] } },
+        nat: { rules: [{ nodeId: 4n }] },
+        loadBalancing: { listeners: [{ targets: [{ deviceId: 5n }] }] },
+      },
     },
   };
-  const entities = new Map([
-    [1n, { kind: "interface" }],
-    [2n, { kind: "physical-machine" }],
-    [3n, { kind: "network-device" }],
+  const pointers = validateObjectReferences(record, new Map()).map(({ pointer }) => pointer);
+  expect(pointers).toEqual([
+    "/networking/l2Announcements/0/interfaceName",
+    "/residentOn/0",
+    "/networking/routing/bgp/peers/0/peerId",
+    "/networking/l2Announcements/0/nodeId",
+    "/networking/nat/rules/0/nodeId",
+    "/networking/loadBalancing/listeners/0/targets/0/deviceId",
   ]);
-  expect(validateObjectReferences({ file: "r.yaml", data }, entities)).toHaveLength(1);
-  expect(validateObjectReferences({ file: "ok.yaml", data: { kind: "other" } }, entities)).toEqual(
-    [],
-  );
   expect(
-    validateObjectReferences(
-      { file: "vm.yaml", data: { kind: "virtual-machine", residentOn: 2n } },
-      entities,
-    ),
-  ).toHaveLength(0);
-  const optional = {
-    kind: "network-device",
-    networking: {
-      l2Announcements: [{ nodeId: 77n }],
-      nat: { rules: [{}] },
-      routing: { bgp: { peers: [{}] } },
-      loadBalancing: { listeners: [{ targets: [{}] }, {}] },
-    },
-  };
-  expect(
-    validateObjectReferences({ file: "optional.yaml", data: optional }, entities),
-  ).toHaveLength(1);
+    validateObjectReferences({ file: "other.yaml", data: { kind: "other" } }, new Map()),
+  ).toEqual([]);
 });

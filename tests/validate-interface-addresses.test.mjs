@@ -14,11 +14,15 @@ test("validates interface addresses across records and their segments", () => {
       interfaces: [{ segmentId: 1n, addresses: [{ cidr: "192.0.2.4/24", assignment: "static" }] }],
     },
   }));
-  records[1].data.interfaces[0].addresses.push({ cidr: "broken", assignment: "static" });
+  records[1].data.interfaces[0].addresses.push(
+    { cidr: "broken", assignment: "static" },
+    { cidr: "192.0.3.4/24", assignment: "static" },
+  );
   expect(validateInterfaceAddresses(records, entities).map(({ message }) => message)).toEqual(
     expect.arrayContaining([
       expect.stringContaining("already assigned"),
       expect.stringContaining("Invalid IP address"),
+      expect.stringContaining("outside the networks"),
     ]),
   );
 });
