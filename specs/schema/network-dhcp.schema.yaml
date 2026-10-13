@@ -1,0 +1,38 @@
+version: "11.0"
+$schema: https://json-schema.org/draft/2020-12/schema
+$defs:
+  dhcp:
+    type: object
+    properties:
+      scopes:
+        type: array
+        items:
+          type: object
+          properties:
+            network:
+              type: string
+            rangeStart:
+              type: string
+            rangeEnd:
+              type: string
+            gateway:
+              type: string
+            reservations:
+              type: array
+              items:
+                type: object
+                properties:
+                  macAddress:
+                    type: string
+                  address:
+                    type: string
+                  name:
+                    type: string
+                required:
+                  - macAddress
+                  - address
+                additionalProperties: false
+          required:
+            - network
+          additionalProperties: false
+    additionalProperties: false

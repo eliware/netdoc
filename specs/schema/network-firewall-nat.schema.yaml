@@ -1,0 +1,105 @@
+version: "11.0"
+$schema: https://json-schema.org/draft/2020-12/schema
+$defs:
+  l2Announcements:
+    type: array
+    items:
+      type: object
+      properties:
+        address:
+          type: string
+        interfaceName:
+          type: string
+        nodeId:
+          $ref: common.schema.yaml#/$defs/reference
+      required:
+        - address
+        - interfaceName
+      additionalProperties: false
+  firewall:
+    type: object
+    properties:
+      defaultAction:
+        enum:
+          - allow
+          - drop
+          - reject
+      zones:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            interfaceNames:
+              type: array
+              items:
+                type: string
+          required:
+            - name
+          additionalProperties: false
+      rules:
+        type: array
+        items:
+          type: object
+          properties:
+            direction:
+              enum:
+                - inbound
+                - outbound
+                - forwarded
+            action:
+              enum:
+                - allow
+                - drop
+                - reject
+            protocol:
+              type: string
+            source:
+              type: string
+              description: A literal address, CIDR, or any.
+            destination:
+              type: string
+              description: A literal address, CIDR, or any.
+            sourceZone:
+              type: string
+            destinationZone:
+              type: string
+            ports:
+              type: array
+              items:
+                type: integer
+                minimum: 1
+                maximum: 65535
+          required:
+            - action
+          additionalProperties: false
+    additionalProperties: false
+  nat:
+    type: object
+    properties:
+      rules:
+        type: array
+        items:
+          type: object
+          properties:
+            type:
+              enum:
+                - source
+                - destination
+            source:
+              type: string
+            destination:
+              type: string
+            translation:
+              type: string
+              description: Use masquerade or an IP address.
+            interfaceName:
+              type: string
+            nodeId:
+              $ref: common.schema.yaml#/$defs/reference
+          required:
+            - type
+            - translation
+          additionalProperties: false
+    additionalProperties: false

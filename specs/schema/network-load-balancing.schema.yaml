@@ -1,0 +1,91 @@
+version: "11.0"
+$schema: https://json-schema.org/draft/2020-12/schema
+$defs:
+  loadBalancing:
+    type: object
+    properties:
+      addressPools:
+        type: array
+        items:
+          oneOf:
+            - type: object
+              properties:
+                cidr:
+                  type: string
+              required:
+                - cidr
+              additionalProperties: false
+            - type: object
+              properties:
+                start:
+                  type: string
+                end:
+                  type: string
+              required:
+                - start
+                - end
+              additionalProperties: false
+      listeners:
+        type: array
+        items:
+          type: object
+          properties:
+            address:
+              type: string
+            protocol:
+              type: string
+            port:
+              type: integer
+              minimum: 1
+              maximum: 65535
+            targets:
+              type: array
+              items:
+                type: object
+                properties:
+                  address:
+                    type: string
+                  port:
+                    type: integer
+                    minimum: 1
+                    maximum: 65535
+                  deviceId:
+                    $ref: common.schema.yaml#/$defs/reference
+                anyOf:
+                  - properties:
+                      address: {}
+                    required:
+                      - address
+                  - properties:
+                      deviceId: {}
+                    required:
+                      - deviceId
+                additionalProperties: false
+          required:
+            - protocol
+            - port
+          additionalProperties: false
+    additionalProperties: false
+  listeners:
+    type: array
+    items:
+      type: object
+      properties:
+        label:
+          type: string
+        address:
+          type: string
+        protocol:
+          enum:
+            - TCP
+            - UDP
+            - SCTP
+        port:
+          type: integer
+          minimum: 1
+          maximum: 65535
+      required:
+        - protocol
+        - port
+      additionalProperties: false
+    description: Record network endpoints needed for Layer 4 diagrams.

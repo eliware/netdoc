@@ -1,4 +1,4 @@
-import { checkMac } from "./network-address-checks.mjs";
+import { checkMac } from "./network-mac-address-checks.mjs";
 import { checkInterfaceAddresses } from "./network-interface-address-checks.mjs";
 import { checkSegmentAddresses } from "./network-segment-address-checks.mjs";
 
