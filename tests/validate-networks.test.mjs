@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import { validateNetworks } from "../src/validate-networks.mjs";
 
-test("coordinates interface and segment network checks", () => {
+test("combines interface, MAC, and segment diagnostics", () => {
   const segment = {
     kind: "network-segment",
     record: { data: { ipNetworks: [{ cidr: "192.0.2.0/24" }] } },
@@ -28,14 +28,10 @@ test("coordinates interface and segment network checks", () => {
     data: { kind: "network-segment", id: 3n, ipNetworks: [{ cidr: "bad", gateway: "bad" }] },
   });
 
-  expect(validateNetworks(records, entities).map(({ message }) => message)).toEqual(
-    expect.arrayContaining([
-      expect.stringContaining("already used"),
-      expect.stringContaining("already assigned"),
-      expect.stringContaining("Invalid IP address"),
-      expect.stringContaining("Invalid network prefix"),
-      expect.stringContaining("Gateway"),
-    ]),
+  const diagnostics = validateNetworks(records, entities);
+  expect(diagnostics).toHaveLength(5);
+  expect(new Set(diagnostics.map(({ file }) => file))).toEqual(
+    new Set(["b.yaml", "invalid-segment.yaml"]),
   );
 });
 

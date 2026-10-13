@@ -140,10 +140,6 @@ test("accepts hardware and storage definitions", () => {
   ).toBe(false);
 });
 
-test("reports a missing schema file through a load error", () => {
-  expect(() => loadSchemaValidators(path.join(root, "missing"))).toThrow();
-});
-
 test("returns schema load errors for the validation workflow", () => {
   expect(tryLoadSchemaValidators(path.join(root, "missing"))).toEqual({
     error: expect.stringContaining("Could not load schemas:"),

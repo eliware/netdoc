@@ -9,9 +9,10 @@ test("checks interface and switch port segment references", () => {
       interfaces: [
         { name: "eth0", segmentId: 5n },
         { name: "eth1", segmentId: 6n },
+        { name: "eth2" },
       ],
       switch: {
-        ports: [{ segmentId: 7n }, { segmentIds: [8n] }, { pvidSegmentId: 9n }],
+        ports: [{ segmentId: 7n }, { segmentIds: [8n] }, { pvidSegmentId: 9n }, {}],
       },
     },
   };
