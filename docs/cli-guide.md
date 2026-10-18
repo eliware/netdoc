@@ -67,7 +67,7 @@ Check every YAML file in a directory and its subdirectories:
 netdoc validate inventory/
 ```
 
-The directory must contain at least one YAML file. NetDoc checks each file as one YAML document. It rejects duplicate keys and extra documents.
+The directory must contain at least one YAML file. NetDoc checks each file as one YAML document. It rejects duplicate keys and files with multiple YAML documents.
 
 ### Print IDs
 
@@ -83,7 +83,7 @@ Print three IDs:
 netdoc --generate-id -n 3
 ```
 
-NetDoc prints one integer on each line. It does not read inventory files or check for an ID that already exists.
+NetDoc prints one integer on each line. It does not read inventory files or check if an ID is in use.
 
 ## Inventory format
 
@@ -101,18 +101,18 @@ Use `version: "11.0"` for the current inventory schema. The CLI package version 
 
 ### Object types
 
-| Kind               | Required fields after `version`, `kind`, and `name` | Purpose                                                           |
-| ------------------ | --------------------------------------------------- | ----------------------------------------------------------------- |
-| `physical-machine` | `roles`                                             | Record a physical system and its stable hardware.                 |
-| `virtual-machine`  | `residentOn`                                        | Record a VM and its host ID.                                      |
-| `network-device`   | `roles`, `implementation`                           | Record a router, switch, firewall, access point, or network tool. |
-| `network-segment`  | `id`, `medium`, `vlan`                              | Record an Ethernet, wireless, virtual, or tunnel segment.         |
+| Type               | Required fields after `version`, `kind`, and `name` | Purpose                                                                   |
+| ------------------ | --------------------------------------------------- | ------------------------------------------------------------------------- |
+| `physical-machine` | `roles`                                             | Record a physical system and its stable hardware.                         |
+| `virtual-machine`  | `residentOn`                                        | Record a VM and its host ID.                                              |
+| `network-device`   | `roles`, `implementation`                           | Record a router, Layer 2 device, firewall, access point, or network tool. |
+| `network-segment`  | `id`, `medium`, `vlan`                              | Record an Ethernet, wireless, virtual, or tunnel segment.                 |
 
 Read the [schema index](../specs/schema/README.md) for all supported fields and limits.
 
 ### Machine fields
 
-Physical and virtual machines can record roles, an SSH username, hardware, storage, and an operating system. Never store passwords or keys.
+Physical and virtual machines can record roles, an SSH username, hardware, storage, and an operating system. Do not store passwords or keys.
 
 Hardware fields cover the maker, model, CPU, memory, and GPUs. Storage fields cover disks, RAID, partitions, file systems, mounts, and SMB or NFS shares.
 
@@ -122,9 +122,11 @@ Physical machines can also record a site, provider, region, data center, rack, r
 
 Network devices can record roles, implementation type, firmware, software, hardware, location, and host IDs. Use `physical`, `software`, or `distributed` for implementation.
 
-Network settings can record a default gateway, static routes, BGP peers and prefixes, VRRP, tunnels, Layer 2 announcements, firewall rules, NAT rules, load balancers, listeners, and DHCP scopes.
+Network settings can record a default gateway, static routes, BGP peers and prefixes, VRRP, tunnels, and Layer 2 announcements.
 
-Switch settings can record managed or unmanaged switches. Use access ports for one segment. Use trunk ports for tagged segments and an optional PVID segment for untagged traffic.
+Network settings can also record firewall rules, NAT rules, load balancers, listeners, and DHCP scopes.
+
+Layer 2 settings can record managed or unmanaged operation. Use access mode for one segment. Use trunk mode for tagged segments and an optional PVID segment for untagged traffic.
 
 ### Network segment fields
 
@@ -134,9 +136,9 @@ Use `ipNetworks` to list address ranges and optional gateways. NetDoc checks gat
 
 ### Common fields
 
-Every object needs `version`, `kind`, and `name`. Add `description`, `evidence`, or `notes` when they help explain stable facts.
+Every object needs `version`, `kind`, and `name`. Add `description`, `evidence`, or `notes` to state stable facts.
 
-Evidence can name a source, basis, date, and note. Set its basis to `configured`, `observed`, `reported`, or `inferred`.
+Record a source, basis, and date for each fact. Set the basis to `configured`, `observed`, `reported`, or `inferred`.
 
 ### Storage fields
 
@@ -146,9 +148,9 @@ Use `storage.mounts` for mounted file systems. Use `storage.shares` for SMB or N
 
 ### IDs and references
 
-Use positive signed 64-bit integers for IDs. Write each ID as a YAML integer, without quotes. Add an object ID only when another record refers to it. A network segment needs an ID because interfaces refer to it.
+Use positive signed 64-bit integers for IDs. Write each ID as a YAML integer, without quotes. Add an object ID only when a different record refers to it. A network segment needs an ID because interfaces refer to it.
 
-Use an object's ID for fields such as `residentOn`, `segmentId`, `peerId`, and `connectsTo`. Give an interface an ID when another interface links to it. Set both `connectsTo` fields to the peer interface ID.
+Use an object's ID for fields such as `residentOn`, `segmentId`, `peerId`, and `connectsTo`. Give an interface an ID when a different interface links to it. Set both `connectsTo` fields to the peer interface ID.
 
 IDs must be unique across object and interface records. Every reference must resolve to an object or interface of the expected type.
 
@@ -158,24 +160,24 @@ An interface needs a name and a type. It can record a MAC address, speed, MTU, p
 
 Use `ethernet`, `wireless`, `virtual-ethernet`, `tunnel`, `loopback`, `bridge`, `vlan`, or `other` for the interface type. Set an address assignment to `static`, `dhcp`, `dhcp-reservation`, or `virtual`.
 
-Use a segment's `vlan` field for a VLAN number or `untagged`. Use an access port for one segment. Use a trunk port for tagged segments and an optional PVID segment.
+Use a segment's `vlan` field for a VLAN number or `untagged`. Use access mode for one segment. Use trunk mode for tagged segments and an optional PVID segment.
 
-Set an interface's segment ID to the matching segment record. Keep both peer interface links reciprocal. Give each interface name a unique value within its record.
+Set an interface's segment ID to the matching segment record. Keep both peer interface links reciprocal. Give each interface name a unique value in its record.
 
-Use `externalPeer` to name a peer outside the inventory. Use `unused: true` for an unused interface. Choose only one of `connectsTo`, `externalPeer`, and `unused`.
+Use `externalPeer` to name a peer outside the inventory. For an interface with no peer, set `unused: true`. Select only one of `connectsTo`, `externalPeer`, and `unused`.
 
 ### Network settings
 
-| Setting           | Record                                                          |
-| ----------------- | --------------------------------------------------------------- |
-| `routing`         | A default gateway, static routes, BGP, and VRRP.                |
-| `tunnels`         | Tunnel type, interface, local address, port, and peer networks. |
-| `l2Announcements` | Address, interface, and optional node ID.                       |
-| `firewall`        | Default action, zones, and rules.                               |
-| `nat`             | Source or destination rules and address translation.            |
-| `loadBalancing`   | Address pools, listeners, targets, protocols, and ports.        |
-| `listeners`       | Layer 4 address, protocol, and port details.                    |
-| `dhcp`            | Network, address range, gateway, and reservations.              |
+| Area              | Record                                                                   |
+| ----------------- | ------------------------------------------------------------------------ |
+| `routing`         | A default gateway, static routes, BGP, and VRRP.                         |
+| `tunnels`         | Tunnel type, interface, local address, `port` number, and peer networks. |
+| `l2Announcements` | Address, interface, and optional node ID.                                |
+| `firewall`        | Default action, zones, and rules.                                        |
+| `nat`             | Source or destination rules and address translation.                     |
+| `loadBalancing`   | Address pools, listeners, targets, protocols, and `port` numbers.        |
+| `listeners`       | Layer 4 address, protocol, and `port` details.                           |
+| `dhcp`            | Network, address range, gateway, and reservations.                       |
 
 Set each BGP peer's address and remote AS number. Set the local AS number for the device. Use IDs for peers that have inventory records.
 
@@ -191,11 +193,11 @@ NetDoc checks each input set in this order:
 2. Check the object type and its schema fields.
 3. Check positive signed 64-bit IDs and global ID uniqueness.
 4. Check object, interface, segment, and local interface references.
-5. Check reciprocal interface links and switch port membership.
+5. Check reciprocal interface links and local interface membership.
 6. Check IP and MAC address conflicts on each network segment. NetDoc permits a DHCP lease and reservation to share an address when their MAC addresses match.
 7. Check IP values, network prefixes, and segment gateways.
 
-The schemas also check values such as VLAN numbers, port numbers, AS numbers, and address formats. NetDoc does not prove that a device or route works.
+The schemas also check VLAN numbers, `port` numbers, AS numbers, and address formats. NetDoc cannot prove that a device or route works.
 
 ## Results and exit codes
 
@@ -227,13 +229,13 @@ Read the file, YAML path, and correction hint. Use a supported `kind` and schema
 
 ### NetDoc reports a duplicate ID or address
 
-Find the earlier record named in the error. Give the object or interface a new ID. For an address error, use a free address on that segment.
+Find the earlier record named in the error. Give the object or interface a new ID. For an address error, use an available address on that segment.
 
 ## Package and release limits
 
 The npm package contains the command, source modules, user guide, and schemas. It does not contain tests or repository workflows.
 
-Use the package version that npm publishes. Source code can contain a newer version before a release. A tag alone does not approve a release. Follow Eliware Operations for release approval.
+Use the package version that npm publishes. Source code can contain a newer version before a release. A tag alone does not authorize a release. Follow Eliware Operations for release approval.
 
 ## More information
 

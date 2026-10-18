@@ -1,15 +1,21 @@
 import { tryLoadInventory } from "./inventory-loader.mjs";
-import { tryLoadSchemaValidators } from "./schema-validators.mjs";
-import { validateRecords } from "./validate-records.mjs";
-import { reportValidationResult } from "./validation-report.mjs";
-import { reportValidationSetupError } from "./validation-setup-result.mjs";
-import { runValidationPipeline } from "./validation-pipeline.mjs";
+import { tryLoadSchemaValidators } from "./schema/validators.mjs";
+import { validateRecords } from "./validate/records.mjs";
+import { reportValidationResult } from "./validation/report.mjs";
+import { reportValidationSetupError } from "./validation/setup-result.mjs";
+import { runValidationPipeline } from "./validation/pipeline.mjs";
 
 export function validateTarget(
   target,
-  { write = console.log, error = console.error, cwd = process.cwd(), schemaDirectory } = {},
+  {
+    write = console.log,
+    error = console.error,
+    cwd = process.cwd(),
+    schemaDirectory,
+    fileSystem,
+  } = {},
 ) {
-  const inventoryResult = tryLoadInventory(target, { cwd });
+  const inventoryResult = tryLoadInventory(target, { cwd, fileSystem });
   const inventoryError = reportValidationSetupError(inventoryResult, error);
   if (inventoryError !== undefined) return inventoryError;
   const { inventory } = inventoryResult;

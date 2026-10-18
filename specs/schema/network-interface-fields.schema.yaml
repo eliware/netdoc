@@ -6,7 +6,7 @@ $defs:
     properties:
       id:
         $ref: common.schema.yaml#/$defs/identifier
-        description: Include when another file must reference this interface.
+        description: Include when a separate file must reference this interface.
       name:
         type: string
         minLength: 1
@@ -44,7 +44,7 @@ $defs:
         description: A label for a peer outside this inventory.
       unused:
         const: true
-        description: Mark a configured port with no connected peer.
+        description: Mark an interface with no connected peer.
       wireless:
         type: object
         properties:

@@ -8,7 +8,7 @@ $defs:
         enum:
           - managed
           - unmanaged
-        description: Whether the switch supports per-port configuration.
+        description: Set managed when the device supports per-interface configuration.
       ports:
         type: array
         minItems: 1
@@ -30,17 +30,17 @@ $defs:
                 - trunk
             segmentId:
               $ref: common.schema.yaml#/$defs/reference
-              description: The segment for an access port.
+              description: The segment for an interface in access mode.
             segmentIds:
               type: array
               minItems: 1
               uniqueItems: true
               items:
                 $ref: common.schema.yaml#/$defs/reference
-              description: Tagged segments allowed on a trunk port.
+              description: Tagged traffic can use these segments in trunk mode.
             pvidSegmentId:
               $ref: common.schema.yaml#/$defs/reference
-              description: The segment for untagged traffic on a trunk port.
+              description: The segment for untagged traffic in trunk mode.
           required:
             - interfaceName
             - type

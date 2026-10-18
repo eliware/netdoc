@@ -15,9 +15,9 @@ test("reports references that are missing or have the wrong object kind", () => 
       entities,
     ).map(({ message }) => message),
   ).toEqual([
-    "Reference 1 resolves to no object; expected physical-machine.",
-    "Reference 2 resolves to network-segment; expected virtual-machine.",
-    "Reference 3 resolves to no object; expected network-device.",
+    "Reference 1 resolves to no object. Expected physical-machine.",
+    "Reference 2 resolves to network-segment. Expected virtual-machine.",
+    "Reference 3 resolves to no object. Expected network-device.",
   ]);
 });
 

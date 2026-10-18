@@ -11,7 +11,7 @@ export function objectReferenceDiagnostics(checks, record, entitiesById) {
         record.file,
         pointer,
         record.data.id,
-        `Reference ${id} resolves to ${actual}; expected ${expected.join(" or ")}.`,
+        `Reference ${id} resolves to ${actual}. Expected ${expected.join(" or ")}.`,
         "Use the ID of an existing object of the required type.",
       ),
     ];

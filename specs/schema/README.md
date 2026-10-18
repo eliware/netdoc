@@ -2,7 +2,7 @@
 
 - [Common schema](common.schema.yaml)
 - [Hardware and storage schema](hardware-storage.schema.yaml)
-- [Interface and switch composition schema](interface-switch.schema.yaml)
+- [Interface and Layer 2 composition schema](interface-switch.schema.yaml)
 - [Network configuration schema](network-configuration.schema.yaml)
 - [Network device schema](network-device.schema.yaml)
 - [DHCP schema](network-dhcp.schema.yaml)
@@ -15,5 +15,5 @@
 - [Routing and tunnel schema](network-routing-tunnels.schema.yaml)
 - [Network segment schema](network-segment.schema.yaml)
 - [Physical machine schema](physical-machine.schema.yaml)
-- [Switch schema](switch.schema.yaml)
+- [Layer 2 configuration schema](switch.schema.yaml)
 - [Virtual machine schema](virtual-machine.schema.yaml)

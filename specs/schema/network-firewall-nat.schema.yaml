@@ -57,10 +57,10 @@ $defs:
               type: string
             source:
               type: string
-              description: A literal address, CIDR, or any.
+              description: A literal address, CIDR, or wildcard.
             destination:
               type: string
-              description: A literal address, CIDR, or any.
+              description: A literal address, CIDR, or wildcard.
             sourceZone:
               type: string
             destinationZone:

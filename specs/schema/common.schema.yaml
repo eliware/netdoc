@@ -5,10 +5,12 @@ $defs:
     type: integer
     minimum: 1
     maximum: 9223372036854775807
-    description: Store positive signed 64-bit Snowflake IDs as YAML integers. Add an ID only when another file must reference the object.
+    description: >-
+      Use positive signed 64-bit Snowflake IDs as YAML integers. Add an ID only when a separate file
+      must reference the object.
   reference:
     $ref: "#/$defs/identifier"
-    description: A reference to another object's NetDoc ID.
+    description: A NetDoc ID that points to a separate object.
   evidence:
     type: object
     properties:
@@ -40,11 +42,11 @@ $defs:
         minLength: 1
       id:
         $ref: "#/$defs/identifier"
-        description: Include only when another file must reference this object.
+        description: Include only when a separate file must reference this object.
       name:
         type: string
         minLength: 1
-        description: A display name. Names can repeat on isolated networks.
+        description: A label that identifies the object. Names can repeat on isolated networks.
       description:
         type: string
       evidence:

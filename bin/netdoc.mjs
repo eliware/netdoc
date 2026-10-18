@@ -2,7 +2,7 @@
 import packageJson from "../package.json" with { type: "json" };
 import { runCli } from "../src/cli.mjs";
 import { generateIds } from "../src/snowflake.mjs";
-import { validateInventory } from "../src/validation-command.mjs";
+import { validateInventory } from "../src/validation/command.mjs";
 
 process.exitCode = runCli(process.argv.slice(2), {
   version: packageJson.version,
