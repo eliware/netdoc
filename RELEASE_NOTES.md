@@ -1,14 +1,17 @@
 # Release Notes
 
-## 13.0.0 — 2026-10-17
+## 14.0.0 — 2026-10-20
 
 ### Changed
 
-- Align project files with Eliware convention v13.
+- Align project metadata, documents, and workflows with Eliware conventions v14.
+- Set the NetDoc package version to 14.0.0.
+- Update `@eliware/test`, `@eliware/common`, and `@eliware/snowflake` to version 13.
 - Group network, schema, validation, and YAML modules by responsibility.
-- Move each matching test beside its module group.
-- Use the canonical npm publishing workflow.
-- Update package metadata to version 13.0.0.
+- Move each matching test into its module folder.
+- Use the canonical npm publishing workflow and fetch full Git history in CI.
+- Keep schema loading pointed at the published `specs/schema/` folder.
+- Clarify the CLI guide and repository instructions.
 
 ## 12.0.0 — 2026-10-13
 
