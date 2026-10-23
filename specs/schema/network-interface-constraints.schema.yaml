@@ -26,10 +26,30 @@ $defs:
             - addresses
             - type
         then:
+          if:
+            not:
+              properties:
+                type:
+                  const: wireless
+                wireless:
+                  type: object
+                  properties:
+                    role:
+                      const: client
+                  required: [role]
+              required: [type, wireless]
+          then:
+            properties:
+              segmentId: {}
+            required:
+              - segmentId
+      - if:
           properties:
-            segmentId: {}
-          required:
-            - segmentId
+            type:
+              const: wireless
+          required: [type]
+        then:
+          required: [wireless]
       - not:
           properties:
             connectsTo: {}

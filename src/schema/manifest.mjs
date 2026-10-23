@@ -16,4 +16,5 @@ export const schemaFiles = Object.freeze([
   "virtual-machine.schema.yaml",
   "network-device.schema.yaml",
   "network-segment.schema.yaml",
+  "wireless-network.schema.yaml",
 ]);

@@ -17,3 +17,4 @@
 - [Physical machine schema](physical-machine.schema.yaml)
 - [Layer 2 configuration schema](switch.schema.yaml)
 - [Virtual machine schema](virtual-machine.schema.yaml)
+- [Wireless network schema](wireless-network.schema.yaml)

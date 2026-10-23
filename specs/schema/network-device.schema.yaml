@@ -2,6 +2,18 @@ version: "11.0"
 $schema: https://json-schema.org/draft/2020-12/schema
 allOf:
   - $ref: common.schema.yaml#/$defs/object
+  - if:
+      properties:
+        roles:
+          type: array
+          contains:
+            const: wireless-access-point
+      required: [roles]
+    else:
+      not:
+        properties:
+          wirelessManagement: {}
+        required: [wirelessManagement]
 type: object
 properties:
   kind:
@@ -49,5 +61,16 @@ properties:
     $ref: common.schema.yaml#/$defs/switchConfiguration
   networking:
     $ref: common.schema.yaml#/$defs/networkConfiguration
+  wirelessManagement:
+    type: object
+    properties:
+      state:
+        enum: [managed, unmanaged, unknown]
+      controllerId:
+        $ref: common.schema.yaml#/$defs/reference
+        description: The ID of a wireless controller for this access point.
+    required: [state]
+    additionalProperties: false
+    description: Record wireless management only when its state is known or explicitly unknown.
 unevaluatedProperties: false
 required: [roles, implementation]

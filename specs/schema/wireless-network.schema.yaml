@@ -1,0 +1,30 @@
+version: "11.0"
+$schema: https://json-schema.org/draft/2020-12/schema
+allOf:
+  - $ref: common.schema.yaml#/$defs/object
+type: object
+properties:
+  kind:
+    const: wireless-network
+  id:
+    $ref: common.schema.yaml#/$defs/identifier
+    description: Required because radios and client profiles reference this network.
+  ssid:
+    type: string
+    minLength: 1
+    maxLength: 32
+  security:
+    type: object
+    properties:
+      mode:
+        enum:
+          - open
+          - wpa2-personal
+          - wpa3-personal
+          - wpa2-enterprise
+          - wpa3-enterprise
+          - unknown
+    required: [mode]
+    additionalProperties: false
+required: [id, ssid]
+unevaluatedProperties: false

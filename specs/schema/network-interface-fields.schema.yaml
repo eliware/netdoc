@@ -49,14 +49,94 @@ $defs:
         type: object
         properties:
           role:
-            enum:
-              - radio
-              - client
+            enum: [radio, client]
           ssid:
             type: string
+            minLength: 1
+            description: Legacy SSID field. Use a wireless-network reference in new records.
           band:
             type: string
+            minLength: 1
+          channel:
+            type: integer
+            minimum: 1
+          channelWidth:
+            type: string
+            minLength: 1
+          broadcasts:
+            type: array
+            minItems: 1
+            uniqueItems: true
+            items:
+              type: object
+              properties:
+                wirelessNetworkId:
+                  $ref: common.schema.yaml#/$defs/reference
+                segmentId:
+                  $ref: common.schema.yaml#/$defs/reference
+                bssid:
+                  type: string
+                  pattern: ^(([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}|([0-9A-Fa-f]{2}-){5}[0-9A-Fa-f]{2})$
+                hidden:
+                  type: boolean
+              required: [wirelessNetworkId, segmentId]
+              additionalProperties: false
+          profiles:
+            type: array
+            minItems: 1
+            uniqueItems: true
+            items:
+              type: object
+              properties:
+                wirelessNetworkId:
+                  $ref: common.schema.yaml#/$defs/reference
+                autoJoin:
+                  type: boolean
+                priority:
+                  type: integer
+                  minimum: 0
+                accessPointId:
+                  $ref: common.schema.yaml#/$defs/reference
+              required: [wirelessNetworkId]
+              additionalProperties: false
         additionalProperties: false
+        required: [role]
+        allOf:
+          - if:
+              properties:
+                role:
+                  const: radio
+              required: [role]
+            then:
+              anyOf:
+                - properties:
+                    ssid: {}
+                  required: [ssid]
+                - properties:
+                    broadcasts: {}
+                  required: [broadcasts]
+          - if:
+              properties:
+                role:
+                  const: client
+              required: [role]
+            then:
+              anyOf:
+                - properties:
+                    ssid: {}
+                  required: [ssid]
+                - properties:
+                    profiles: {}
+                  required: [profiles]
+          - if:
+              properties:
+                ssid: {}
+              required: [ssid]
+            then:
+              not:
+                anyOf:
+                  - required: [broadcasts]
+                  - required: [profiles]
       notes:
         type: array
         items:

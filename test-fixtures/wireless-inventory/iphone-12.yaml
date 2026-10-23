@@ -1,0 +1,13 @@
+version: "11.0"
+kind: physical-machine
+name: iPhone 12
+roles: [mobile-device]
+interfaces:
+  - name: Wi-Fi
+    type: wireless
+    segmentId: 1001
+    wireless:
+      role: client
+      profiles:
+        - wirelessNetworkId: 2002
+        - wirelessNetworkId: 2004

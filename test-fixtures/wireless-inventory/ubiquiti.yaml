@@ -1,0 +1,25 @@
+version: "11.0"
+kind: network-device
+id: 3002
+name: Ubiquiti UAP-AC-M-US
+roles: [wireless-access-point]
+implementation: physical
+wirelessManagement:
+  state: unknown
+interfaces:
+  - name: 2.4 GHz radio
+    type: wireless
+    wireless:
+      role: radio
+      band: 2.4 GHz
+      broadcasts:
+        - wirelessNetworkId: 2003
+          segmentId: 1001
+  - name: 5 GHz radio
+    type: wireless
+    wireless:
+      role: radio
+      band: 5 GHz
+      broadcasts:
+        - wirelessNetworkId: 2004
+          segmentId: 1001

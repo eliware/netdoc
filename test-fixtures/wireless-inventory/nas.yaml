@@ -1,0 +1,15 @@
+version: "11.0"
+kind: physical-machine
+name: NAS
+roles: [storage]
+interfaces:
+  - name: Ethernet
+    type: ethernet
+    segmentId: 1001
+    addresses:
+      - cidr: 192.168.50.10/24
+        assignment: dhcp-reservation
+        dnsNames:
+          - nas.purinton.us
+          - radar.purinton.us
+          - nas-sql.purinton.us

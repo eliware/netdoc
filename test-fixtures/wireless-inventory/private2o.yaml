@@ -1,0 +1,7 @@
+version: "11.0"
+kind: wireless-network
+id: 2003
+name: Outdoor 2.4 GHz Wi-Fi
+ssid: private2o
+security:
+  mode: unknown

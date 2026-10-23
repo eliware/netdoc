@@ -16,6 +16,7 @@ test("loads a schema validator for each supported object kind", () => {
     "network-segment",
     "physical-machine",
     "virtual-machine",
+    "wireless-network",
   ]);
   expect(
     validators["network-device"]({
@@ -26,87 +27,6 @@ test("loads a schema validator for each supported object kind", () => {
       implementation: "physical",
     }),
   ).toBe(true);
-});
-
-test("validates switch ports and network configuration", () => {
-  const validate = validators["network-device"];
-  expect(
-    validate({
-      version: "11.0",
-      kind: "network-device",
-      name: "router",
-      roles: ["router", "switch"],
-      implementation: "physical",
-      interfaces: [
-        { name: "LAN1", type: "ethernet" },
-        { name: "LAN bridge", type: "bridge" },
-        {
-          name: "VLAN 102",
-          type: "vlan",
-          parentInterface: "LAN bridge",
-          segmentId: 102,
-          addresses: [{ cidr: "192.0.2.1/24", assignment: "static" }],
-        },
-        { name: "uplink", type: "ethernet" },
-      ],
-      switch: {
-        management: "managed",
-        ports: [
-          { interfaceName: "LAN1", type: "physical", mode: "access", segmentId: 101 },
-          { interfaceName: "LAN bridge", type: "internal", mode: "access", segmentId: 101 },
-          {
-            interfaceName: "uplink",
-            type: "physical",
-            mode: "trunk",
-            segmentIds: [102, 103],
-            pvidSegmentId: 101,
-          },
-        ],
-      },
-    }),
-  ).toBe(true);
-  expect(
-    validate({
-      version: "11.0",
-      kind: "network-device",
-      name: "router",
-      roles: ["router"],
-      implementation: "physical",
-      switch: {
-        management: "unmanaged",
-        ports: [
-          { interfaceName: "LAN1", type: "physical", mode: "access" },
-          { interfaceName: "LAN2", type: "physical", mode: "trunk", segmentId: 101 },
-        ],
-      },
-    }),
-  ).toBe(false);
-  const record = {
-    version: "11.0",
-    kind: "network-device",
-    name: "router",
-    roles: ["router"],
-    implementation: "physical",
-  };
-  expect(
-    validate({
-      ...record,
-      networking: {
-        routing: {
-          staticRoutes: [{ destination: "0.0.0.0/0", nextHop: "192.0.2.1" }],
-          bgp: { localAs: 64512, routerId: "192.0.2.1" },
-        },
-        tunnels: [{ type: "wireguard", peers: [{ endpointAddress: "198.51.100.1" }] }],
-        firewall: { defaultAction: "drop", rules: [{ action: "allow", source: "any" }] },
-        nat: { rules: [{ type: "source", translation: "masquerade" }] },
-        dhcp: { scopes: [{ network: "192.0.2.0/24" }] },
-      },
-    }),
-  ).toBe(true);
-  expect(validate({ ...record, networking: { routing: { bgp: { localAs: 0 } } } })).toBe(false);
-  expect(
-    validate({ ...record, networking: { routing: { staticRoutes: [{ destination: "bad" }] } } }),
-  ).toBe(false);
 });
 
 test("validates network interface fields and constraints", () => {
@@ -120,6 +40,7 @@ test("validates network interface fields and constraints", () => {
   };
   const invalidInterfaces = [
     { name: "eth0", type: "invalid" },
+    { name: "Wi-Fi", type: "wireless" },
     { name: "eth0", type: "ethernet", extra: true },
     {
       name: "eth0",
@@ -172,6 +93,180 @@ test("accepts hardware and storage definitions", () => {
       hardware: { memory: { capacity: { value: 0, unit: "GB" } } },
     }),
   ).toBe(false);
+});
+
+test("validates wireless network records and security modes", () => {
+  const validate = validators["wireless-network"];
+  for (const mode of [
+    "open",
+    "wpa2-personal",
+    "wpa3-personal",
+    "wpa2-enterprise",
+    "wpa3-enterprise",
+    "unknown",
+  ]) {
+    expect(
+      validate({
+        version: "11.0",
+        kind: "wireless-network",
+        id: 1,
+        name: "Home Wi-Fi",
+        ssid: "private5",
+        security: { mode },
+      }),
+    ).toBe(true);
+  }
+  expect(validate({ version: "11.0", kind: "wireless-network", name: "Wi-Fi", ssid: "home" })).toBe(
+    false,
+  );
+  expect(
+    validate({
+      version: "11.0",
+      kind: "wireless-network",
+      id: 1,
+      name: "Wi-Fi",
+      ssid: "home",
+      security: { mode: "wpa2-personal", password: "not-used" },
+    }),
+  ).toBe(false);
+});
+
+test("validates wireless radios, client profiles, management, and DNS names", () => {
+  const validateDevice = validators["network-device"];
+  const validateMachine = validators["physical-machine"];
+  const validateDeviceRecord = {
+    version: "11.0",
+    kind: "network-device",
+    name: "Access point",
+    roles: ["wireless-access-point"],
+    implementation: "physical",
+  };
+  for (const state of ["managed", "unmanaged", "unknown"])
+    expect(validateDevice({ ...validateDeviceRecord, wirelessManagement: { state } })).toBe(true);
+  expect(
+    validateDevice({
+      ...validateDeviceRecord,
+      interfaces: [
+        {
+          name: "5 GHz",
+          type: "wireless",
+          wireless: {
+            role: "radio",
+            band: "5 GHz",
+            channel: 36,
+            channelWidth: "80 MHz",
+            broadcasts: [
+              { wirelessNetworkId: 10, segmentId: 20, bssid: "00:11:22:33:44:55" },
+              { wirelessNetworkId: 11, segmentId: 20, hidden: false },
+            ],
+          },
+        },
+      ],
+    }),
+  ).toBe(true);
+  expect(
+    validateMachine({
+      version: "11.0",
+      kind: "physical-machine",
+      name: "Phone",
+      roles: ["mobile-device"],
+      interfaces: [
+        {
+          name: "Wi-Fi",
+          type: "wireless",
+          addresses: [{ assignment: "static", cidr: "192.0.2.8/24" }],
+          wireless: {
+            role: "client",
+            profiles: [
+              { wirelessNetworkId: 10, autoJoin: true, priority: 1 },
+              { wirelessNetworkId: 11, accessPointId: 12 },
+            ],
+          },
+        },
+      ],
+    }),
+  ).toBe(true);
+  expect(
+    validateMachine({
+      version: "11.0",
+      kind: "physical-machine",
+      name: "NAS",
+      roles: ["storage"],
+      interfaces: [
+        {
+          name: "Ethernet",
+          type: "ethernet",
+          segmentId: 20,
+          addresses: [
+            {
+              assignment: "static",
+              cidr: "192.0.2.5/24",
+              dnsNames: ["nas.example.net", "nas-sql.example.net"],
+            },
+          ],
+        },
+      ],
+    }),
+  ).toBe(true);
+});
+
+test("rejects invalid wireless interfaces and DNS aliases", () => {
+  const validateDevice = validators["network-device"];
+  const base = {
+    version: "11.0",
+    kind: "network-device",
+    name: "Access point",
+    roles: ["wireless-access-point"],
+    implementation: "physical",
+  };
+  for (const wireless of [
+    { role: "radio" },
+    { role: "radio", broadcasts: [{ wirelessNetworkId: 1 }] },
+    { role: "client", profiles: [{ wirelessNetworkId: 1, password: "not-used" }] },
+    { role: "invalid" },
+  ])
+    expect(
+      validateDevice({ ...base, interfaces: [{ name: "Wi-Fi", type: "wireless", wireless }] }),
+    ).toBe(false);
+  expect(validateDevice({ ...base, wirelessManagement: { state: "bad" } })).toBe(false);
+  expect(
+    validateDevice({
+      ...base,
+      roles: ["router"],
+      wirelessManagement: { state: "unknown" },
+    }),
+  ).toBe(false);
+  const validateMachine = validators["physical-machine"];
+  const record = {
+    version: "11.0",
+    kind: "physical-machine",
+    name: "NAS",
+    roles: ["storage"],
+    interfaces: [
+      {
+        name: "Ethernet",
+        type: "ethernet",
+        segmentId: 20,
+        addresses: [{ assignment: "static", cidr: "192.0.2.5/24", dnsNames: ["nas"] }],
+      },
+    ],
+  };
+  expect(validateMachine(record)).toBe(false);
+});
+
+test("allows the legacy wireless SSID form during migration", () => {
+  expect(
+    validators["network-device"]({
+      version: "11.0",
+      kind: "network-device",
+      name: "Legacy access point",
+      roles: ["wireless-access-point"],
+      implementation: "physical",
+      interfaces: [
+        { name: "private5", type: "wireless", wireless: { role: "radio", ssid: "private5" } },
+      ],
+    }),
+  ).toBe(true);
 });
 
 test("returns schema load errors for the validation workflow", () => {

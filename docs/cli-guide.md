@@ -6,7 +6,7 @@ Use this guide to install NetDoc, check inventory YAML, and print Snowflake IDs.
 
 NetDoc checks network and system inventory. It reads YAML files and reports errors. It does not change files or connect to devices.
 
-NetDoc supports physical machines, virtual machines, network devices, and network segments.
+NetDoc supports physical machines, virtual machines, network devices, network segments, and wireless networks.
 
 ## Requirements
 
@@ -108,6 +108,7 @@ Use `version: "11.0"` for the current inventory schema. The CLI package version 
 | `virtual-machine`  | `residentOn`                                        | Record a VM and its host ID.                                              |
 | `network-device`   | `roles`, `implementation`                           | Record a router, Layer 2 device, firewall, access point, or network tool. |
 | `network-segment`  | `id`, `medium`, `vlan`                              | Record an Ethernet, wireless, virtual, or tunnel segment.                 |
+| `wireless-network` | `id`, `ssid`                                        | Record an SSID and its protection mode.                                   |
 
 Read the [schema index](../specs/schema/README.md) for all supported fields and limits.
 
@@ -167,6 +168,78 @@ Set an interface's segment ID to the matching segment record. Keep both peer int
 
 Use `externalPeer` to name a peer outside the inventory. For an interface with no peer, set `unused: true`. Select only one of `connectsTo`, `externalPeer`, and `unused`.
 
+### Wireless networks
+
+Create one `wireless-network` record for each SSID. Give it a unique object ID and a concise inventory name.
+Set `security.mode` to `open`, `wpa2-personal`, `wpa3-personal`, `wpa2-enterprise`, `wpa3-enterprise`, or `unknown` when known.
+Do not store passwords, pre-shared keys, certificates, or other secrets.
+
+```yaml
+version: "11.0"
+kind: wireless-network
+id: 9001
+name: Indoor 5 GHz Wi-Fi
+ssid: private5
+security:
+  mode: unknown
+```
+
+Use one `wireless` interface with `role: radio` for each access point radio.
+List each SSID in `wireless.broadcasts`. Set its `wirelessNetworkId` and `segmentId` fields.
+Add `bssid` and `hidden` when those facts are known. Add `band`, `channel`, and `channelWidth` when known.
+
+```yaml
+interfaces:
+  - name: 5 GHz radio
+    type: wireless
+    wireless:
+      role: radio
+      band: 5 GHz
+      broadcasts:
+        - wirelessNetworkId: 9001
+          segmentId: 9002
+```
+
+Use `role: client` for a machine wireless interface. List configured SSIDs in `wireless.profiles` by wireless-network ID.
+Set `autoJoin` and `priority` when known. Set `accessPointId` only when the client must use one access point.
+Do not use a profile to record the client's current access point.
+
+Keep `segmentId` on a client when its profiles use one fixed segment. Omit it when the profiles use different segments.
+
+```yaml
+interfaces:
+  - name: Wi-Fi
+    type: wireless
+    wireless:
+      role: client
+      profiles:
+        - wirelessNetworkId: 9001
+        - wirelessNetworkId: 9003
+```
+
+Set `wirelessManagement.state` to `managed`, `unmanaged`, or `unknown` for an access point.
+Set `controllerId` only when the access point has a confirmed wireless controller.
+The controller must have the `wireless-controller` role. A controller record alone does not prove that it manages an access point.
+
+Previously saved `wireless.ssid` fields remain valid during migration. Replace them with wireless-network records, radio broadcasts, and client profiles.
+Do not use a previous SSID field to record a client's current access point.
+
+### DNS name associations
+
+List complete DNS names that include the host and domain, such as `nas.example.net`, in an address entry's `dnsNames` field.
+Use this field only to associate names with an inventory address. Do not use it to configure DNS.
+Keep DNS zones, record types, TTL values, resolver settings, and PTR records out of NetDoc.
+VyOS remains the source for authoritative DNS configuration.
+
+```yaml
+addresses:
+  - cidr: 192.0.2.10/24
+    assignment: dhcp-reservation
+    dnsNames:
+      - nas.example.net
+      - nas-sql.example.net
+```
+
 ### Network settings
 
 | Area              | Record                                                                   |
@@ -195,8 +268,10 @@ NetDoc checks each input set in this order:
 3. Check positive signed 64-bit IDs and global ID uniqueness.
 4. Check object, interface, segment, and local interface references.
 5. Check reciprocal interface links and local interface membership.
-6. Check IP and MAC address conflicts on each network segment. NetDoc permits a DHCP lease and reservation to share an address when their MAC addresses match.
-7. Check IP values, network prefixes, and segment gateways.
+6. Check wireless-network, wireless-controller, access-point, and segment references.
+7. Check unique wireless profiles, radio broadcasts, and DNS names.
+8. Check IP and MAC address conflicts on each network segment. NetDoc permits a DHCP lease and reservation to share an address when their MAC addresses match.
+9. Check IP values, network prefixes, and segment gateways.
 
 The schemas also check VLAN numbers, `port` numbers, AS numbers, and address formats. NetDoc cannot prove that a device or route works.
 

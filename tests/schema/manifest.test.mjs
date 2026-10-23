@@ -20,5 +20,6 @@ test("lists every schema file", () => {
     "physical-machine.schema.yaml",
     "switch.schema.yaml",
     "virtual-machine.schema.yaml",
+    "wireless-network.schema.yaml",
   ]);
 });

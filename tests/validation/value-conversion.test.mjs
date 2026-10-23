@@ -10,8 +10,11 @@ test("converts nested BigInts and preserves other values", () => {
     values: [7, null],
     date,
   });
-  expect(convertBigIntsForValidation({ segmentIds: [9007199254740993n] })).toEqual({
-    segmentIds: [1],
+  expect(
+    convertBigIntsForValidation({ segmentIds: [9007199254740993n, 9007199254740994n] }),
+  ).toEqual({
+    segmentIds: [1, 2],
   });
+  expect(convertBigIntsForValidation({ segmentIds: [7n, 7n] })).toEqual({ segmentIds: [1, 1] });
   expect(convertBigIntsForValidation("value")).toBe("value");
 });

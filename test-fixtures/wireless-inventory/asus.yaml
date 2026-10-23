@@ -1,0 +1,25 @@
+version: "11.0"
+kind: network-device
+id: 3001
+name: ASUS RT-AX1800S
+roles: [router, wireless-access-point, switch, firewall]
+implementation: physical
+wirelessManagement:
+  state: unknown
+interfaces:
+  - name: 2.4 GHz radio
+    type: wireless
+    wireless:
+      role: radio
+      band: 2.4 GHz
+      broadcasts:
+        - wirelessNetworkId: 2001
+          segmentId: 1001
+  - name: 5 GHz radio
+    type: wireless
+    wireless:
+      role: radio
+      band: 5 GHz
+      broadcasts:
+        - wirelessNetworkId: 2002
+          segmentId: 1001
