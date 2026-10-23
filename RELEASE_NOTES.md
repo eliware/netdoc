@@ -1,17 +1,25 @@
 # Release Notes
 
-## 14.0.0 — 2026-10-20
+## 15.0.0 — 2026-10-23
+
+### Added
+
+- Add schemas for port modes, VLANs, and PVIDs.
+- Add network fields for DNS names linked to addresses.
+- Add schema and validator checks for network references, interface addresses, port modes, and VLAN assignments.
+- Add focused tests for the network and validation modules.
 
 ### Changed
 
-- Align project metadata, documents, and workflows with Eliware conventions v14.
-- Set the NetDoc package version to 14.0.0.
-- Update `@eliware/test`, `@eliware/common`, and `@eliware/snowflake` to version 13.
+- Set the NetDoc package version to 15.0.0.
+- Update `@eliware/test` and `@eliware/common` to v15.
+- Use the Snowflake generator exported by `@eliware/common`.
 - Group network, schema, validation, and YAML modules by responsibility.
 - Move each matching test into its module folder.
 - Use the canonical npm publishing workflow and fetch full Git history in CI.
 - Keep schema loading pointed at the published `specs/schema/` folder.
 - Clarify the CLI guide and repository instructions.
+- Align package metadata, repository directives, documentation, and workflows with current Eliware conventions.
 
 ## 12.0.0 — 2026-10-13
 

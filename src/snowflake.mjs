@@ -1,4 +1,4 @@
-import generate from "@eliware/snowflake";
+import { snowflake as generate } from "@eliware/common";
 import { parseSnowflakeArguments } from "./snowflake-arguments.mjs";
 
 export function generateIds(

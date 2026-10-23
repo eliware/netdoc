@@ -84,6 +84,7 @@ netdoc --generate-id -n 3
 ```
 
 NetDoc prints one integer on each line. It does not read inventory files or check if an ID is in use.
+NetDoc gets the shared `snowflake` generator from `@eliware/common`.
 
 ## Inventory format
 
