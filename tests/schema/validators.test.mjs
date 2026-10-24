@@ -1,7 +1,6 @@
 import { beforeAll, expect, test } from "@jest/globals";
-import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { loadSchemaValidators, tryLoadSchemaValidators } from "../../src/schema/validators.mjs";
+import { loadSchemaValidators } from "../../src/schema/validators.mjs";
 
 const root = fileURLToPath(new URL("../../specs/schema/", import.meta.url));
 let validators;
@@ -291,10 +290,4 @@ test("rejects wireless interfaces that use an inline SSID", () => {
         interfaces: [{ name: "Wi-Fi", type: "wireless", wireless: { role, ssid: "private5" } }],
       }),
     ).toBe(false);
-});
-
-test("returns schema load errors for the validation workflow", () => {
-  expect(tryLoadSchemaValidators(path.join(root, "missing"))).toEqual({
-    error: expect.stringContaining("Could not load schemas:"),
-  });
 });

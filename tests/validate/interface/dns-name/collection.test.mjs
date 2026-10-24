@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateDnsNameDuplicatesAcrossRecords } from "../../../../src/validate/interface/dns-name/validation.mjs";
+import { validateDnsNameDuplicatesAcrossRecords } from "../../../../src/validate/interface/dns-name/collection.mjs";
 
 test("collects duplicate DNS names across records", () => {
   const record = (name, dnsNames) => ({

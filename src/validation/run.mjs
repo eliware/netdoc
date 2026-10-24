@@ -1,5 +1,5 @@
 import { tryLoadInventory } from "../inventory-loader.mjs";
-import { tryLoadSchemaValidators } from "../schema/validators.mjs";
+import { tryLoadSchemaValidators } from "../schema/load-result.mjs";
 import { validateRecords } from "../validate/records.mjs";
 import { runValidationPipeline } from "./pipeline.mjs";
 
