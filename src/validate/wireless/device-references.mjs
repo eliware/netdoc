@@ -1,5 +1,5 @@
-import { validateWirelessAccessPointReferences } from "./access-points.mjs";
-import { validateWirelessControllerReferences } from "./controllers.mjs";
+import { validateWirelessAccessPointReferences } from "./access-points/references.mjs";
+import { validateWirelessControllerReferences } from "./controllers/references.mjs";
 
 export function validateWirelessDeviceReferences(record, entitiesById) {
   return [

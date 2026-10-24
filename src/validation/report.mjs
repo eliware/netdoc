@@ -1,4 +1,4 @@
-import { formatDiagnostic } from "../diagnostics.mjs";
+import { formatDiagnostic } from "../diagnostics/format.mjs";
 
 export function reportValidationResult(diagnostics, fileCount, { write, error }) {
   if (diagnostics.length > 0) {

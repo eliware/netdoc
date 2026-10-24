@@ -1,15 +1,19 @@
 import { expect, test } from "@jest/globals";
-import { createDiagnostic, formatDiagnostic } from "../src/diagnostics.mjs";
+import { createDiagnostic } from "../src/diagnostics.mjs";
 
-test("formats complete diagnostics", () => {
-  const value = createDiagnostic("record.yaml", "/interfaces/0", 123n, "Invalid link", "Fix peer.");
-  expect(value.severity).toBe("error");
-  expect(formatDiagnostic(value)).toBe(
-    "ERROR record.yaml#/interfaces/0 [id=123]: Invalid link. Suggestion: Fix peer.",
-  );
-});
-
-test("formats diagnostics without optional context", () => {
-  const value = createDiagnostic("record.yaml", "", undefined, "Invalid record", "");
-  expect(formatDiagnostic(value)).toBe("ERROR record.yaml: Invalid record.");
+test("creates diagnostics with a derived code and optional explicit code", () => {
+  expect(
+    createDiagnostic("record.yaml", "/interfaces/0", 123n, "Reference missing", "Fix peer."),
+  ).toEqual({
+    code: "NETDOC_REFERENCE_INVALID",
+    severity: "error",
+    file: "record.yaml",
+    pointer: "/interfaces/0",
+    objectId: 123n,
+    message: "Reference missing",
+    suggestion: "Fix peer.",
+  });
+  expect(
+    createDiagnostic("record.yaml", "", undefined, "Invalid record", "", "CUSTOM_CODE").code,
+  ).toBe("CUSTOM_CODE");
 });

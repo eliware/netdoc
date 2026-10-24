@@ -1,6 +1,6 @@
 import { validateWirelessDeviceReferences } from "./device-references.mjs";
-import { validateWirelessAccessPointRoles } from "./access-points.mjs";
-import { validateWirelessControllerRoles } from "./controllers.mjs";
+import { validateWirelessAccessPointRoles } from "./access-points/roles.mjs";
+import { validateWirelessControllerRoles } from "./controllers/roles.mjs";
 import { validateWirelessNetworkReferences } from "./network-references.mjs";
 import { validateWirelessSegmentReferences } from "./segments.mjs";
 import { validateWirelessReferenceUniqueness } from "./unique-references.mjs";
