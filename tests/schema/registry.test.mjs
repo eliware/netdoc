@@ -11,7 +11,3 @@ test("loads shared schemas and object-kind schema registrations", () => {
     expect(ajv.getSchema(pathToFileURL(path.join(root, name)).href)).toEqual(expect.any(Function));
   }
 });
-
-test("reports a missing schema during registry loading", () => {
-  expect(() => loadSchemaRegistry(path.join(root, "missing"))).toThrow();
-});

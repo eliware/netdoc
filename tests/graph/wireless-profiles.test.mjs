@@ -49,5 +49,6 @@ test("maps wireless profiles to advertised segments and names", () => {
   expect(wirelessProfileNamesOnSegment(clientInterface, 99n, context)).toEqual([]);
   expect(wirelessProfileSegments({}, context)).toEqual(new Set());
   expect(wirelessProfileSegments(clientInterface)).toEqual(new Set());
+  expect(wirelessProfileNamesOnSegment({}, 20n, context)).toEqual([]);
   expect(wirelessProfileNamesOnSegment(clientInterface, 20n)).toEqual([]);
 });

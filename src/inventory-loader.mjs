@@ -1,8 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
-import { createDiagnostic } from "./diagnostics.mjs";
 import { collectYamlFiles } from "./yaml/file-collection.mjs";
-import { parseYamlFile } from "./yaml/parser.mjs";
+import { parseInventoryRecords } from "./yaml/inventory-records.mjs";
 
 export function loadInventory(target, { cwd = process.cwd(), fileSystem = fs } = {}) {
   if (typeof target !== "string" || target.length === 0) {
@@ -16,37 +15,7 @@ export function loadInventory(target, { cwd = process.cwd(), fileSystem = fs } =
   if (files.length === 0) {
     throw new Error(`No YAML files found: ${absoluteTarget}`);
   }
-  const records = [];
-  const diagnostics = [];
-  for (const file of files) {
-    const relativeFile = path.relative(cwd, file);
-    try {
-      const data = parseYamlFile(file, true, fileSystem);
-      if (!data || typeof data !== "object" || Array.isArray(data)) {
-        diagnostics.push(
-          createDiagnostic(
-            relativeFile,
-            "",
-            undefined,
-            "The YAML document must contain one object.",
-            "Use a mapping with version, object type, and name fields.",
-          ),
-        );
-        continue;
-      }
-      records.push({ file: relativeFile, absoluteFile: file, data });
-    } catch (cause) {
-      diagnostics.push(
-        createDiagnostic(
-          relativeFile,
-          "",
-          undefined,
-          `YAML parse error: ${cause.message}`,
-          "Correct the YAML syntax, remove duplicate keys, and keep one YAML document.",
-        ),
-      );
-    }
-  }
+  const { records, diagnostics } = parseInventoryRecords(files, { cwd, fileSystem });
   return { records, diagnostics, fileCount: files.length };
 }
 
