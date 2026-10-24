@@ -32,7 +32,7 @@ test("links route destinations to matching segments and renders unmatched routes
   ]);
 });
 
-test("links a default route to a matching segment", () => {
+test("links broader routes to matching segments", () => {
   const router = { data: { kind: "network-device", networking: {} } };
   const segment = {
     data: { kind: "network-segment", ipNetworks: [{ cidr: "192.0.2.0/24" }] },
@@ -41,10 +41,20 @@ test("links a default route to a matching segment", () => {
   const elements = buildRouteElements(
     0,
     "object_0",
-    { routing: { staticRoutes: [{ destination: "0.0.0.0/0", nextHop: "192.0.2.1" }] } },
+    {
+      routing: {
+        staticRoutes: [
+          { destination: "0.0.0.0/0", nextHop: "192.0.2.1" },
+          { destination: "192.0.0.0/16", nextHop: "192.0.2.2" },
+        ],
+      },
+    },
     context,
   );
 
-  expect(elements.edges).toEqual(["object_0 -->|route 0.0.0.0/0 via 192.0.2.1| object_1"]);
+  expect(elements.edges).toEqual([
+    "object_0 -->|route 0.0.0.0/0 via 192.0.2.1| object_1",
+    "object_0 -->|route 192.0.0.0/16 via 192.0.2.2| object_1",
+  ]);
   expect(elements.nodes).toEqual([]);
 });

@@ -62,6 +62,7 @@ Run those scripts with `npm run` and their script names.
 | `netdoc --help`                                        | Print command syntax and exit with code 0.        |
 | `netdoc --version`                                     | Print the installed version and exit with code 0. |
 | `netdoc validate <path>`                               | Check one YAML file or a directory.               |
+| `netdoc validate <path> --format text`                 | Print validation results as text.                 |
 | `netdoc validate <path> --format json`                 | Print validation results as JSON.                 |
 | `netdoc report <path> --freshness --max-age-days DAYS` | Report record dates.                              |
 | `netdoc graph <path> --format mermaid`                 | Print inventory topology as Mermaid.              |

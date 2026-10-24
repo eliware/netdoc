@@ -14,6 +14,7 @@
 
 - Use each object's `lastReviewed` date for freshness reports. Remove per-source date entries.
 - Expand inventory guidance for switches, wireless networks, storage units, VXLAN overlays, and recorded dates.
+- Document the text and JSON validation output formats in the CLI guide.
 - Refactor graph generation and relationship validation into focused modules with matching tests.
 
 ### Fixed
