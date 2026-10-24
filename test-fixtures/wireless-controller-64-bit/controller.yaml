@@ -1,0 +1,6 @@
+version: "11.0"
+kind: virtual-machine
+id: 5986103641881280512
+name: Example controller
+residentOn: 99
+roles: [wireless-controller]

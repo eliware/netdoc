@@ -293,7 +293,9 @@ Use `externalPeer` to name a peer outside the inventory. For an interface with n
 ### Wireless networks
 
 Create one `wireless-network` record for each SSID. Give it a unique object ID and a concise inventory name.
-Set `security.mode` to `open`, `wpa2-personal`, `wpa3-personal`, `wpa2-enterprise`, `wpa3-enterprise`, or `unknown` when known.
+Set `security.mode` to `open`, a WPA2 mode, a WPA3 mode, a mixed WPA2/WPA3 mode, or `unknown`.
+Use `wpa2-wpa3-personal` or `wpa2-wpa3-enterprise` for mixed protocol modes.
+Keep personal and enterprise authentication distinct.
 Do not store passwords, pre-shared keys, certificates, or other secrets.
 
 ```yaml
@@ -303,7 +305,7 @@ id: 9001
 name: Indoor 5 GHz Wi-Fi
 ssid: private5
 security:
-  mode: unknown
+  mode: wpa2-wpa3-personal
 ```
 
 Use one `wireless` interface with `role: radio` for each access point radio.
@@ -344,6 +346,48 @@ interfaces:
 Set `wirelessManagement.state` to `managed`, `unmanaged`, or `unknown` for an access point.
 Set `controllerId` only when the access point has a confirmed wireless controller.
 The controller must have the `wireless-controller` role. A controller record alone does not prove that it manages an access point.
+Write controller IDs as YAML integers. IDs can be larger than JavaScript's safe integer limit.
+
+### VXLAN overlays
+
+Use a `network-segment` with `medium: virtual` for each documented VXLAN overlay.
+Set `encapsulation.type` to `vxlan` and reference the underlay with `underlaySegmentId`.
+Set `vni`, `udpPort`, `mtu`, encryption state, and endpoint details only when known.
+The schema accepts VNI values from 1 through 16,777,215 and UDP ports from 1 through 65,535.
+
+Use `encryption: enabled`, `disabled`, or `unknown`.
+Each endpoint needs a `nodeId`. Add its interface name and underlay address when known.
+The validator checks the underlay segment, endpoint object, and any endpoint interface name.
+
+Reference the VXLAN segment from the CNI or network-device record with `networking.overlaySegmentIds`.
+NetDoc checks that each reference points to a segment with VXLAN encapsulation.
+Omit unknown values. Do not infer defaults or add values that the configuration does not confirm.
+
+```yaml
+version: "11.0"
+kind: network-segment
+id: 8100
+name: Kubernetes pod overlay
+medium: virtual
+vlan: untagged
+encapsulation:
+  type: vxlan
+  underlaySegmentId: 8000
+  encryption: disabled
+  endpoints:
+    - nodeId: 8200
+      interfaceName: enX1
+```
+
+```yaml
+version: "11.0"
+kind: network-device
+name: Cilium
+roles: [cni, network-overlay]
+implementation: software
+networking:
+  overlaySegmentIds: [8100]
+```
 
 ### DNS name associations
 

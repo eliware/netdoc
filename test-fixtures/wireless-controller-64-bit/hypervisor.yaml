@@ -1,0 +1,5 @@
+version: "11.0"
+kind: physical-machine
+id: 99
+name: Example hypervisor
+roles: [hypervisor]

@@ -128,10 +128,79 @@ test("validates the wireless and DNS inventory fixtures", () => {
   expect(error).not.toHaveBeenCalled();
 });
 
+test("validates wireless controller references with full 64-bit IDs", () => {
+  const controllerId = 9223372036854775807n;
+  const accessPoint = `version: "11.0"\nkind: network-device\nname: access point\nroles: [wireless-access-point]\nimplementation: physical\nwirelessManagement:\n  state: managed\n  controllerId: ${controllerId}\n`;
+  const controller = (roles) =>
+    `version: "11.0"\nkind: virtual-machine\nid: ${controllerId}\nname: controller\nresidentOn: 99\nroles: ${roles}\n`;
+  const host =
+    'version: "11.0"\nkind: physical-machine\nid: 99\nname: hypervisor\nroles: [hypervisor]\n';
+  const error = jest.fn();
+  const write = jest.fn();
+
+  expect(
+    validateTarget(root, {
+      error,
+      write,
+      fileSystem: createInventory({
+        "ap.yaml": accessPoint,
+        "controller.yaml": controller("[wireless-controller]"),
+        "host.yaml": host,
+      }),
+    }),
+  ).toBe(0);
+  expect(
+    validateTarget(root, {
+      error,
+      write,
+      fileSystem: createInventory({
+        "ap.yaml": accessPoint,
+        "controller.yaml": controller("[host]"),
+        "host.yaml": host,
+      }),
+    }),
+  ).toBe(1);
+  expect(error).toHaveBeenCalledWith(
+    expect.stringContaining("does not have the 'wireless-controller' role"),
+  );
+  error.mockClear();
+  expect(
+    validateTarget(root, { error, write, fileSystem: createInventory({ "ap.yaml": accessPoint }) }),
+  ).toBe(1);
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("resolves to no object"));
+});
+
+test("validates the generated 64-bit wireless controller fixture", () => {
+  const fixtureDirectory = fileURLToPath(
+    new URL("../test-fixtures/wireless-controller-64-bit/", import.meta.url),
+  );
+  const write = jest.fn();
+  const error = jest.fn();
+
+  expect(validateTarget(fixtureDirectory, { write, error })).toBe(0);
+  expect(write).toHaveBeenCalledWith("Validated 3 YAML file(s).");
+  expect(error).not.toHaveBeenCalled();
+});
+
+test("accepts mixed WPA2 and WPA3 personal and enterprise modes", () => {
+  const fileSystem = createInventory({
+    "personal.yaml":
+      'version: "11.0"\nkind: wireless-network\nid: 1\nname: Personal Wi-Fi\nssid: personal\nsecurity:\n  mode: wpa2-wpa3-personal\n',
+    "enterprise.yaml":
+      'version: "11.0"\nkind: wireless-network\nid: 2\nname: Enterprise Wi-Fi\nssid: enterprise\nsecurity:\n  mode: wpa2-wpa3-enterprise\n',
+  });
+  const error = jest.fn();
+  const write = jest.fn();
+
+  expect(validateTarget(root, { error, write, fileSystem })).toBe(0);
+  expect(error).not.toHaveBeenCalled();
+});
+
 test("validates switch ports and network configuration together", () => {
   const router = {
     version: "11.0",
     kind: "network-device",
+    id: 200,
     name: "router",
     roles: ["router", "switch"],
     implementation: "physical",
@@ -170,6 +239,7 @@ test("validates switch ports and network configuration together", () => {
       firewall: { defaultAction: "drop", rules: [{ action: "allow", source: "any" }] },
       nat: { rules: [{ type: "source", translation: "masquerade" }] },
       dhcp: { scopes: [{ network: "192.0.2.0/24" }] },
+      overlaySegmentIds: [104],
     },
   };
   const segment = (id, vlan, ipNetworks = []) => ({
@@ -188,10 +258,32 @@ test("validates switch ports and network configuration together", () => {
       segment(102, 102, [{ cidr: "192.0.2.0/24", gateway: "192.0.2.254" }]),
     ),
     "segment-103.yaml": JSON.stringify(segment(103, 103)),
+    "overlay-segment.yaml": JSON.stringify({
+      ...segment(104, "untagged"),
+      medium: "virtual",
+      encapsulation: {
+        type: "vxlan",
+        underlaySegmentId: 101,
+        vni: 100,
+        encryption: "disabled",
+        endpoints: [{ nodeId: 200, interfaceName: "LAN1" }],
+      },
+    }),
   });
   const write = jest.fn();
   const error = jest.fn();
 
   expect(validateTarget(root, { write, error, fileSystem })).toBe(0);
   expect(error).not.toHaveBeenCalled();
+});
+
+test("rejects VXLAN values outside the schema range", () => {
+  const fileSystem = createInventory({
+    "overlay.yaml":
+      'version: "11.0"\nkind: network-segment\nid: 1\nname: overlay\nmedium: virtual\nvlan: untagged\nencapsulation:\n  type: vxlan\n  underlaySegmentId: 2\n  vni: 16777216\n',
+  });
+  const error = jest.fn();
+
+  expect(validateTarget(root, { error, fileSystem })).toBe(1);
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("/encapsulation/vni"));
 });

@@ -21,8 +21,10 @@ properties:
           - open
           - wpa2-personal
           - wpa3-personal
+          - wpa2-wpa3-personal
           - wpa2-enterprise
           - wpa3-enterprise
+          - wpa2-wpa3-enterprise
           - unknown
     required: [mode]
     additionalProperties: false

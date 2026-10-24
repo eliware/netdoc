@@ -1,0 +1,8 @@
+version: "11.0"
+kind: network-device
+name: Example access point
+roles: [wireless-access-point]
+implementation: physical
+wirelessManagement:
+  state: managed
+  controllerId: 5986103641881280512

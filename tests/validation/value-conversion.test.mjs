@@ -18,6 +18,15 @@ test("converts nested BigInts and preserves other values", () => {
   expect(convertBigIntsForValidation({ wirelessNetworkId: 9007199254740993n })).toEqual({
     wirelessNetworkId: 1,
   });
+  expect(convertBigIntsForValidation({ controllerId: 9007199254740993n })).toEqual({
+    controllerId: 1,
+  });
+  expect(convertBigIntsForValidation({ underlaySegmentId: 9007199254740993n })).toEqual({
+    underlaySegmentId: 1,
+  });
+  expect(convertBigIntsForValidation({ overlaySegmentIds: [9007199254740993n] })).toEqual({
+    overlaySegmentIds: [1],
+  });
   expect(convertBigIntsForValidation({ segmentIds: [7n, 7n] })).toEqual({ segmentIds: [1, 1] });
   expect(convertBigIntsForValidation({ value: 9007199254740993n })).toEqual({
     value: "9007199254740993",

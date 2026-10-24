@@ -20,4 +20,10 @@ $defs:
         $ref: network-load-balancing.schema.yaml#/$defs/listeners
       dhcp:
         $ref: network-dhcp.schema.yaml#/$defs/dhcp
+      overlaySegmentIds:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: common.schema.yaml#/$defs/reference
+        description: IDs of overlay network segments used by this network configuration.
     additionalProperties: false

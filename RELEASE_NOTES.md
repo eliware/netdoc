@@ -13,6 +13,9 @@
 - Add configured MTU values with positive 32-bit byte limits on interfaces.
 - Add schema and validator checks for network references, interface addresses, port modes, and VLAN assignments.
 - Add checks for wireless references, unique profiles, unique radio entries, and unique DNS names.
+- Add mixed WPA2/WPA3 personal and enterprise wireless modes.
+- Add VXLAN overlay fields for network segments, underlays, endpoints, transport settings, MTU, and encryption state.
+- Validate VXLAN overlay references and preserve full 64-bit wireless controller IDs.
 
 ### Changed
 
