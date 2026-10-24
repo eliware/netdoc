@@ -6,11 +6,15 @@ test("coordinates interface and network setting references", () => {
     file: "switch.yaml",
     data: {
       interfaces: [{ name: "known", parentInterface: "missing" }],
-      networking: { tunnels: [{ interfaceName: "missing" }] },
+      networking: {
+        routing: { staticRoutes: [{ destination: "192.0.2.0/24", interfaceName: "missing" }] },
+        tunnels: [{ interfaceName: "missing" }],
+      },
     },
   };
   expect(validateLocalReferences(record).map(({ pointer }) => pointer)).toEqual([
     "/interfaces/0/parentInterface",
+    "/networking/routing/staticRoutes/0/interfaceName",
     "/networking/tunnels/0/interfaceName",
   ]);
 });

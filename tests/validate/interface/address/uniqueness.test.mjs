@@ -32,6 +32,36 @@ test("finds repeated assigned addresses on the same segment", () => {
   ).toContain("is in use at first.yaml");
 });
 
+test("allows distinct host addresses with the same subnet prefix", () => {
+  const assignments = new Map();
+  const record = { file: "node.yaml", data: { id: 1n } };
+  const networkInterface = { segmentId: 2n };
+  const addressAssignment = { assignment: "static" };
+  const pointer = "/interfaces/0/addresses/0/cidr";
+  expect(
+    validateInterfaceAddressUniqueness(
+      networkInterface,
+      addressAssignment,
+      { version: 4, bits: 32, prefix: 24, integer: 3221225985n },
+      "192.0.2.1/24",
+      record,
+      pointer,
+      assignments,
+    ),
+  ).toEqual([]);
+  expect(
+    validateInterfaceAddressUniqueness(
+      networkInterface,
+      addressAssignment,
+      { version: 4, bits: 32, prefix: 24, integer: 3221225986n },
+      "192.0.2.2/24",
+      record,
+      pointer,
+      assignments,
+    ),
+  ).toEqual([]);
+});
+
 test.each([
   [{ segmentId: 2n }, { assignment: "virtual" }],
   [{}, { assignment: "static" }],
