@@ -1,28 +1,37 @@
 # Release Notes
 
-## 15.0.0 — 2026-10-23
+## 15.0.0 — 2026-10-24
 
 ### Added
 
-- Add schemas for port modes, VLANs, and PVIDs.
-- Add network fields for DNS names linked to addresses.
-- Add wireless network, radio, and client profile schemas.
-- Add configured MTU values with positive 32-bit byte limits on every interface type.
+- Add a report command that marks inventory source age as current or stale.
+- Add a Mermaid topology command for network inventory.
+- Add JSON output for validation results.
+- Add port mode schemas for access ports, trunk ports, VLANs, and PVIDs.
+- Add wireless schemas for networks, radios, and client profiles.
+- Add DNS names linked to interface addresses.
+- Add configured MTU values with positive 32-bit byte limits on interfaces.
 - Add schema and validator checks for network references, interface addresses, port modes, and VLAN assignments.
 - Add checks for wireless references, unique profiles, unique radio entries, and unique DNS names.
-- Add focused tests for the network and validation modules.
 
 ### Changed
 
-- Set the NetDoc package version to 15.0.0.
-- Update `@eliware/test` and `@eliware/common` to v15.
-- Use the Snowflake generator exported by `@eliware/common`.
-- Group network, schema, validation, and YAML modules by responsibility.
-- Move each matching test into its module folder.
+- Set the package version to 15.0.0 and update the Eliware test and common packages to v15.
+- Use the Snowflake generator from `@eliware/common`.
+- Group source modules and matching tests by responsibility.
 - Use the canonical npm publishing workflow and fetch full Git history in CI.
-- Keep schema loading pointed at the published `specs/schema/` folder.
-- Clarify the CLI guide and repository instructions.
-- Align package metadata, repository directives, documentation, and workflows with current Eliware conventions.
+- Load schemas from the published `specs/schema/` folder.
+- Expand the CLI guide and end-user documentation.
+- Align package metadata, repository directives, documentation, and workflows with Eliware conventions.
+
+### Fixed
+
+- Reject imprecise schema integers and invalid network address values.
+- Validate route targets, gateway hosts, network membership, and segment address ranges.
+- Find conflicting interface addresses and MAC addresses on each segment.
+- Validate wireless network references and address conflicts.
+- Use correct IPv6 address expansion and compression.
+- Clarify inventory source age limits and report invalid command arguments consistently.
 
 ## 12.0.0 — 2026-10-13
 
