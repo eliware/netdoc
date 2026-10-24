@@ -31,3 +31,20 @@ test("links route destinations to matching segments and renders unmatched routes
     'route_0_1["Static route<br/>198.51.100.0/24<br/>Next hop: eth1"]',
   ]);
 });
+
+test("links a default route to a matching segment", () => {
+  const router = { data: { kind: "network-device", networking: {} } };
+  const segment = {
+    data: { kind: "network-segment", ipNetworks: [{ cidr: "192.0.2.0/24" }] },
+  };
+  const context = createGraphContext([router, segment]);
+  const elements = buildRouteElements(
+    0,
+    "object_0",
+    { routing: { staticRoutes: [{ destination: "0.0.0.0/0", nextHop: "192.0.2.1" }] } },
+    context,
+  );
+
+  expect(elements.edges).toEqual(["object_0 -->|route 0.0.0.0/0 via 192.0.2.1| object_1"]);
+  expect(elements.nodes).toEqual([]);
+});

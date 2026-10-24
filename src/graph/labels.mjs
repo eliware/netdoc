@@ -9,6 +9,8 @@ export function escapeMermaidText(value) {
     .replaceAll("]", "&#93;")
     .replaceAll("(", "&#40;")
     .replaceAll(")", "&#41;")
+    .replaceAll("{", "&#123;")
+    .replaceAll("}", "&#125;")
     .replace(/[\r\n]+/g, " ");
 }
 
