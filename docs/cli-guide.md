@@ -132,7 +132,7 @@ Each recorded date has one of these statuses:
 - `invalid-date` means the date is not a valid calendar date.
 
 The freshness report is informational. A missing or expired date does not fail inventory validation.
-The maximum age must be an integer from 1 through 36500.
+Set `DAYS` to a positive safe integer.
 Set a limit that matches your inventory inspection period.
 
 ### Export topology as Mermaid

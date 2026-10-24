@@ -1,8 +1,9 @@
 import { createDiagnostic } from "../../diagnostics.mjs";
 
 export function validateNetworkSegmentReference(id, record, pointer, entitiesById) {
+  if (id === undefined) return [];
   const target = entitiesById.get(id);
-  if (id === undefined || target?.kind === "network-segment" || target?.invalid) return [];
+  if (target?.invalid || target?.kind === "network-segment") return [];
   return [
     createDiagnostic(
       record.file,

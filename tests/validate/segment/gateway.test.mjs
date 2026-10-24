@@ -11,6 +11,11 @@ test("accepts an in-network gateway and reports an outside gateway", () => {
     ),
   ).toEqual(["/ipNetworks/1/gateway"]);
   expect(
+    validateSegmentGateway(record, { ...network, gateway: "192.0.0.0/16" }, 6).map(
+      ({ pointer }) => pointer,
+    ),
+  ).toEqual(["/ipNetworks/6/gateway"]);
+  expect(
     validateSegmentGateway(record, { ...network, gateway: "192.0.2.1/24" }, 2).map(
       ({ pointer }) => pointer,
     ),

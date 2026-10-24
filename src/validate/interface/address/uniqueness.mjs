@@ -15,9 +15,11 @@ export function validateInterfaceAddressUniqueness(
     return [];
   const key = `${networkInterface.segmentId}:${parsed.version}`;
   const range = addressRange(parsed);
-  const previous = (assignments.get(key) ?? []).find((item) => rangesOverlap(item.range, range));
-  if (previous && isAllowedDhcpSharing(previous, networkInterface, addressAssignment, range))
-    return [];
+  const overlaps = (assignments.get(key) ?? []).filter((item) => rangesOverlap(item.range, range));
+  const previous = overlaps.find(
+    (item) => !isAllowedDhcpSharing(item, networkInterface, addressAssignment, range),
+  );
+  if (!previous && overlaps.length > 0) return [];
   if (previous)
     return [
       createDiagnostic(

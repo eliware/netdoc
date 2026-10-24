@@ -145,3 +145,37 @@ test("reports a DHCP address conflict when MAC addresses differ", () => {
     )[0].message,
   ).toContain("is in use");
 });
+
+test("checks later conflicts after an allowed DHCP sharing pair", () => {
+  const range = { start: 1n, end: 1n };
+  const assignments = new Map([
+    [
+      "2:4",
+      [
+        {
+          file: "lease.yaml",
+          pointer: "/interfaces/0/addresses/0/cidr",
+          assignment: "dhcp",
+          macAddress: "AA:BB:CC:DD:EE:FF",
+          range,
+        },
+        {
+          file: "conflict.yaml",
+          pointer: "/interfaces/0/addresses/0/cidr",
+          assignment: "static",
+          range,
+        },
+      ],
+    ],
+  ]);
+  const diagnostics = validateInterfaceAddressUniqueness(
+    { segmentId: 2n, macAddress: "aa-bb-cc-dd-ee-ff" },
+    { assignment: "dhcp-reservation" },
+    { version: 4, bits: 32, prefix: 32, integer: 1n },
+    "192.0.2.1",
+    { file: "reservation.yaml", data: { id: 3n } },
+    "/interfaces/0/addresses/0/cidr",
+    assignments,
+  );
+  expect(diagnostics[0].message).toContain("is in use at conflict.yaml");
+});
