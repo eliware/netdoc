@@ -75,7 +75,8 @@ NetDoc reads input files and writes results to the terminal. It does not change 
 | ------------------------------------------------------ | ----------------------------------------- |
 | `netdoc --help`                                        | List commands.                            |
 | `netdoc --version`                                     | Print the package version.                |
-| `netdoc validate <path> [--format text                 | json]`                                    | Check YAML files and select text or JSON output. |
+| `netdoc validate <path>`                               | Check YAML files and print text results.  |
+| `netdoc validate <path> --format json`                 | Check YAML files and print JSON results.  |
 | `netdoc report <path> --freshness --max-age-days DAYS` | Report record dates and age.              |
 | `netdoc graph <path> --format mermaid`                 | Print inventory topology as Mermaid text. |
 | `netdoc --generate-id [-n COUNT]`                      | Print one or more Snowflake IDs.          |
@@ -84,11 +85,11 @@ Read the [CLI guide](docs/cli-guide.md) for all commands, options, and examples.
 
 ## Exit codes
 
-| Code | Meaning                         |
-| ---- | ------------------------------- |
-| `0`  | The command completed.          |
-| `1`  | YAML data failed a check.       |
-| `2`  | The command or path is invalid. |
+| Code | Meaning                                                     |
+| ---- | ----------------------------------------------------------- |
+| `0`  | The command completed.                                      |
+| `1`  | YAML data failed a check.                                   |
+| `2`  | Invalid command or path, or NetDoc cannot load its schemas. |
 
 ## Support
 

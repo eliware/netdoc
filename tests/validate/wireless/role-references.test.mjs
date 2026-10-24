@@ -36,6 +36,22 @@ test("reports access point and controller role mismatches", () => {
   );
 });
 
+test("requires roles when a referenced controller has no role list", () => {
+  const record = {
+    file: "client.yaml",
+    data: { wirelessManagement: { controllerId: 3n } },
+  };
+  const entities = new Map([
+    [3n, { kind: "virtual-machine", record: { data: { name: "controller" } } }],
+  ]);
+  expect(validateWirelessRoleReferences(record, entities)).toEqual([
+    expect.objectContaining({
+      pointer: "/wirelessManagement/controllerId",
+      message: "Reference 3 does not have the 'wireless-controller' role.",
+    }),
+  ]);
+});
+
 test("skips profiles without access point pins and records without controllers", () => {
   expect(
     validateWirelessRoleReferences(

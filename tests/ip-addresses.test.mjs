@@ -6,6 +6,7 @@ test("parses IPv4 and IPv6 addresses with prefixes", () => {
   expect(parseAddress("2001:db8::1/64").version).toBe(6);
   expect(parseAddress("::/0").version).toBe(6);
   expect(parseAddress("192.0.2.1/33")).toBeUndefined();
+  expect(parseAddress("2001:db8::1/129")).toBeUndefined();
   expect(parseAddress("bad")).toBeUndefined();
   expect(parseAddress(4)).toBeUndefined();
 });

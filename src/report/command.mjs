@@ -16,7 +16,8 @@ export function reportInventoryFreshness(args, options = {}) {
   if (result.error !== undefined) return reportValidationSetupError(result, error);
   if (result.diagnostics.length > 0)
     return reportValidationErrors(result.diagnostics, result.fileCount, error);
-  const rows = collectEvidenceFreshness(result.records, parsed.maxAgeDays, options.now);
-  (options.write ?? console.log)(formatEvidenceFreshness(rows, parsed.maxAgeDays, options.now));
+  const now = options.now ?? new Date();
+  const rows = collectEvidenceFreshness(result.records, parsed.maxAgeDays, now);
+  (options.write ?? console.log)(formatEvidenceFreshness(rows, parsed.maxAgeDays, now));
   return 0;
 }

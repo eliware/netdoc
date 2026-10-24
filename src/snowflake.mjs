@@ -10,6 +10,6 @@ export function generateIds(
     error(result.error);
     return 2;
   }
-  for (let index = 0; index < result.count; index += 1) write(`${generateId()}\n`);
+  for (let index = 0; index < result.count; index += 1) write(String(generateId()));
   return 0;
 }

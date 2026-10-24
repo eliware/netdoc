@@ -12,5 +12,5 @@ process.exitCode = runCli(process.argv.slice(2), {
   validate: (args) => validateInventory(args),
   report: (args) => reportInventoryFreshness(args),
   graph: (args) => graphInventory(args),
-  generateIds: (args) => generateIds(args, { write: (text) => process.stdout.write(text) }),
+  generateIds: (args) => generateIds(args, { write: (text) => process.stdout.write(`${text}\n`) }),
 });

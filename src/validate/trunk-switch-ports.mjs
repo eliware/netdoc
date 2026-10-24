@@ -9,7 +9,7 @@ export function validateTrunkSwitchPorts(records, entitiesById) {
       const tagged = port.segmentIds ?? [];
       for (const [segmentIndex, id] of tagged.entries()) {
         const target = entitiesById.get(id);
-        if (target?.invalid) continue;
+        if (!target || target.invalid || target.kind !== "network-segment") continue;
         const segment = target?.record?.data;
         if (segment?.vlan === "untagged")
           diagnostics.push(
@@ -24,7 +24,7 @@ export function validateTrunkSwitchPorts(records, entitiesById) {
       }
       if (port.pvidSegmentId !== undefined) {
         const target = entitiesById.get(port.pvidSegmentId);
-        if (target && !target.invalid) {
+        if (target && !target.invalid && target.kind === "network-segment") {
           const segment = target.record?.data;
           if (segment?.vlan !== undefined && segment.vlan !== "untagged")
             diagnostics.push(
