@@ -77,6 +77,16 @@ test("reports unsupported object types and schema violations", () => {
   expect(error).toHaveBeenCalledWith(expect.stringContaining("Found "));
 });
 
+test("rejects integer values that exceed safe numeric precision", () => {
+  const fileSystem = createInventory({
+    "large-size.yaml":
+      'version: "11.0"\nkind: physical-machine\nname: large\nroles: [server]\nhardware:\n  memory:\n    capacity:\n      value: 9007199254740993\n      unit: B\n',
+  });
+  const error = jest.fn();
+  expect(validateTarget(root, { error, fileSystem })).toBe(1);
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("/hardware/memory/capacity/value"));
+});
+
 test("checks valid records when a record has a schema error", () => {
   const fileSystem = createInventory({
     "broken.yaml":

@@ -13,7 +13,10 @@ const identifierKeys = new Set([
 export function convertBigIntsForValidation(value, key, identifiers = new Map()) {
   // Validate IDs and references from the initial BigInt records before this schema-only conversion.
   if (typeof value === "bigint") {
-    if (!identifierKeys.has(key)) return Number(value);
+    if (!identifierKeys.has(key)) {
+      const number = Number(value);
+      return Number.isSafeInteger(number) ? number : value.toString();
+    }
     if (!identifiers.has(value)) identifiers.set(value, identifiers.size + 1);
     return identifiers.get(value);
   }
