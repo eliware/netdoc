@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import { validateWirelessReferences } from "../../../src/validate/wireless/references.mjs";
 
-test("combines wireless reference and duplicate broadcast diagnostics", () => {
+test("coordinates wireless reference diagnostics", () => {
   const record = {
     file: "ap.yaml",
     data: {
@@ -9,10 +9,7 @@ test("combines wireless reference and duplicate broadcast diagnostics", () => {
         {
           wireless: {
             role: "radio",
-            broadcasts: [
-              { wirelessNetworkId: 1n, segmentId: 2n },
-              { wirelessNetworkId: 1n, segmentId: 2n },
-            ],
+            broadcasts: [{ wirelessNetworkId: 1n, segmentId: 2n }],
           },
         },
         { wireless: { role: "client", profiles: [{ wirelessNetworkId: 3n, accessPointId: 4n }] } },
@@ -32,7 +29,6 @@ test("combines wireless reference and duplicate broadcast diagnostics", () => {
   );
   expect(diagnostics.map(({ pointer }) => pointer)).toEqual([
     "/interfaces/1/wireless/profiles/0/accessPointId",
-    "/interfaces/0/wireless/broadcasts/1",
   ]);
 });
 

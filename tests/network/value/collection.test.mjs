@@ -15,8 +15,20 @@ test("collects address fields from routing, policies, pools, and DHCP", () => {
       },
       tunnels: [{ localAddress: "192.0.2.20" }],
       l2Announcements: [{ address: "192.0.2.30" }],
-      loadBalancing: { addressPools: [{ cidr: "192.0.2.0/24" }] },
-      dhcp: { scopes: [{ network: "192.0.2.0/24" }] },
+      loadBalancing: {
+        addressPools: [{ cidr: "192.0.2.0/24", start: "192.0.2.10", end: "192.0.2.20" }],
+      },
+      dhcp: {
+        scopes: [
+          {
+            network: "192.0.2.0/24",
+            rangeStart: "192.0.2.30",
+            rangeEnd: "192.0.2.40",
+            gateway: "192.0.2.1",
+            reservations: [{ address: "192.0.2.31" }],
+          },
+        ],
+      },
     },
   };
   expect(collectNetworkValueFields(data).map(([pointer]) => pointer)).toEqual([
@@ -36,6 +48,7 @@ test("collects address fields from routing, policies, pools, and DHCP", () => {
     "/networking/dhcp/scopes/0/rangeStart",
     "/networking/dhcp/scopes/0/rangeEnd",
     "/networking/dhcp/scopes/0/gateway",
+    "/networking/dhcp/scopes/0/reservations/0/address",
   ]);
 });
 

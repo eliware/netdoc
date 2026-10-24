@@ -1,9 +1,9 @@
 import { expect, test } from "@jest/globals";
-import { validateWirelessReferenceUniqueness } from "../../../src/validate/wireless/unique-references.mjs";
+import { validateWirelessUniqueness } from "../../../src/validate/wireless/uniqueness.mjs";
 
 test("accepts distinct profiles and broadcasts", () => {
   expect(
-    validateWirelessReferenceUniqueness({
+    validateWirelessUniqueness({
       file: "client.yaml",
       data: {
         interfaces: [
@@ -23,7 +23,7 @@ test("accepts distinct profiles and broadcasts", () => {
 });
 
 test("coordinates repeated profile and broadcast diagnostics", () => {
-  const diagnostics = validateWirelessReferenceUniqueness({
+  const diagnostics = validateWirelessUniqueness({
     file: "client.yaml",
     data: {
       id: 10n,
@@ -47,5 +47,5 @@ test("coordinates repeated profile and broadcast diagnostics", () => {
 });
 
 test("accepts records without wireless references", () => {
-  expect(validateWirelessReferenceUniqueness({ file: "switch.yaml", data: {} })).toEqual([]);
+  expect(validateWirelessUniqueness({ file: "switch.yaml", data: {} })).toEqual([]);
 });

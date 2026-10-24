@@ -1,4 +1,5 @@
-import { networkAddressPoolFields } from "../address/pool-fields.mjs";
+import { dhcpScopeFields } from "../../dhcp-scope-fields.mjs";
+import { loadBalancerAddressPoolFields } from "../../load-balancer-address-pool-fields.mjs";
 import { networkPolicyValueFields } from "../policy/value-fields.mjs";
 import { networkRouteValueFields } from "../route/value-fields.mjs";
 import { networkTunnelValueFields } from "../tunnel/value-fields.mjs";
@@ -11,6 +12,7 @@ export function collectNetworkValueFields(data) {
     ...networkVrrpValueFields(network),
     ...networkTunnelValueFields(network),
     ...networkPolicyValueFields(network),
-    ...networkAddressPoolFields(network),
+    ...loadBalancerAddressPoolFields(network),
+    ...dhcpScopeFields(network),
   ];
 }
