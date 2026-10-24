@@ -57,13 +57,16 @@ Run those scripts with `npm run` and their script names.
 
 ## Commands
 
-| Command                         | Result                                            |
-| ------------------------------- | ------------------------------------------------- |
-| `netdoc --help`                 | Print command syntax and exit with code 0.        |
-| `netdoc --version`              | Print the installed version and exit with code 0. |
-| `netdoc validate <path>`        | Check one YAML file or a directory.               |
-| `netdoc --generate-id`          | Print one Snowflake ID.                           |
-| `netdoc --generate-id -n COUNT` | Print COUNT Snowflake IDs.                        |
+| Command                                                | Result                                            |
+| ------------------------------------------------------ | ------------------------------------------------- |
+| `netdoc --help`                                        | Print command syntax and exit with code 0.        |
+| `netdoc --version`                                     | Print the installed version and exit with code 0. |
+| `netdoc validate <path>`                               | Check one YAML file or a directory.               |
+| `netdoc validate <path> --format json`                 | Print validation results as JSON.                 |
+| `netdoc report <path> --freshness --max-age-days DAYS` | Report record dates.                              |
+| `netdoc graph <path> --format mermaid`                 | Print inventory topology as Mermaid.              |
+| `netdoc --generate-id`                                 | Print one Snowflake ID.                           |
+| `netdoc --generate-id -n COUNT`                        | Print COUNT Snowflake IDs.                        |
 
 Run one command at a time. Replace `<path>` with a YAML file or directory. Set `COUNT` to an integer from 1 through 1000.
 
@@ -86,6 +89,72 @@ netdoc validate inventory/
 ```
 
 The directory must contain at least one YAML file. NetDoc checks each file as one YAML document. It rejects duplicate keys and files with multiple YAML documents.
+
+### Print validation results as JSON
+
+Use JSON when a client must read validation results:
+
+```sh
+netdoc validate inventory/ --format json
+```
+
+The command prints one JSON document to standard output. It includes `status`, file and error counts, and a `diagnostics` array. Each diagnostic includes a stable code, file path, YAML path, and message. A diagnostic can also include a correction hint. The command does not include inventory content or secrets.
+
+The `status` value is `passed` when validation succeeds. It is `failed` when inventory data has errors.
+It is `error` when NetDoc cannot run the command, such as when the input path is missing.
+
+The command uses the same exit codes as text output. Code `0` means validation passed.
+Code `1` means inventory errors exist. Code `2` means the command or input is invalid.
+Code `2` also means NetDoc cannot load its schemas.
+
+Use `text` or omit `--format` to print the default text report. Use only `text` or `json` as the format value. Put the format option after the input path.
+
+### Report record freshness
+
+Report the age of recorded facts with a maximum age in days:
+
+```sh
+netdoc report inventory/ --freshness --max-age-days 180
+```
+
+The report uses dates from `evidence.checkedOn`. It checks the inventory against the schemas and references.
+Then, it lists each object with its record status, source, date, and age in days.
+The report does not change inventory files or connect to systems.
+
+The command uses the current UTC date. It counts calendar days in UTC.
+Each recorded date has one of these statuses:
+
+- `no-evidence` means the object has no source entries.
+- `undated` means a source entry has no `checkedOn` date.
+- `current` means the date is on or before the maximum age.
+- `stale` means the date is older than the maximum age.
+- `future` means the date is after the current UTC date.
+- `invalid-date` means the date is not a valid calendar date.
+
+The freshness report is informational. A missing or expired date does not fail inventory validation.
+The maximum age must be an integer from 0 through 36500.
+Set a limit that matches your inventory inspection period.
+
+### Export topology as Mermaid
+
+Print a Mermaid flowchart from the inventory:
+
+```sh
+netdoc graph inventory/ --format mermaid
+```
+
+The command validates the inventory before it prints a graph. It shows objects, interfaces, network segments, reciprocal interface links, and routing relationships.
+It labels known values and identifies unknown endpoints. It shows configured inventory only.
+It does not find live devices or test connectivity.
+
+The command writes Mermaid text to standard output. Redirect the output when you want to save a diagram:
+
+```sh
+netdoc graph inventory/ --format mermaid > topology.mmd
+```
+
+The command accepts only the `mermaid` format. If validation fails, NetDoc prints diagnostics to standard error.
+It does not print an incomplete graph or change inventory files.
 
 ### Print IDs
 
@@ -334,7 +403,7 @@ The schemas also check VLAN numbers, `port` numbers, AS numbers, and address for
 
 On success, NetDoc prints the number of YAML files that passed. It exits with code `0`.
 
-On an inventory error, NetDoc prints one error for each issue. Each error names the file and YAML path. It can include an object ID and a correction hint. NetDoc writes errors to standard error and exits with code `1`.
+On an inventory error, NetDoc prints one error for each issue. Each error names the file and YAML path. It can include an object ID and a correction hint. NetDoc writes text errors to standard error and exits with code `1`. JSON validation prints its result document to standard output and uses the same exit code.
 
 | Code | Meaning                                                  | Action                                      |
 | ---- | -------------------------------------------------------- | ------------------------------------------- |

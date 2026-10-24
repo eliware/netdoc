@@ -30,6 +30,7 @@ export function validateRecords(records, validators) {
           record.data.id,
           issue.message,
           `Correct the value at '${issue.instancePath || "/"}'.`,
+          "NETDOC_SCHEMA_VALIDATION",
         ),
       );
     }

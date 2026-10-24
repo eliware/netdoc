@@ -3,10 +3,14 @@ import packageJson from "../package.json" with { type: "json" };
 import { runCli } from "../src/cli.mjs";
 import { generateIds } from "../src/snowflake.mjs";
 import { validateInventory } from "../src/validation/command.mjs";
+import { reportInventoryFreshness } from "../src/report/command.mjs";
+import { graphInventory } from "../src/graph/command.mjs";
 
 process.exitCode = runCli(process.argv.slice(2), {
   version: packageJson.version,
   write: (text) => process.stdout.write(`${text}\n`),
   validate: (args) => validateInventory(args),
+  report: (args) => reportInventoryFreshness(args),
+  graph: (args) => graphInventory(args),
   generateIds: (args) => generateIds(args, { write: (text) => process.stdout.write(text) }),
 });

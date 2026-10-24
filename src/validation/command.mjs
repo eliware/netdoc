@@ -1,8 +1,31 @@
 import { validateInventoryArguments } from "../validate/arguments.mjs";
-import { validateTarget } from "../validator.mjs";
+import { runInventoryValidation } from "./run.mjs";
+import { reportValidationResult } from "./report.mjs";
+import { reportValidationSetupError } from "./setup-result.mjs";
+import { validationJson } from "./json-report.mjs";
 
 export function validateInventory(args, options = {}) {
-  const argumentResult = validateInventoryArguments(args, options.error);
-  if (argumentResult !== undefined) return argumentResult;
-  return validateTarget(args[0], options);
+  const argumentResult = validateInventoryArguments(args);
+  if (argumentResult.error !== undefined) {
+    if (argumentResult.format === "json")
+      (options.write ?? console.log)(
+        validationJson({
+          exitCode: 2,
+          error: argumentResult.error,
+          errorCode: "NETDOC_ARGUMENTS_INVALID",
+          fileCount: 0,
+          diagnostics: [],
+        }),
+      );
+    else (options.error ?? console.error)(argumentResult.error);
+    return 2;
+  }
+  const result = runInventoryValidation(argumentResult.path, options);
+  if (argumentResult.format === "json") {
+    (options.write ?? console.log)(validationJson(result));
+    return result.exitCode;
+  }
+  const output = { write: options.write ?? console.log, error: options.error ?? console.error };
+  if (result.error !== undefined) return reportValidationSetupError(result, output.error);
+  return reportValidationResult(result.diagnostics, result.fileCount, output);
 }
