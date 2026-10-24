@@ -27,7 +27,7 @@ test("returns validated records and diagnostics without writing output", () => {
   const file = path.join(root, "router.yaml");
   const fileSystem = createMemoryFileSystem({
     [file]:
-      'version: "11.0"\nkind: network-device\nname: router\nroles: [router]\nimplementation: physical\n',
+      'version: "11.0"\nkind: network-device\nname: router\nlastReviewed: "2026-10-24"\nroles: [router]\nimplementation: physical\n',
   });
   expect(runInventoryValidation(file, { fileSystem })).toMatchObject({
     exitCode: 0,

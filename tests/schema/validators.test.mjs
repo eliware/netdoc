@@ -8,6 +8,7 @@ const networkDevice = {
   version: "11.0",
   kind: "network-device",
   name: "router",
+  lastReviewed: "2026-10-24",
   roles: ["router"],
   implementation: "physical",
 };
@@ -19,7 +20,7 @@ beforeAll(() => {
   validators = loadSchemaValidators(root);
 });
 
-test("loads a schema validator for each supported object kind", () => {
+test("loads the supported validators and validates network interfaces", () => {
   expect(Object.keys(validators).sort()).toEqual([
     "network-device",
     "network-segment",
@@ -28,9 +29,6 @@ test("loads a schema validator for each supported object kind", () => {
     "wireless-network",
   ]);
   expect(validators["network-device"](networkDevice)).toBe(true);
-});
-
-test("validates network interface fields and constraints", () => {
   const validate = validators["network-device"];
   const invalidInterfaces = [
     { name: "eth0", type: "invalid" },
@@ -47,17 +45,12 @@ test("validates network interface fields and constraints", () => {
   for (const networkInterface of invalidInterfaces)
     expect(validate({ ...networkDevice, interfaces: [networkInterface] })).toBe(false);
   expect(
-    validate({
-      ...networkDevice,
-      interfaces: [
-        {
-          name: "eth0",
-          type: "ethernet",
-          macAddress: "00:11:22:33:44:55",
-          segmentId: 4,
-          addresses: [{ assignment: "static", cidr: "192.0.2.1/24" }],
-        },
-      ],
+    validateInterface({
+      name: "eth0",
+      type: "ethernet",
+      macAddress: "00:11:22:33:44:55",
+      segmentId: 4,
+      addresses: [{ assignment: "static", cidr: "192.0.2.1/24" }],
     }),
   ).toBe(true);
 });
@@ -95,6 +88,7 @@ test("accepts hardware and storage definitions", () => {
       version: "11.0",
       kind: "physical-machine",
       name: "host",
+      lastReviewed: "2026-10-24",
       roles: ["hypervisor"],
       hardware: {
         manufacturer: "Example",
@@ -109,6 +103,7 @@ test("accepts hardware and storage definitions", () => {
       version: "11.0",
       kind: "physical-machine",
       name: "host",
+      lastReviewed: "2026-10-24",
       roles: ["hypervisor"],
       hardware: { memory: { capacity: { value: 0, unit: "GB" } } },
     }),
@@ -131,6 +126,7 @@ test("validates wireless network records and security modes", () => {
         kind: "wireless-network",
         id: 1,
         name: "Home Wi-Fi",
+        lastReviewed: "2026-10-24",
         ssid: "private5",
         security: { mode },
       }),
@@ -145,6 +141,7 @@ test("validates wireless network records and security modes", () => {
       kind: "wireless-network",
       id: 1,
       name: "Wi-Fi",
+      lastReviewed: "2026-10-24",
       ssid: "home",
       security: { mode: "wpa2-personal", password: "not-used" },
     }),
@@ -158,6 +155,7 @@ test("validates wireless radios, client profiles, management, and DNS names", ()
     version: "11.0",
     kind: "network-device",
     name: "Access point",
+    lastReviewed: "2026-10-24",
     roles: ["wireless-access-point"],
     implementation: "physical",
   };
@@ -189,6 +187,7 @@ test("validates wireless radios, client profiles, management, and DNS names", ()
       version: "11.0",
       kind: "physical-machine",
       name: "Phone",
+      lastReviewed: "2026-10-24",
       roles: ["mobile-device"],
       interfaces: [
         {
@@ -211,6 +210,7 @@ test("validates wireless radios, client profiles, management, and DNS names", ()
       version: "11.0",
       kind: "physical-machine",
       name: "NAS",
+      lastReviewed: "2026-10-24",
       roles: ["storage"],
       interfaces: [
         {
@@ -236,6 +236,7 @@ test("rejects invalid wireless interfaces and DNS aliases", () => {
     version: "11.0",
     kind: "network-device",
     name: "Access point",
+    lastReviewed: "2026-10-24",
     roles: ["wireless-access-point"],
     implementation: "physical",
   };
@@ -262,6 +263,7 @@ test("rejects invalid wireless interfaces and DNS aliases", () => {
     version: "11.0",
     kind: "physical-machine",
     name: "NAS",
+    lastReviewed: "2026-10-24",
     roles: ["storage"],
     interfaces: [
       {
@@ -280,6 +282,7 @@ test("rejects wireless interfaces that use an inline SSID", () => {
     version: "11.0",
     kind: "network-device",
     name: "Access point",
+    lastReviewed: "2026-10-24",
     roles: ["wireless-access-point"],
     implementation: "physical",
   };

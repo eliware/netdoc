@@ -2,6 +2,7 @@ version: "11.0"
 kind: network-device
 name: Example access point
 roles: [wireless-access-point]
+lastReviewed: "2026-10-24"
 implementation: physical
 wirelessManagement:
   state: managed

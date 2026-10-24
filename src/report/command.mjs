@@ -1,6 +1,6 @@
 import { parseFreshnessArguments } from "./arguments.mjs";
-import { collectEvidenceFreshness } from "./evidence.mjs";
-import { formatEvidenceFreshness } from "./format.mjs";
+import { collectReviewFreshness } from "./review-dates.mjs";
+import { formatReviewFreshness } from "./format.mjs";
 import { runInventoryValidation } from "../validation/run.mjs";
 import { reportValidationErrors } from "../validation/report.mjs";
 import { reportValidationSetupError } from "../validation/setup-result.mjs";
@@ -17,7 +17,7 @@ export function reportInventoryFreshness(args, options = {}) {
   if (result.diagnostics.length > 0)
     return reportValidationErrors(result.diagnostics, result.fileCount, error);
   const now = options.now ?? new Date();
-  const rows = collectEvidenceFreshness(result.records, parsed.maxAgeDays, now);
-  (options.write ?? console.log)(formatEvidenceFreshness(rows, parsed.maxAgeDays, now));
+  const rows = collectReviewFreshness(result.records, parsed.maxAgeDays, now);
+  (options.write ?? console.log)(formatReviewFreshness(rows, parsed.maxAgeDays, now));
   return 0;
 }

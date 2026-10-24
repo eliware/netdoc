@@ -111,28 +111,24 @@ Use `text` or omit `--format` to print the default text report. Use only `text` 
 
 ### Report record freshness
 
-Report the age of recorded facts with a maximum age in days:
+Report the age of each object's recorded date with a maximum age in days:
 
 ```sh
 netdoc report inventory/ --freshness --max-age-days 180
 ```
 
-The report uses dates from `evidence.checkedOn`. It checks the inventory against the schemas and references.
-It prints one row for each `evidence` entry. A record without `evidence` gets one `no-evidence` row.
-Each row includes the record name, source, date, status, and age in days when available.
+The report uses each object's `lastReviewed` date. It checks the inventory against the schemas and references.
+It prints one row for each object. Each row includes the record name, date, status, and age in days.
 The report does not change inventory files or connect to systems.
 
 The command uses the current UTC date. It counts calendar days in UTC.
 Each recorded date has one of these statuses:
 
-- `no-evidence` means the object has no source entries.
-- `undated` means a source entry has no `checkedOn` date.
 - `current` means the UTC age is less than or equal to the selected maximum age.
 - `stale` means the UTC age is greater than the selected maximum age.
 - `future` means the date is after the current UTC date.
 
-The report validates the inventory before it checks dates. An invalid `checkedOn` value stops the report and returns validation errors.
-A missing or expired date does not fail inventory validation.
+The report validates the inventory before it checks dates. A missing or invalid `lastReviewed` date stops the report and returns validation errors.
 Set `DAYS` to a positive safe integer.
 Set a limit that matches your inventory inspection period.
 
@@ -186,6 +182,7 @@ Store each object in one YAML file. Begin each record with these fields:
 version: "11.0"
 kind: physical-machine
 name: example-host
+lastReviewed: "2026-10-24"
 roles:
   - hypervisor
 ```
@@ -251,11 +248,9 @@ Set a host address from each network as its gateway because NetDoc rejects the f
 
 ### Common fields
 
-Every object needs `version`, `kind`, and `name`. Add `description`, `evidence`, or `notes` to state stable facts.
-
-You can omit `evidence`. Each `evidence` entry needs a source and a basis. Add `checkedOn` when you know the date.
-Set the basis to `configured`, `observed`, `reported`, or `inferred`.
-Write `checkedOn` as a YAML date in `YYYY-MM-DD` format. NetDoc rejects invalid dates.
+Every object needs `version`, `kind`, `name`, and `lastReviewed`. Add `description` or `notes` to state stable facts.
+Set `lastReviewed` to the date when someone last reviewed the object. Write the date as `YYYY-MM-DD`.
+NetDoc rejects a missing or invalid `lastReviewed` date.
 
 ### Storage fields
 
@@ -277,9 +272,9 @@ IDs must be unique across object and interface records. Every reference must res
 
 An interface needs a name and a type. It can record a MAC address, speed, MTU, parent interface, segment ID, addresses, and peer connection.
 
-Set `mtu` to a confirmed configured maximum packet length in bytes. NetDoc accepts positive integers from 1 through 4,294,967,295 on every supported interface type. NetDoc does not infer a default or check device support.
-
-Add an entry to the object's `evidence` list. Set `basis: configured` and name the configuration source. In the entry's `note`, identify the interface and MTU. Do not use `mtu` for a live value. The schema has no separate field for an observed MTU.
+Set `mtu` to the confirmed configured maximum packet length in bytes.
+NetDoc accepts values from 1 through 4,294,967,295. It does not infer defaults or device support.
+Do not use `mtu` for a live value.
 
 Use the same MTU on hosts in one subnet. Check every path when traffic crosses a tunnel. Set each tunnel MTU to the underlying path limit minus tunnel-header bytes. OVHcloud's vRack jumbo-frame guide requires the same MTU on hosts in a subnet. The guide warns that some server products may limit jumbo-frame support. Some OVHcloud servers or vRack paths may not support MTU 9000.
 
@@ -287,10 +282,8 @@ Use the same MTU on hosts in one subnet. Check every path when traffic crosses a
 version: "11.0"
 kind: physical-machine
 name: Example server
-evidence:
-  - source: Network interface configuration
-    basis: configured
-    note: eth0 is configured with an MTU of 1500 bytes.
+lastReviewed: "2026-10-24"
+roles: [server]
 interfaces:
   - name: eth0
     type: ethernet
@@ -320,6 +313,7 @@ version: "11.0"
 kind: wireless-network
 id: 9001
 name: Indoor 5 GHz Wi-Fi
+lastReviewed: "2026-10-24"
 ssid: private5
 security:
   mode: wpa2-wpa3-personal
@@ -385,6 +379,7 @@ version: "11.0"
 kind: network-segment
 id: 8100
 name: Kubernetes pod overlay
+lastReviewed: "2026-10-24"
 medium: virtual
 vlan: untagged
 encapsulation:
@@ -400,6 +395,7 @@ encapsulation:
 version: "11.0"
 kind: network-device
 name: Cilium
+lastReviewed: "2026-10-24"
 roles: [cni, network-overlay]
 implementation: software
 networking:

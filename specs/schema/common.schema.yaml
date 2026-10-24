@@ -11,27 +11,6 @@ $defs:
   reference:
     $ref: "#/$defs/identifier"
     description: A NetDoc ID that points to a separate object.
-  evidence:
-    type: object
-    properties:
-      source:
-        type: string
-        minLength: 1
-      basis:
-        enum:
-          - configured
-          - observed
-          - reported
-          - inferred
-      checkedOn:
-        type: string
-        format: date
-      note:
-        type: string
-    required:
-      - source
-      - basis
-    additionalProperties: false
   object:
     type: object
     properties:
@@ -49,10 +28,10 @@ $defs:
         description: A label that identifies the object. Names can repeat on isolated networks.
       description:
         type: string
-      evidence:
-        type: array
-        items:
-          $ref: "#/$defs/evidence"
+      lastReviewed:
+        type: string
+        format: date
+        description: The date when someone last reviewed this inventory object.
       notes:
         type: array
         items:
@@ -61,6 +40,7 @@ $defs:
       - version
       - kind
       - name
+      - lastReviewed
   size:
     type: object
     properties:

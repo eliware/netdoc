@@ -3,6 +3,7 @@ kind: network-device
 id: 3001
 name: ASUS RT-AX1800S
 roles: [router, wireless-access-point, switch, firewall]
+lastReviewed: "2026-10-24"
 implementation: physical
 wirelessManagement:
   state: unknown

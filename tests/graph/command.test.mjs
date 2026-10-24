@@ -7,13 +7,13 @@ test("renders a validated inventory and reports its configured tunnel", () => {
   const root = path.resolve("graph-command-fixture");
   const fileSystem = createMemoryFileSystem({
     [path.join(root, "router.yaml")]:
-      'version: "11.0"\nkind: network-device\nid: 1\nname: router\nroles: [router]\nimplementation: physical\ninterfaces:\n  - id: 11\n    name: eth0\n    type: ethernet\n    segmentId: 100\n    connectsTo: 22\n    addresses:\n      - cidr: 192.0.2.1/24\n        assignment: static\n  - id: 12\n    name: eth1\n    type: ethernet\n    segmentId: 101\nnetworking:\n  tunnels:\n    - type: wireguard\n      listenPort: 51820\n',
+      'version: "11.0"\nkind: network-device\nid: 1\nname: router\nlastReviewed: "2026-10-24"\nroles: [router]\nimplementation: physical\ninterfaces:\n  - id: 11\n    name: eth0\n    type: ethernet\n    segmentId: 100\n    connectsTo: 22\n    addresses:\n      - cidr: 192.0.2.1/24\n        assignment: static\n  - id: 12\n    name: eth1\n    type: ethernet\n    segmentId: 101\nnetworking:\n  tunnels:\n    - type: wireguard\n      listenPort: 51820\n',
     [path.join(root, "server.yaml")]:
-      'version: "11.0"\nkind: physical-machine\nid: 2\nname: server\nroles: [server]\ninterfaces:\n  - id: 22\n    name: eth0\n    type: ethernet\n    segmentId: 100\n    connectsTo: 11\n    addresses:\n      - cidr: 192.0.2.2/24\n        assignment: static\n',
+      'version: "11.0"\nkind: physical-machine\nid: 2\nname: server\nlastReviewed: "2026-10-24"\nroles: [server]\ninterfaces:\n  - id: 22\n    name: eth0\n    type: ethernet\n    segmentId: 100\n    connectsTo: 11\n    addresses:\n      - cidr: 192.0.2.2/24\n        assignment: static\n',
     [path.join(root, "segment-home.yaml")]:
-      'version: "11.0"\nkind: network-segment\nid: 100\nname: Home LAN\nmedium: ethernet\nvlan: untagged\nipNetworks:\n  - cidr: 192.0.2.0/24\n',
+      'version: "11.0"\nkind: network-segment\nid: 100\nname: Home LAN\nlastReviewed: "2026-10-24"\nmedium: ethernet\nvlan: untagged\nipNetworks:\n  - cidr: 192.0.2.0/24\n',
     [path.join(root, "segment-guest.yaml")]:
-      'version: "11.0"\nkind: network-segment\nid: 101\nname: Guest VLAN\nmedium: ethernet\nvlan: 10\n',
+      'version: "11.0"\nkind: network-segment\nid: 101\nname: Guest VLAN\nlastReviewed: "2026-10-24"\nmedium: ethernet\nvlan: 10\n',
   });
   const write = jest.spyOn(console, "log").mockImplementation(() => {});
   const error = jest.spyOn(console, "error").mockImplementation(() => {});
@@ -34,7 +34,7 @@ test("reports invalid references and does not print a partial graph", () => {
   const file = path.join(root, "router.yaml");
   const fileSystem = createMemoryFileSystem({
     [file]:
-      'version: "11.0"\nkind: network-device\nname: router\nroles: [router]\nimplementation: physical\ninterfaces:\n  - name: eth0\n    type: ethernet\n    segmentId: 99\n',
+      'version: "11.0"\nkind: network-device\nname: router\nlastReviewed: "2026-10-24"\nroles: [router]\nimplementation: physical\ninterfaces:\n  - name: eth0\n    type: ethernet\n    segmentId: 99\n',
   });
   const write = jest.fn();
   const error = jest.fn();

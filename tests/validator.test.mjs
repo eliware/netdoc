@@ -6,7 +6,7 @@ import { validateTarget } from "../src/validator.mjs";
 
 const root = path.resolve("validation-fixture");
 const validRecord =
-  'version: "11.0"\nkind: network-device\nname: router\nroles: [router]\nimplementation: physical\n';
+  'version: "11.0"\nkind: network-device\nname: router\nlastReviewed: "2026-10-24"\nroles: [router]\nimplementation: physical\n';
 
 afterEach(() => jest.restoreAllMocks());
 
@@ -50,6 +50,23 @@ test("uses default output and working directory settings", () => {
   expect(error).toHaveBeenCalledWith(expect.stringContaining("Path does not exist:"));
 });
 
+test("requires valid lastReviewed dates and rejects evidence", () => {
+  const fileSystem = createInventory({
+    "missing-date.yaml":
+      'version: "11.0"\nkind: network-device\nname: missing date\nroles: [router]\nimplementation: physical\n',
+    "invalid-date.yaml":
+      'version: "11.0"\nkind: network-device\nname: invalid date\nlastReviewed: "2026-02-30"\nroles: [router]\nimplementation: physical\n',
+    "removed-field.yaml":
+      'version: "11.0"\nkind: network-device\nname: removed field\nlastReviewed: "2026-10-24"\nevidence: []\nroles: [router]\nimplementation: physical\n',
+  });
+  const error = jest.fn();
+
+  expect(validateTarget(root, { error, fileSystem })).toBe(1);
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("lastReviewed"));
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("removed-field.yaml"));
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("unevaluated properties"));
+});
+
 test("reports YAML parse errors", () => {
   const fileSystem = createInventory({ "bad.yaml": "name: [broken\n" });
   const error = jest.fn();
@@ -60,12 +77,14 @@ test("reports YAML parse errors", () => {
 test("reports unsupported object types and schema violations", () => {
   const fileSystem = createInventory({
     "kind.yaml": "name: unknown\n",
-    "unsupported.yaml": 'version: "11.0"\nkind: unknown\nname: unknown\n',
+    "unsupported.yaml":
+      'version: "11.0"\nkind: unknown\nname: unknown\nlastReviewed: "2026-10-24"\n',
     "scalar.yaml": "just text\n",
     "null.yaml": "null\n",
     "schema.yaml":
-      'version: "11.0"\nkind: network-device\nname: bad\nroles: [unknown]\nimplementation: physical\n',
-    "required.yaml": 'version: "11.0"\nkind: network-device\nname: broken\n',
+      'version: "11.0"\nkind: network-device\nname: bad\nlastReviewed: "2026-10-24"\nroles: [unknown]\nimplementation: physical\n',
+    "required.yaml":
+      'version: "11.0"\nkind: network-device\nname: broken\nlastReviewed: "2026-10-24"\n',
   });
   const error = jest.fn();
   expect(validateTarget(root, { error, fileSystem })).toBe(1);
@@ -80,7 +99,7 @@ test("reports unsupported object types and schema violations", () => {
 test("rejects integer values that exceed safe numeric precision", () => {
   const fileSystem = createInventory({
     "large-size.yaml":
-      'version: "11.0"\nkind: physical-machine\nname: large\nroles: [server]\nhardware:\n  memory:\n    capacity:\n      value: 9007199254740993\n      unit: B\n',
+      'version: "11.0"\nkind: physical-machine\nname: large\nlastReviewed: "2026-10-24"\nroles: [server]\nhardware:\n  memory:\n    capacity:\n      value: 9007199254740993\n      unit: B\n',
   });
   const error = jest.fn();
   expect(validateTarget(root, { error, fileSystem })).toBe(1);
@@ -89,11 +108,11 @@ test("rejects integer values that exceed safe numeric precision", () => {
 
 test("validates wireless controller references with full 64-bit IDs", () => {
   const controllerId = 9223372036854775807n;
-  const accessPoint = `version: "11.0"\nkind: network-device\nname: access point\nroles: [wireless-access-point]\nimplementation: physical\nwirelessManagement:\n  state: managed\n  controllerId: ${controllerId}\n`;
+  const accessPoint = `version: "11.0"\nkind: network-device\nname: access point\nlastReviewed: "2026-10-24"\nroles: [wireless-access-point]\nimplementation: physical\nwirelessManagement:\n  state: managed\n  controllerId: ${controllerId}\n`;
   const controller = (roles) =>
-    `version: "11.0"\nkind: virtual-machine\nid: ${controllerId}\nname: controller\nresidentOn: 99\nroles: ${roles}\n`;
+    `version: "11.0"\nkind: virtual-machine\nid: ${controllerId}\nname: controller\nlastReviewed: "2026-10-24"\nresidentOn: 99\nroles: ${roles}\n`;
   const host =
-    'version: "11.0"\nkind: physical-machine\nid: 99\nname: hypervisor\nroles: [hypervisor]\n';
+    'version: "11.0"\nkind: physical-machine\nid: 99\nname: hypervisor\nlastReviewed: "2026-10-24"\nroles: [hypervisor]\n';
   const error = jest.fn();
   const write = jest.fn();
 
@@ -144,9 +163,9 @@ test("validates the generated 64-bit wireless controller fixture", () => {
 test("accepts mixed WPA2 and WPA3 personal and enterprise modes", () => {
   const fileSystem = createInventory({
     "personal.yaml":
-      'version: "11.0"\nkind: wireless-network\nid: 1\nname: Personal Wi-Fi\nssid: personal\nsecurity:\n  mode: wpa2-wpa3-personal\n',
+      'version: "11.0"\nkind: wireless-network\nid: 1\nname: Personal Wi-Fi\nlastReviewed: "2026-10-24"\nssid: personal\nsecurity:\n  mode: wpa2-wpa3-personal\n',
     "enterprise.yaml":
-      'version: "11.0"\nkind: wireless-network\nid: 2\nname: Enterprise Wi-Fi\nssid: enterprise\nsecurity:\n  mode: wpa2-wpa3-enterprise\n',
+      'version: "11.0"\nkind: wireless-network\nid: 2\nname: Enterprise Wi-Fi\nlastReviewed: "2026-10-24"\nssid: enterprise\nsecurity:\n  mode: wpa2-wpa3-enterprise\n',
   });
   const error = jest.fn();
   const write = jest.fn();
@@ -158,7 +177,7 @@ test("accepts mixed WPA2 and WPA3 personal and enterprise modes", () => {
 test("rejects VXLAN values outside the schema range", () => {
   const fileSystem = createInventory({
     "overlay.yaml":
-      'version: "11.0"\nkind: network-segment\nid: 1\nname: overlay\nmedium: virtual\nvlan: untagged\nencapsulation:\n  type: vxlan\n  underlaySegmentId: 2\n  vni: 16777216\n',
+      'version: "11.0"\nkind: network-segment\nid: 1\nname: overlay\nlastReviewed: "2026-10-24"\nmedium: virtual\nvlan: untagged\nencapsulation:\n  type: vxlan\n  underlaySegmentId: 2\n  vni: 16777216\n',
   });
   const error = jest.fn();
 

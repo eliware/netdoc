@@ -3,5 +3,6 @@ kind: wireless-network
 id: 2003
 name: Outdoor 2.4 GHz Wi-Fi
 ssid: private2o
+lastReviewed: "2026-10-24"
 security:
   mode: unknown

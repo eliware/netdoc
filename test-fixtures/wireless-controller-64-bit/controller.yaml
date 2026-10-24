@@ -3,4 +3,5 @@ kind: virtual-machine
 id: 5986103641881280512
 name: Example controller
 residentOn: 99
+lastReviewed: "2026-10-24"
 roles: [wireless-controller]

@@ -32,7 +32,7 @@ test("validates a record and reports the result", () => {
   const file = path.join(root, "record.yaml");
   const fileSystem = createMemoryFileSystem({
     [file]:
-      'version: "11.0"\nkind: network-device\nname: router\nroles: [router]\nimplementation: physical\n',
+      'version: "11.0"\nkind: network-device\nname: router\nlastReviewed: "2026-10-24"\nroles: [router]\nimplementation: physical\n',
   });
   const write = jest.fn();
   const error = jest.fn();
@@ -47,7 +47,7 @@ test("writes one JSON document for successful validation", () => {
   const file = path.join(root, "record.yaml");
   const fileSystem = createMemoryFileSystem({
     [file]:
-      'version: "11.0"\nkind: network-device\nname: router\nroles: [router]\nimplementation: physical\n',
+      'version: "11.0"\nkind: network-device\nname: router\nlastReviewed: "2026-10-24"\nroles: [router]\nimplementation: physical\n',
   });
   const write = jest.fn();
   const error = jest.fn();
@@ -65,11 +65,11 @@ test("writes schema and cross-file diagnostics as JSON", () => {
   const root = path.resolve("json-errors-fixture");
   const fileSystem = createMemoryFileSystem({
     [path.join(root, "schema.yaml")]:
-      'version: "11.0"\nkind: network-device\nname: invalid\nroles: [unknown]\nimplementation: physical\n',
+      'version: "11.0"\nkind: network-device\nname: invalid\nlastReviewed: "2026-10-24"\nroles: [unknown]\nimplementation: physical\n',
     [path.join(root, "first.yaml")]:
-      'version: "11.0"\nkind: network-device\nid: 7\nname: first\nroles: [router]\nimplementation: physical\n',
+      'version: "11.0"\nkind: network-device\nid: 7\nname: first\nlastReviewed: "2026-10-24"\nroles: [router]\nimplementation: physical\n',
     [path.join(root, "second.yaml")]:
-      'version: "11.0"\nkind: network-device\nid: 7\nname: second\nroles: [router]\nimplementation: physical\n',
+      'version: "11.0"\nkind: network-device\nid: 7\nname: second\nlastReviewed: "2026-10-24"\nroles: [router]\nimplementation: physical\n',
   });
   const write = jest.fn();
   const error = jest.fn();
@@ -155,9 +155,9 @@ test("uses default output for invalid arguments and JSON setup errors", () => {
 test("checks valid records when a record has a schema error", () => {
   const fileSystem = createInventory({
     "broken.yaml":
-      'version: "11.0"\nkind: network-device\nname: broken\nroles: [unknown]\nimplementation: physical\n',
+      'version: "11.0"\nkind: network-device\nname: broken\nlastReviewed: "2026-10-24"\nroles: [unknown]\nimplementation: physical\n',
     "router.yaml":
-      'version: "11.0"\nkind: network-device\nname: router\nroles: [router]\nimplementation: physical\ninterfaces:\n  - name: eth0\n    type: ethernet\n    segmentId: 99\n',
+      'version: "11.0"\nkind: network-device\nname: router\nlastReviewed: "2026-10-24"\nroles: [router]\nimplementation: physical\ninterfaces:\n  - name: eth0\n    type: ethernet\n    segmentId: 99\n',
   });
   const error = jest.fn();
   expect(validateInventory([root], { error, fileSystem })).toBe(1);
@@ -170,9 +170,9 @@ test("checks valid records when a record has a schema error", () => {
 test("checks record values when IDs conflict", () => {
   const fileSystem = createInventory({
     "first.yaml":
-      'version: "11.0"\nkind: network-device\nid: 7\nname: first\nroles: [router]\nimplementation: physical\nnetworking:\n  routing:\n    defaultGateway: bad\n',
+      'version: "11.0"\nkind: network-device\nid: 7\nname: first\nlastReviewed: "2026-10-24"\nroles: [router]\nimplementation: physical\nnetworking:\n  routing:\n    defaultGateway: bad\n',
     "second.yaml":
-      'version: "11.0"\nkind: network-device\nid: 7\nname: second\nroles: [router]\nimplementation: physical\n',
+      'version: "11.0"\nkind: network-device\nid: 7\nname: second\nlastReviewed: "2026-10-24"\nroles: [router]\nimplementation: physical\n',
   });
   const error = jest.fn();
   expect(validateInventory([root], { error, fileSystem })).toBe(1);
@@ -199,6 +199,7 @@ test("validates switch ports and network configuration together", () => {
     kind: "network-device",
     id: 200,
     name: "router",
+    lastReviewed: "2026-10-24",
     roles: ["router", "switch"],
     implementation: "physical",
     interfaces: [
@@ -244,6 +245,7 @@ test("validates switch ports and network configuration together", () => {
     kind: "network-segment",
     id,
     name: `segment-${id}`,
+    lastReviewed: "2026-10-24",
     medium: "ethernet",
     vlan,
     ipNetworks,

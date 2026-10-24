@@ -2,6 +2,7 @@ version: "11.0"
 kind: physical-machine
 name: iPhone 12
 roles: [mobile-device]
+lastReviewed: "2026-10-24"
 interfaces:
   - name: Wi-Fi
     type: wireless

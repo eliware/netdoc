@@ -3,5 +3,6 @@ kind: wireless-network
 id: 2002
 name: Indoor 5 GHz Wi-Fi
 ssid: private5
+lastReviewed: "2026-10-24"
 security:
   mode: unknown

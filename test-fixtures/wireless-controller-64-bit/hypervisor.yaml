@@ -3,3 +3,4 @@ kind: physical-machine
 id: 99
 name: Example hypervisor
 roles: [hypervisor]
+lastReviewed: "2026-10-24"

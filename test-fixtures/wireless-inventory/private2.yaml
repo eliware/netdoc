@@ -3,5 +3,6 @@ kind: wireless-network
 id: 2001
 name: Indoor 2.4 GHz Wi-Fi
 ssid: private2
+lastReviewed: "2026-10-24"
 security:
   mode: unknown

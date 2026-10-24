@@ -1,17 +1,16 @@
 import { expect, test } from "@jest/globals";
-import { formatEvidenceFreshness } from "../../src/report/format.mjs";
+import { formatReviewFreshness } from "../../src/report/format.mjs";
 
-test("formats evidence rows and age values", () => {
+test("formats review rows and age values", () => {
   expect(
-    formatEvidenceFreshness(
+    formatReviewFreshness(
       [
-        { status: "no-evidence", file: "none.yaml", name: "None" },
+        { status: "missing", file: "none.yaml", name: "None" },
         {
           status: "stale",
           file: "old.yaml",
           name: "Old",
-          source: "console",
-          checkedOn: "2026-01-01",
+          lastReviewed: "2026-01-01",
           ageDays: 295,
         },
       ],
@@ -19,13 +18,13 @@ test("formats evidence rows and age values", () => {
       new Date("2026-10-23T00:00:00Z"),
     ),
   ).toBe(
-    "Evidence freshness as of 2026-10-23 UTC (maximum age: 30 days).\n" +
-      "Status | File | Record | Source | Checked on | Age in days\n" +
-      "no-evidence | none.yaml | None |  |  | \n" +
-      "stale | old.yaml | Old | console | 2026-01-01 | 295",
+    "Review freshness as of 2026-10-23 UTC (maximum age: 30 days).\n" +
+      "Status | File | Record | Last reviewed | Age in days\n" +
+      "missing | none.yaml | None |  | \n" +
+      "stale | old.yaml | Old | 2026-01-01 | 295",
   );
 });
 
 test("uses the current UTC date when the caller omits it", () => {
-  expect(formatEvidenceFreshness([], 7)).toMatch(/^Evidence freshness as of \d{4}-\d{2}-\d{2} UTC/);
+  expect(formatReviewFreshness([], 7)).toMatch(/^Review freshness as of \d{4}-\d{2}-\d{2} UTC/);
 });

@@ -3,12 +3,12 @@ import path from "node:path";
 import { createMemoryFileSystem } from "../../test-fixtures/memory-file-system.mjs";
 import { reportInventoryFreshness } from "../../src/report/command.mjs";
 
-test("reports stale evidence without failing validation", () => {
+test("reports stale records without failing validation", () => {
   const root = path.resolve("freshness-report-fixture");
   const file = path.join(root, "machine.yaml");
   const fileSystem = createMemoryFileSystem({
     [file]:
-      'version: "11.0"\nkind: physical-machine\nname: server\nroles: [server]\nevidence:\n  - source: inventory\n    basis: observed\n    checkedOn: "2026-10-01"\n',
+      'version: "11.0"\nkind: physical-machine\nname: server\nlastReviewed: "2026-10-01"\nroles: [server]\n',
   });
   const write = jest.spyOn(console, "log").mockImplementation(() => {});
   const error = jest.spyOn(console, "error").mockImplementation(() => {});
@@ -18,7 +18,9 @@ test("reports stale evidence without failing validation", () => {
       now: new Date("2026-10-23T00:00:00Z"),
     }),
   ).toBe(0);
-  expect(write.mock.calls[0][0]).toContain("stale | freshness-report-fixture/machine.yaml");
+  expect(write.mock.calls[0][0]).toContain(
+    "stale | freshness-report-fixture/machine.yaml | server | 2026-10-01 | 22",
+  );
   expect(error).not.toHaveBeenCalled();
   write.mockRestore();
   error.mockRestore();
@@ -29,7 +31,7 @@ test("uses one date for freshness classification and the report heading", () => 
   const file = path.join(root, "machine.yaml");
   const fileSystem = createMemoryFileSystem({
     [file]:
-      'version: "11.0"\nkind: physical-machine\nname: server\nroles: [server]\nevidence:\n  - source: inventory\n    basis: observed\n    checkedOn: "2026-10-23"\n',
+      'version: "11.0"\nkind: physical-machine\nname: server\nlastReviewed: "2026-10-23"\nroles: [server]\n',
   });
   const NativeDate = globalThis.Date;
   const dates = ["2026-10-23T23:59:59.000Z", "2026-10-24T00:00:01.000Z"];
@@ -52,8 +54,25 @@ test("uses one date for freshness classification and the report heading", () => 
   }
   expect(exitCode).toBe(0);
   expect(currentDateIndex).toBe(1);
-  expect(write.mock.calls[0][0]).toContain("Evidence freshness as of 2026-10-23 UTC");
+  expect(write.mock.calls[0][0]).toContain("Review freshness as of 2026-10-23 UTC");
   expect(write.mock.calls[0][0]).toContain("current | freshness-midnight-fixture/machine.yaml");
+});
+
+test("rejects records without a review date", () => {
+  const root = path.resolve("missing-review-date-fixture");
+  const file = path.join(root, "machine.yaml");
+  const fileSystem = createMemoryFileSystem({
+    [file]: 'version: "11.0"\nkind: physical-machine\nname: server\nroles: [server]\n',
+  });
+  const error = jest.fn();
+
+  expect(
+    reportInventoryFreshness([root, "--freshness", "--max-age-days", "7"], {
+      fileSystem,
+      error,
+    }),
+  ).toBe(1);
+  expect(error).toHaveBeenCalledWith(expect.stringContaining("lastReviewed"));
 });
 
 test("reports command argument errors", () => {

@@ -4,7 +4,8 @@
 
 ### Added
 
-- Add a report command that marks inventory source age as current or stale.
+- Add a report command that marks each object's recorded date as current, stale, or future.
+- Require a top-level `lastReviewed` date on every inventory object.
 - Add a Mermaid topology command for network inventory.
 - Add JSON output for validation results.
 - Add Layer 2 port schemas for access ports, trunk ports, VLANs, PVIDs, and internal router ports.
@@ -37,7 +38,7 @@
 - Check wireless radio segment assignments when validating VXLAN endpoints.
 - Use correct IPv6 address expansion and compression.
 - Clarify inventory source age limits and report invalid command arguments consistently.
-- Clarify that invalid `checkedOn` dates stop the freshness report during validation.
+- Replace individual source entries with one recorded date for each inventory object.
 
 ## 12.0.0 — 2026-10-13
 

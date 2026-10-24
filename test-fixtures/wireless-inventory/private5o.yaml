@@ -3,5 +3,6 @@ kind: wireless-network
 id: 2004
 name: Outdoor 5 GHz Wi-Fi
 ssid: private5o
+lastReviewed: "2026-10-24"
 security:
   mode: unknown
