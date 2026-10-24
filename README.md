@@ -24,7 +24,7 @@ Git-versioned inventory for network infrastructure and systems, with YAML schema
 
 ## Features
 
-NetDoc validates infrastructure YAML and prints Snowflake IDs. Read the [CLI guide](docs/cli-guide.md) for usage.
+NetDoc validates infrastructure YAML and prints Snowflake IDs.
 
 ## Requirements
 
@@ -39,11 +39,11 @@ Install the public package:
 npm install --global @eliware/netdoc
 ```
 
-The package installs the `netdoc` command. It includes the CLI, schemas, and user guide. An approved release publishes it to npm.
+The package includes the `netdoc` command, source, schemas, and user guide. Only approved releases publish versions to npm.
 
 ## Usage
 
-Run `netdoc --help` to list commands. Use `netdoc validate <path>` to check YAML. Use `netdoc --generate-id` to print an ID. Read the [CLI guide](docs/cli-guide.md) and [release notes](RELEASE_NOTES.md).
+Run `netdoc --help` to list commands. Read the [CLI guide](docs/cli-guide.md) for command details and the [release notes](RELEASE_NOTES.md) for version history.
 
 ## Development
 
@@ -55,11 +55,11 @@ Run `npm ci` to install locked dependencies. Run `npm test` for repository check
 
 ## Troubleshooting
 
-If `netdoc` is not found, install the package. If validation fails, read the error and correct the named YAML value.
+If a command fails, read its error and correct the named path, option, or YAML value.
 
 ## Security
 
-Do not store credentials in inventory files.
+Keep credentials, secret values, private data, and runtime state out of Git.
 
 ## Configuration
 
@@ -67,7 +67,7 @@ NetDoc has no runtime settings or environment variables.
 
 ## Operations
 
-NetDoc reads input files and writes results to the terminal. It does not change files or connect to a network.
+NetDoc reads inventory and prints results. It does not change files or connect to devices.
 
 ## Commands
 
@@ -80,8 +80,6 @@ NetDoc reads input files and writes results to the terminal. It does not change 
 | `netdoc report <path> --freshness --max-age-days DAYS` | Report record dates and age.              |
 | `netdoc graph <path> --format mermaid`                 | Print inventory topology as Mermaid text. |
 | `netdoc --generate-id [-n COUNT]`                      | Print one or more Snowflake IDs.          |
-
-Read the [CLI guide](docs/cli-guide.md) for all commands, options, and examples.
 
 ## Exit codes
 

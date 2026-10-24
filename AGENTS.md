@@ -19,11 +19,13 @@ Keep each source and test module focused on one responsibility.
 ## Validation
 
 Use Node.js 26 or later and native ESM for maintained JavaScript modules.
+
 Run npm test for aggregate validation.
 Run npm run lint for lint checks.
 Run npm run audit for dependency checks.
 Run npm run format to format files.
 Run npm run format:check to check formatting.
+Run npm run pack to check package contents.
 
 ## Security
 
