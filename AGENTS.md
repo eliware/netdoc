@@ -25,7 +25,6 @@ Run npm run lint for lint checks.
 Run npm run audit for dependency checks.
 Run npm run format to format files.
 Run npm run format:check to check formatting.
-Run npm run pack to check package contents.
 
 ## Security
 
@@ -33,7 +32,7 @@ Keep credentials, secret values, private data, and runtime state out of Git.
 
 ## Changes
 
-Update RELEASE_NOTES.md for each user-visible change.
+Keep contribution rules in specs/.
 
 ## Application
 

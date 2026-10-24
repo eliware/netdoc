@@ -24,7 +24,7 @@ Git-versioned inventory for network infrastructure and systems, with YAML schema
 
 ## Features
 
-NetDoc validates infrastructure YAML and prints Snowflake IDs.
+NetDoc validates YAML, reports date freshness, and prints topology graphs and Snowflake IDs.
 
 ## Requirements
 
@@ -59,7 +59,7 @@ If a command fails, read its error and correct the named path, option, or YAML v
 
 ## Security
 
-Keep credentials, secret values, private data, and runtime state out of Git.
+Do not add credentials, keys, secrets, or private data to inventory files.
 
 ## Configuration
 
