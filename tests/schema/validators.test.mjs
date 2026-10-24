@@ -69,7 +69,9 @@ test("validates configured MTU values on every supported interface type", () => 
       name: "if0",
       type,
       ...(mtu === undefined ? {} : { mtu }),
-      ...(type === "wireless" ? { wireless: { role: "client", ssid: "test" } } : {}),
+      ...(type === "wireless"
+        ? { wireless: { role: "client", profiles: [{ wirelessNetworkId: 1 }] } }
+        : {}),
     });
   for (const type of [
     "ethernet",
@@ -241,6 +243,7 @@ test("rejects invalid wireless interfaces and DNS aliases", () => {
   for (const wireless of [
     { role: "radio" },
     { role: "radio", broadcasts: [{ wirelessNetworkId: 1 }] },
+    { role: "client" },
     { role: "client", profiles: [{ wirelessNetworkId: 1, password: "not-used" }] },
     { role: "invalid" },
   ])
@@ -273,19 +276,21 @@ test("rejects invalid wireless interfaces and DNS aliases", () => {
   expect(validateMachine(record)).toBe(false);
 });
 
-test("allows the legacy wireless SSID form during migration", () => {
-  expect(
-    validators["network-device"]({
-      version: "11.0",
-      kind: "network-device",
-      name: "Legacy access point",
-      roles: ["wireless-access-point"],
-      implementation: "physical",
-      interfaces: [
-        { name: "private5", type: "wireless", wireless: { role: "radio", ssid: "private5" } },
-      ],
-    }),
-  ).toBe(true);
+test("rejects wireless interfaces that use an inline SSID", () => {
+  const base = {
+    version: "11.0",
+    kind: "network-device",
+    name: "Access point",
+    roles: ["wireless-access-point"],
+    implementation: "physical",
+  };
+  for (const role of ["radio", "client"])
+    expect(
+      validators["network-device"]({
+        ...base,
+        interfaces: [{ name: "Wi-Fi", type: "wireless", wireless: { role, ssid: "private5" } }],
+      }),
+    ).toBe(false);
 });
 
 test("returns schema load errors for the validation workflow", () => {

@@ -326,6 +326,8 @@ Use `role: client` for a machine wireless interface. List configured SSIDs in `w
 Set `autoJoin` and `priority` when known. Set `accessPointId` only when the client must use one access point.
 Do not use a profile to record the client's current access point.
 
+Every radio must use `broadcasts`. Every client must use `profiles`.
+
 Keep `segmentId` on a client when its profiles use one fixed segment. Omit it when the profiles use different segments.
 
 ```yaml
@@ -342,9 +344,6 @@ interfaces:
 Set `wirelessManagement.state` to `managed`, `unmanaged`, or `unknown` for an access point.
 Set `controllerId` only when the access point has a confirmed wireless controller.
 The controller must have the `wireless-controller` role. A controller record alone does not prove that it manages an access point.
-
-Previously saved `wireless.ssid` fields remain valid during migration. Replace them with wireless-network records, radio broadcasts, and client profiles.
-Do not use a previous SSID field to record a client's current access point.
 
 ### DNS name associations
 

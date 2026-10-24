@@ -15,6 +15,9 @@ test("converts nested BigInts and preserves other values", () => {
   ).toEqual({
     segmentIds: [1, 2],
   });
+  expect(convertBigIntsForValidation({ wirelessNetworkId: 9007199254740993n })).toEqual({
+    wirelessNetworkId: 1,
+  });
   expect(convertBigIntsForValidation({ segmentIds: [7n, 7n] })).toEqual({ segmentIds: [1, 1] });
   expect(convertBigIntsForValidation({ value: 9007199254740993n })).toEqual({
     value: "9007199254740993",

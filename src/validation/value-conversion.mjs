@@ -8,6 +8,7 @@ const identifierKeys = new Set([
   "nodeId",
   "deviceId",
   "peerId",
+  "wirelessNetworkId",
 ]);
 
 export function convertBigIntsForValidation(value, key, identifiers = new Map()) {
