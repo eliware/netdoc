@@ -6,7 +6,10 @@
 
 - Add schemas for port modes, VLANs, and PVIDs.
 - Add network fields for DNS names linked to addresses.
+- Add wireless network, radio, and client profile schemas.
+- Add configured MTU values with positive 32-bit byte limits on every interface type.
 - Add schema and validator checks for network references, interface addresses, port modes, and VLAN assignments.
+- Add checks for wireless references, unique profiles, unique radio entries, and unique DNS names.
 - Add focused tests for the network and validation modules.
 
 ### Changed

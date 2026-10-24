@@ -160,6 +160,28 @@ IDs must be unique across object and interface records. Every reference must res
 
 An interface needs a name and a type. It can record a MAC address, speed, MTU, parent interface, segment ID, addresses, and peer connection.
 
+Set `mtu` to a confirmed configured maximum packet length in bytes. NetDoc accepts positive integers from 1 through 4,294,967,295 on every supported interface type. NetDoc does not infer a default or check device support.
+
+Add an entry to the object's `evidence` list. Set `basis: configured` and name the configuration source. In the entry's `note`, identify the interface and MTU. Do not use `mtu` for a live value. The schema has no separate field for an observed MTU.
+
+Use the same MTU on hosts in one subnet. Check every path when traffic crosses a tunnel. Set each tunnel MTU to the underlying path limit minus tunnel-header bytes. OVHcloud's vRack jumbo-frame guide requires the same MTU on hosts in a subnet. The guide warns that some server products may limit jumbo-frame support. Some OVHcloud servers or vRack paths may not support MTU 9000.
+
+```yaml
+version: "11.0"
+kind: physical-machine
+name: Example server
+evidence:
+  - source: Network interface configuration
+    basis: configured
+    note: eth0 is configured with an MTU of 1500 bytes.
+interfaces:
+  - name: eth0
+    type: ethernet
+    mtu: 1500
+```
+
+Read the [OVHcloud vRack jumbo-frame guide](https://docs.ovhcloud.com/en/guides/bare-metal-cloud/dedicated-servers/vrack-mtu-jumbo-frames) before you use jumbo frames on vRack.
+
 Use `ethernet`, `wireless`, `virtual-ethernet`, `tunnel`, `loopback`, `bridge`, `vlan`, or `other` for the interface type. Set an address assignment to `static`, `dhcp`, `dhcp-reservation`, or `virtual`.
 
 Use a segment's `vlan` field for a VLAN number or `untagged`. Use access mode for one segment. Use trunk mode for tagged segments and an optional PVID segment.

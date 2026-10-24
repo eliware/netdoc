@@ -28,6 +28,10 @@ $defs:
       mtu:
         type: integer
         minimum: 1
+        maximum: 4294967295
+        description: >-
+          The configured MTU for this interface, in bytes. Use the field on ethernet, wireless,
+          virtual-ethernet, tunnel, loopback, bridge, vlan, or other interfaces.
       parentInterface:
         type: string
         minLength: 1

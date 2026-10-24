@@ -5,6 +5,16 @@ import { loadSchemaValidators, tryLoadSchemaValidators } from "../../src/schema/
 
 const root = fileURLToPath(new URL("../../specs/schema/", import.meta.url));
 let validators;
+const networkDevice = {
+  version: "11.0",
+  kind: "network-device",
+  name: "router",
+  roles: ["router"],
+  implementation: "physical",
+};
+
+const validateInterface = (networkInterface) =>
+  validators["network-device"]({ ...networkDevice, interfaces: [networkInterface] });
 
 beforeAll(() => {
   validators = loadSchemaValidators(root);
@@ -18,26 +28,11 @@ test("loads a schema validator for each supported object kind", () => {
     "virtual-machine",
     "wireless-network",
   ]);
-  expect(
-    validators["network-device"]({
-      version: "11.0",
-      kind: "network-device",
-      name: "router",
-      roles: ["router"],
-      implementation: "physical",
-    }),
-  ).toBe(true);
+  expect(validators["network-device"](networkDevice)).toBe(true);
 });
 
 test("validates network interface fields and constraints", () => {
   const validate = validators["network-device"];
-  const base = {
-    version: "11.0",
-    kind: "network-device",
-    name: "router",
-    roles: ["router"],
-    implementation: "physical",
-  };
   const invalidInterfaces = [
     { name: "eth0", type: "invalid" },
     { name: "Wi-Fi", type: "wireless" },
@@ -51,10 +46,10 @@ test("validates network interface fields and constraints", () => {
     { name: "eth0", type: "ethernet", id: 7, connectsTo: 8, unused: true },
   ];
   for (const networkInterface of invalidInterfaces)
-    expect(validate({ ...base, interfaces: [networkInterface] })).toBe(false);
+    expect(validate({ ...networkDevice, interfaces: [networkInterface] })).toBe(false);
   expect(
     validate({
-      ...base,
+      ...networkDevice,
       interfaces: [
         {
           name: "eth0",
@@ -66,6 +61,30 @@ test("validates network interface fields and constraints", () => {
       ],
     }),
   ).toBe(true);
+});
+
+test("validates configured MTU values on every supported interface type", () => {
+  const validate = (mtu, type = "ethernet") =>
+    validateInterface({
+      name: "if0",
+      type,
+      ...(mtu === undefined ? {} : { mtu }),
+      ...(type === "wireless" ? { wireless: { role: "client", ssid: "test" } } : {}),
+    });
+  for (const type of [
+    "ethernet",
+    "wireless",
+    "virtual-ethernet",
+    "tunnel",
+    "loopback",
+    "bridge",
+    "vlan",
+    "other",
+  ])
+    expect(validate(1500, type)).toBe(true);
+  for (const mtu of [0, -1, 1.5, 4294967296, "1500", null]) expect(validate(mtu)).toBe(false);
+  for (const mtu of [1, 1500, 9000, 4294967295]) expect(validate(mtu)).toBe(true);
+  expect(validate()).toBe(true);
 });
 
 test("accepts hardware and storage definitions", () => {
