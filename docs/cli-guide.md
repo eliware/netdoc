@@ -126,13 +126,13 @@ Each recorded date has one of these statuses:
 
 - `no-evidence` means the object has no source entries.
 - `undated` means a source entry has no `checkedOn` date.
-- `current` means the date is on or before the maximum age.
-- `stale` means the date is older than the maximum age.
+- `current` means the UTC age is less than or equal to the selected maximum age.
+- `stale` means the UTC age is greater than the selected maximum age.
 - `future` means the date is after the current UTC date.
 - `invalid-date` means the date is not a valid calendar date.
 
 The freshness report is informational. A missing or expired date does not fail inventory validation.
-The maximum age must be an integer from 0 through 36500.
+The maximum age must be an integer from 1 through 36500.
 Set a limit that matches your inventory inspection period.
 
 ### Export topology as Mermaid
