@@ -1,5 +1,5 @@
 import { validateIdentifiers } from "../validate/identifiers.mjs";
-import { validateNetworkValues } from "../network/value/validation.mjs";
+import { validateNetworkValues } from "../network/value/records.mjs";
 import { validateRelationships } from "./relationships.mjs";
 
 export function runValidationPipeline({ inventoryRecords, validRecords, initialDiagnostics }) {

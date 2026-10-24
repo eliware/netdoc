@@ -1,6 +1,17 @@
 import { expect, test } from "@jest/globals";
 import { buildTunnelElements } from "../../../src/graph/networking/tunnels.mjs";
 
+test("returns empty tunnel elements when no tunnel config exists", () => {
+  expect(buildTunnelElements(0, "object_0", {}, { records: [] })).toEqual({
+    nodes: [],
+    edges: [],
+  });
+  expect(buildTunnelElements(0, "object_0", { tunnels: [{}] }, { records: [] })).toEqual({
+    nodes: ['tunnel_0_0["Configured tunnel<br/>Local: unknown<br/>Listen port: unknown"]'],
+    edges: ["object_0 -.->|tunnel configuration| tunnel_0_0"],
+  });
+});
+
 test("renders tunnel peers with default labels when details are absent", () => {
   expect(buildTunnelElements(1, "object_1", { tunnels: [{ peers: [{}] }] })).toEqual({
     nodes: [

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateNetworkValues } from "../../../src/network/value/validation.mjs";
+import { validateNetworkValues } from "../../../src/network/value/records.mjs";
 
 test("validates address values collected across network settings", () => {
   const data = {
