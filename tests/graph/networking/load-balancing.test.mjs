@@ -13,6 +13,7 @@ test("renders load-balancer listeners and address or device targets", () => {
       id: 1n,
       networking: {
         loadBalancing: {
+          addressPools: [{ cidr: "10.0.0.0/24" }, { start: "10.0.1.1", end: "10.0.1.20" }],
           listeners: [
             {
               protocol: "TCP",
@@ -45,4 +46,11 @@ test("renders load-balancer listeners and address or device targets", () => {
   expect(elements.edges).toContain("listener_0_0 -->|target device 2 port 22| object_1");
   expect(elements.edges).toContain("listener_0_0 -->|target device 2| object_1");
   expect(elements.nodes).toContain('listener_0_1["Load balancer listener<br/>UDP:53"]');
+  expect(elements.nodes).toContain(
+    'address_pool_0_0["Load balancer address pool<br/>10.0.0.0/24"]',
+  );
+  expect(elements.nodes).toContain(
+    'address_pool_0_1["Load balancer address pool<br/>10.0.1.1 - 10.0.1.20"]',
+  );
+  expect(elements.edges).toContain("object_0 -->|address pool| address_pool_0_0");
 });

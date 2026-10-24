@@ -7,6 +7,7 @@
 - Add mixed WPA2 and WPA3 wireless modes for personal and enterprise networks.
 - Add VXLAN overlay fields for underlay segments, endpoints, transport settings, MTU, and encryption.
 - Add listener, load-balancer target, and wireless client profile relationships to topology graphs.
+- Show load-balancer address pools, VRRP interface links, and uniquely matched tunnel endpoints in topology graphs.
 - Require a `lastReviewed` date on each inventory object.
 
 ### Changed
@@ -19,7 +20,7 @@
 
 - Validate VXLAN endpoint references and interface segment assignments.
 - Preserve full 64-bit wireless controller IDs.
-- Escape Mermaid syntax characters in object and interface labels.
+- Escape Mermaid syntax characters and backticks in object and interface labels.
 
 ## 15.0.0 — 2026-10-24
 

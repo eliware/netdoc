@@ -1,9 +1,17 @@
 import { edgeLine, nodeLine } from "../labels.mjs";
+import { buildAddressPoolElements } from "./address-pools.mjs";
 import { buildLoadBalancingTargetElements } from "./targets.mjs";
 
 export function buildLoadBalancingElements(index, source, networking, context) {
   const nodes = [];
   const edges = [];
+  const pools = buildAddressPoolElements(
+    index,
+    source,
+    networking.loadBalancing?.addressPools ?? [],
+  );
+  nodes.push(...pools.nodes);
+  edges.push(...pools.edges);
   (networking.loadBalancing?.listeners ?? []).forEach((listener, listenerIndex) => {
     const listenerNode = `listener_${index}_${listenerIndex}`;
     const label = ["Load balancer listener", `${listener.protocol}:${listener.port}`];

@@ -11,6 +11,8 @@ export function escapeMermaidText(value) {
     .replaceAll(")", "&#41;")
     .replaceAll("{", "&#123;")
     .replaceAll("}", "&#125;")
+    .replaceAll("`", "&#96;")
+    .replaceAll("%", "&#37;")
     .replace(/[\r\n]+/g, " ");
 }
 
