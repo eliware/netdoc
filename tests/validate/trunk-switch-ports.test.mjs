@@ -1,4 +1,5 @@
 import { expect, test } from "@jest/globals";
+import { validateSwitchPorts } from "../../src/validate/switch/ports.mjs";
 import { validateTrunkSwitchPorts } from "../../src/validate/trunk-switch-ports.mjs";
 
 test("checks tagged segments and PVID membership on trunk ports", () => {
@@ -53,4 +54,15 @@ test("does not apply VLAN rules to non-segment references", () => {
     [3n, { kind: "network-device", record: { data: { vlan: 3 } } }],
   ]);
   expect(validateTrunkSwitchPorts([record], entities)).toEqual([]);
+});
+
+test("reports unresolved PVID segment references", () => {
+  const record = {
+    file: "switch.yaml",
+    data: { id: 1n, switch: { ports: [{ mode: "trunk", pvidSegmentId: 99n }] } },
+  };
+
+  expect(validateSwitchPorts([record], new Map()).map(({ pointer }) => pointer)).toEqual([
+    "/switch/ports/0/pvidSegmentId",
+  ]);
 });

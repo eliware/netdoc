@@ -1,5 +1,5 @@
 import { isIP } from "node:net";
-import { addressToBigInt } from "./ip-addresses/integer.mjs";
+import { addressToBigInt } from "./ip-addresses/conversion.mjs";
 
 export function parseAddress(value) {
   if (typeof value !== "string") return undefined;

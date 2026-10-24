@@ -19,13 +19,3 @@ test("reports missing and wrong-kind switch port segment references", () => {
   ).toEqual(["/switch/ports/0/segmentIds/0"]);
   expect(validateSwitchPortSegmentReferences({ data: {} }, new Map())).toEqual([]);
 });
-
-test("reports an unresolved trunk PVID segment reference", () => {
-  const record = {
-    file: "switch.yaml",
-    data: { id: 1n, switch: { ports: [{ mode: "trunk", pvidSegmentId: 99n }] } },
-  };
-  expect(
-    validateSwitchPortSegmentReferences(record, new Map()).map(({ pointer }) => pointer),
-  ).toEqual(["/switch/ports/0/pvidSegmentId"]);
-});
