@@ -1,5 +1,5 @@
 import { createDiagnostic } from "../../../diagnostics.mjs";
-import { isMatchingDhcpReservation } from "./dhcp-reservation-matching.mjs";
+import { isAllowedDhcpSharing } from "./dhcp/sharing.mjs";
 import { addressRange, rangesOverlap } from "../../../network/address/ranges.mjs";
 
 export function validateInterfaceAddressUniqueness(
@@ -16,13 +16,7 @@ export function validateInterfaceAddressUniqueness(
   const key = `${networkInterface.segmentId}:${parsed.version}`;
   const range = addressRange(parsed);
   const previous = (assignments.get(key) ?? []).find((item) => rangesOverlap(item.range, range));
-  if (
-    previous &&
-    previous.range.start === range.start &&
-    previous.range.end === range.end &&
-    range.start === range.end &&
-    isMatchingDhcpReservation(previous, networkInterface, addressAssignment)
-  )
+  if (previous && isAllowedDhcpSharing(previous, networkInterface, addressAssignment, range))
     return [];
   if (previous)
     return [

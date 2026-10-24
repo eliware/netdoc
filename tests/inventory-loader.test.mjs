@@ -39,6 +39,10 @@ test("loads valid YAML and reports per-file parse or document errors", () => {
 test.each([undefined, "", "missing.yaml"])("rejects an invalid input path %s", (target) => {
   const fileSystem = createMemoryFileSystem({}, [root]);
   expect(() => loadInventory(target, { cwd: root, fileSystem })).toThrow("Path does not exist:");
+  if (target === "missing.yaml")
+    expect(tryLoadInventory(target, { cwd: root, fileSystem })).toEqual({
+      error: `Path does not exist: ${path.join(root, target)}`,
+    });
 });
 
 test("uses the default working directory and file system", () => {
@@ -50,11 +54,4 @@ test("uses the default working directory and file system", () => {
 test("rejects a directory without YAML files", () => {
   const fileSystem = createMemoryFileSystem({ [path.join(root, "readme.txt")]: "text\n" });
   expect(() => loadInventory(root, { cwd: root, fileSystem })).toThrow("No YAML files found:");
-});
-
-test("returns input errors for the validation workflow", () => {
-  const fileSystem = createMemoryFileSystem({}, [root]);
-  expect(tryLoadInventory("missing.yaml", { cwd: root, fileSystem })).toEqual({
-    error: `Path does not exist: ${path.join(root, "missing.yaml")}`,
-  });
 });

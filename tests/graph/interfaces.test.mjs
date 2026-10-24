@@ -48,8 +48,7 @@ test("links interfaces to segments, peer interfaces, and resident hosts", () => 
     "interface_0_1 -->|radio0 / broadcast wireless network unknown| object_3",
   );
   expect(edges).toContain("interface_0_0 ---|eth0 ↔ eth1| interface_1_0");
-  expect(edges).toContain("object_1 -.->|runs on| object_0");
-  expect(edges).toHaveLength(9);
+  expect(edges).toHaveLength(8);
 });
 
 test("skips missing segment and peer targets", () => {

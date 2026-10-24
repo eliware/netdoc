@@ -63,3 +63,55 @@ test("checks DHCP reservations for duplicate addresses", () => {
   validateInterfaceAddressUniqueness(...args);
   expect(validateInterfaceAddressUniqueness(...args)[0].message).toContain("is in use");
 });
+
+test("allows matching DHCP lease and reservation addresses", () => {
+  const assignments = new Map();
+  const parsed = { version: 4, bits: 32, prefix: 32, integer: 1n };
+  const record = { file: "node.yaml", data: { id: 1n } };
+  validateInterfaceAddressUniqueness(
+    { segmentId: 2n, macAddress: "AA-BB-CC-DD-EE-FF" },
+    { assignment: "dhcp" },
+    parsed,
+    "192.0.2.1",
+    record,
+    "/interfaces/0/addresses/0/cidr",
+    assignments,
+  );
+  expect(
+    validateInterfaceAddressUniqueness(
+      { segmentId: 2n, macAddress: "aa:bb:cc:dd:ee:ff" },
+      { assignment: "dhcp-reservation" },
+      parsed,
+      "192.0.2.1",
+      record,
+      "/interfaces/0/addresses/1/cidr",
+      assignments,
+    ),
+  ).toEqual([]);
+});
+
+test("reports a DHCP address conflict when MAC addresses differ", () => {
+  const assignments = new Map();
+  const parsed = { version: 4, bits: 32, prefix: 32, integer: 1n };
+  const record = { file: "node.yaml", data: { id: 1n } };
+  validateInterfaceAddressUniqueness(
+    { segmentId: 2n, macAddress: "AA:BB:CC:DD:EE:FF" },
+    { assignment: "dhcp" },
+    parsed,
+    "192.0.2.1",
+    record,
+    "/interfaces/0/addresses/0/cidr",
+    assignments,
+  );
+  expect(
+    validateInterfaceAddressUniqueness(
+      { segmentId: 2n, macAddress: "11:22:33:44:55:66" },
+      { assignment: "dhcp-reservation" },
+      parsed,
+      "192.0.2.1",
+      record,
+      "/interfaces/1/addresses/0/cidr",
+      assignments,
+    )[0].message,
+  ).toContain("is in use");
+});
