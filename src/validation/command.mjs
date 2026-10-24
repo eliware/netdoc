@@ -3,23 +3,12 @@ import { runInventoryValidation } from "./run.mjs";
 import { reportValidationResult } from "./report.mjs";
 import { reportValidationSetupError } from "./setup-result.mjs";
 import { validationJson } from "./json-report.mjs";
+import { reportValidationArgumentError } from "./argument-error.mjs";
 
 export function validateInventory(args, options = {}) {
   const argumentResult = validateInventoryArguments(args);
-  if (argumentResult.error !== undefined) {
-    if (argumentResult.format === "json")
-      (options.write ?? console.log)(
-        validationJson({
-          exitCode: 2,
-          error: argumentResult.error,
-          errorCode: "NETDOC_ARGUMENTS_INVALID",
-          fileCount: 0,
-          diagnostics: [],
-        }),
-      );
-    else (options.error ?? console.error)(argumentResult.error);
-    return 2;
-  }
+  if (argumentResult.error !== undefined)
+    return reportValidationArgumentError(argumentResult, options);
   const result = runInventoryValidation(argumentResult.path, options);
   if (argumentResult.format === "json") {
     (options.write ?? console.log)(validationJson(result));
