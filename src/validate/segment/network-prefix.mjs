@@ -1,8 +1,8 @@
 import { createDiagnostic } from "../../diagnostics.mjs";
-import { parseAddress } from "../../ip-addresses.mjs";
+import { validNetworkAddressValue } from "../network/address/value.mjs";
 
 export function validateSegmentNetworkPrefix(record, network, index) {
-  if (parseAddress(network.cidr) && network.cidr.includes("/")) return [];
+  if (validNetworkAddressValue(network.cidr, true, `/ipNetworks/${index}/cidr`)) return [];
   return [
     createDiagnostic(
       record.file,

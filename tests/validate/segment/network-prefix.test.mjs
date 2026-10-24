@@ -10,4 +10,7 @@ test("accepts a valid prefix and reports an invalid prefix", () => {
   expect(
     validateSegmentNetworkPrefix(record, { cidr: "192.0.2.0" }, 2).map(({ pointer }) => pointer),
   ).toEqual(["/ipNetworks/2/cidr"]);
+  expect(
+    validateSegmentNetworkPrefix(record, { cidr: "192.0.2.1/24" }, 3).map(({ pointer }) => pointer),
+  ).toEqual(["/ipNetworks/3/cidr"]);
 });
