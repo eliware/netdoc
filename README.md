@@ -71,12 +71,14 @@ NetDoc reads input files and writes results to the terminal. It does not change 
 
 ## Commands
 
-| Command                           | Result                           |
-| --------------------------------- | -------------------------------- |
-| `netdoc --help`                   | List commands.                   |
-| `netdoc --version`                | Print the package version.       |
-| `netdoc validate <path>`          | Check YAML files.                |
-| `netdoc --generate-id [-n COUNT]` | Print one or more Snowflake IDs. |
+| Command                                                | Result                                    |
+| ------------------------------------------------------ | ----------------------------------------- |
+| `netdoc --help`                                        | List commands.                            |
+| `netdoc --version`                                     | Print the package version.                |
+| `netdoc validate <path> [--format text                 | json]`                                    | Check YAML files and select text or JSON output. |
+| `netdoc report <path> --freshness --max-age-days DAYS` | Report record dates and age.              |
+| `netdoc graph <path> --format mermaid`                 | Print inventory topology as Mermaid text. |
+| `netdoc --generate-id [-n COUNT]`                      | Print one or more Snowflake IDs.          |
 
 Read the [CLI guide](docs/cli-guide.md) for all commands, options, and examples.
 
