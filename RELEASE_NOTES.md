@@ -36,6 +36,7 @@
 - Find conflicting interface addresses and MAC addresses on each segment.
 - Validate wireless network references and address conflicts.
 - Check wireless radio segment assignments when validating VXLAN endpoints.
+- Escape Mermaid syntax characters in object and interface labels.
 - Use correct IPv6 address expansion and compression.
 - Clarify inventory source age limits and report invalid command arguments consistently.
 - Replace individual source entries with one recorded date for each inventory object.
