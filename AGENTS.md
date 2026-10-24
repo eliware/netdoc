@@ -2,11 +2,11 @@
 
 ## Project
 
-This repository contains the NetDoc command-line tool and schemas.
+See README.md for repository purpose, ownership, and scope.
 
 ## Scope and boundaries
 
-Use README.md for project purpose, scope, and ownership.
+Keep requirements in their authoritative specifications.
 
 ## Layout
 
@@ -18,27 +18,23 @@ Keep each source and test module focused on one responsibility.
 
 ## Validation
 
-Use Node.js 26 or later and npm 12 or later.
-Use native ESM for maintained JavaScript modules.
-Run `npm test` for aggregate checks.
-Run `npm run lint` for lint checks.
-Run `npm run audit` for dependency checks.
-
-Run `npm run format` to format files.
-Run `npm run format:check` to check formatting.
+Use Node.js 26 or later and native ESM for maintained JavaScript modules.
+Run npm test for aggregate validation.
+Run npm run lint for lint checks.
+Run npm run audit for dependency checks.
+Run npm run format to format files.
+Run npm run format:check to check formatting.
 
 ## Security
 
-Keep secrets, private data, and runtime state out of Git.
+Keep credentials, secret values, private data, and runtime state out of Git.
 
 ## Changes
 
-Keep changes in this repository.
-Receive Eliware Operations approval before you change an external system.
+Update RELEASE_NOTES.md for each user-visible change.
 
 ## Application
 
-Document entry points, workflows, settings, startup, and shutdown in README.md.
 Run focused tests first during development.
 Run one test file with `npm test -- tests/path/to/example.test.mjs`.
 Run multiple test files with `npm test -- tests/path/to/first.test.mjs tests/path/to/second.test.mjs`.
@@ -47,8 +43,10 @@ Run the full `npm test` suite for final validation before a commit, milestone, o
 
 ## CLI
 
-Document each command, option, argument, default, error, and exit code in docs/cli-guide.md.
+Keep `--help` and `--version` read-only.
+Document each command, option, argument, default, error, and exit code.
 
 ## npm publication
 
-Include specs/ in the package.
+Use `.github/workflows/npm.yaml` for package publication.
+Follow the approved release process before you publish.

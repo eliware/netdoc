@@ -24,12 +24,12 @@ Git-versioned inventory for network infrastructure and systems, with YAML schema
 
 ## Features
 
-NetDoc checks infrastructure YAML and prints Snowflake IDs. Read the [user guide](docs/cli-guide.md) for command details.
+NetDoc validates infrastructure YAML and prints Snowflake IDs. Read the [CLI guide](docs/cli-guide.md) for usage.
 
 ## Requirements
 
 - Node.js 26 or later.
-- npm 12 or later to check this repository.
+- npm to install the package and run repository checks.
 
 ## Setup
 
@@ -39,27 +39,27 @@ Install the public package:
 npm install --global @eliware/netdoc
 ```
 
-The package installs the `netdoc` command. It includes the CLI, schemas, and user guide. An approved release publishes the package to npm.
+The package installs the `netdoc` command. It includes the CLI, schemas, and user guide. An approved release publishes it to npm.
 
 ## Usage
 
-Run `netdoc --help` to list commands. Use `netdoc validate <path>` to check YAML. Use `netdoc --generate-id` to print an ID. Read the [user guide](docs/cli-guide.md) for details and [release notes](RELEASE_NOTES.md) for changes.
+Run `netdoc --help` to list commands. Use `netdoc validate <path>` to check YAML. Use `netdoc --generate-id` to print an ID. Read the [CLI guide](docs/cli-guide.md) and [release notes](RELEASE_NOTES.md).
 
 ## Development
 
-Read [AGENTS.md](AGENTS.md), the [documentation index](docs/README.md), and the [specification index](specs/README.md) before you change the project.
+Read [AGENTS.md](AGENTS.md), the [documentation index](docs/README.md), and the [specification index](specs/README.md) before you change files.
 
 ## Testing
 
-Run `npm ci` to install locked dependencies. Run `npm test` to check code, format, dependencies, package contents, and test coverage.
+Run `npm ci` to install locked dependencies. Run `npm test` for repository checks and test coverage.
 
 ## Troubleshooting
 
-If `netdoc` is not found, install the package again. If validation fails, read each error and correct the named YAML value.
+If `netdoc` is not found, install the package. If validation fails, read the error and correct the named YAML value.
 
 ## Security
 
-Do not store credentials in inventory files. NetDoc does not print secret values.
+Do not store credentials in inventory files.
 
 ## Configuration
 
@@ -67,18 +67,18 @@ NetDoc has no runtime settings or environment variables.
 
 ## Operations
 
-Run a command to start NetDoc. It exits when the command ends. NetDoc reads input files and writes results to the terminal. It does not change files or connect to a network.
+NetDoc reads input files and writes results to the terminal. It does not change files or connect to a network.
 
 ## Commands
 
-| Command                  | Result                     |
-| ------------------------ | -------------------------- |
-| `netdoc --help`          | List commands.             |
-| `netdoc --version`       | Print the package version. |
-| `netdoc validate <path>` | Check YAML files.          |
-| `netdoc --generate-id`   | Print one Snowflake ID.    |
+| Command                           | Result                           |
+| --------------------------------- | -------------------------------- |
+| `netdoc --help`                   | List commands.                   |
+| `netdoc --version`                | Print the package version.       |
+| `netdoc validate <path>`          | Check YAML files.                |
+| `netdoc --generate-id [-n COUNT]` | Print one or more Snowflake IDs. |
 
-See the [user guide](docs/cli-guide.md) for command options and examples.
+Read the [CLI guide](docs/cli-guide.md) for all commands, options, and examples.
 
 ## Exit codes
 
