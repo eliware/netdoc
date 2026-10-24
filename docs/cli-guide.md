@@ -144,7 +144,7 @@ The command validates the inventory before it prints a graph. It shows objects, 
 
 For a wireless client, the graph links its profiles to segments advertised by matching wireless networks.
 It labels known values and identifies unknown endpoints. It shows configured inventory only.
-It does not show VXLAN overlay references.
+It does not show VXLAN overlay references from `networking.overlaySegmentIds`.
 It does not find live devices or test connectivity.
 
 The command writes Mermaid text to standard output. Redirect the output when you want to save a diagram:
@@ -218,6 +218,8 @@ Read the [schema index](../specs/schema/README.md) for all supported fields and 
 Physical and virtual machines can record roles, an SSH username, hardware, storage, and an operating system. Do not store passwords or keys.
 
 Hardware fields cover the maker, model, CPU, memory, and GPUs. Storage fields cover disks, RAID, partitions, file systems, mounts, and SMB or NFS shares.
+Use `B`, `KB`, `MB`, `GB`, `TB`, `KiB`, `MiB`, `GiB`, or `TiB` for storage capacity.
+Use `MHz` or `GHz` for frequency. Use `Mbps` or `Gbps` for data rates.
 
 Physical machines can also record a site, provider, region, data center, rack, rack unit, and provider asset ID. Virtual machines use `residentOn` for the host ID.
 
@@ -230,11 +232,52 @@ Network settings can record a default gateway, static routes, BGP peers and pref
 Network settings can also record firewall rules, NAT rules, load balancers, listeners, DHCP scopes, and VXLAN overlay references.
 Use `networking.overlaySegmentIds` on a CNI or network-device record to reference VXLAN segments.
 
-Layer 2 settings can record managed or unmanaged operation. Use access mode for one segment. Use trunk mode for tagged segments and an optional PVID segment for untagged traffic.
+Set `switch.management` to `managed` or `unmanaged`. List port entries under `switch.ports`.
+Each port needs an interface name, a type, and a mode. Match the name to an entry under `interfaces`.
+Use `physical` or `internal` for the port type. Use `access` for one segment.
+
+Use `trunk` for one or more tagged segments and an optional PVID segment for untagged traffic.
+Set `segmentId` for an access port. Set `segmentIds` for tagged segments on a trunk port.
+Set `pvidSegmentId` when untagged traffic on a trunk port belongs to a segment.
+
+This example shows one access port and one trunk port. Each segment ID must point to a network-segment record.
+Segment 9002 uses `vlan: untagged`. Segments 9003 and 9004 use numeric VLAN IDs.
+
+```yaml
+version: "11.0"
+kind: network-device
+name: Example switch
+lastReviewed: "2026-10-24"
+roles: [switch]
+implementation: physical
+switch:
+  management: managed
+  ports:
+    - interfaceName: port1
+      type: physical
+      mode: access
+      segmentId: 9002
+    - interfaceName: uplink
+      type: physical
+      mode: trunk
+      segmentIds: [9003, 9004]
+      pvidSegmentId: 9002
+interfaces:
+  - name: port1
+    type: ethernet
+    segmentId: 9002
+  - name: uplink
+    type: ethernet
+```
 
 ### Network segment fields
 
 Set `medium` to `ethernet`, `wireless`, `virtual`, `tunnel`, or `other`. Set `vlan` to an integer from 1 through 4094 or to `untagged`.
+
+If you record a gateway, use an address inside its network.
+Do not use the network address as a gateway for IPv4 prefixes shorter than `/31` or IPv6 prefixes shorter than `/127`.
+NetDoc accepts both addresses in IPv4 `/31` and IPv6 `/127` point-to-point networks.
+Do not use the last IPv4 address as a gateway when the prefix is shorter than `/31`.
 
 #### VXLAN encapsulation
 
@@ -243,8 +286,6 @@ Set `underlaySegmentId` to the segment that carries VXLAN traffic.
 Set a VNI, UDP port, MTU, and encryption state when those values are known.
 Each endpoint needs `nodeId` and can include `interfaceName` or `underlayAddress` when known.
 NetDoc checks references and confirms that a named interface uses the underlay segment when both IDs are known.
-
-Set a host address from each network as its gateway because NetDoc rejects the first and last addresses for IPv4 prefixes shorter than `/31`.
 
 ### Common fields
 
@@ -292,7 +333,10 @@ interfaces:
 
 Read the [OVHcloud vRack jumbo-frame guide](https://docs.ovhcloud.com/en/guides/bare-metal-cloud/dedicated-servers/vrack-mtu-jumbo-frames) before you use jumbo frames on vRack.
 
-Use `ethernet`, `wireless`, `virtual-ethernet`, `tunnel`, `loopback`, `bridge`, `vlan`, or `other` for the interface type. Set an address assignment to `static`, `dhcp`, `dhcp-reservation`, or `virtual`.
+Use `ethernet`, `wireless`, `virtual-ethernet`, `tunnel`, `loopback`, `bridge`, `vlan`, or `other` for the interface type.
+Set an address assignment to `static`, `dhcp`, `dhcp-reservation`, or `virtual`.
+Set `cidr` for `static`, `dhcp-reservation`, and `virtual` assignments.
+You can omit `cidr` for a `dhcp` assignment when no stable address is known.
 
 Use a segment's `vlan` field for a VLAN number or `untagged`. Use access mode for one segment. Use trunk mode for tagged segments and an optional PVID segment.
 
