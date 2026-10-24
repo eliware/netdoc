@@ -118,7 +118,8 @@ netdoc report inventory/ --freshness --max-age-days 180
 ```
 
 The report uses dates from `evidence.checkedOn`. It checks the inventory against the schemas and references.
-Then, it lists each object with its record status, source, date, and age in days.
+It prints one row for each `evidence` entry. A record without `evidence` gets one `no-evidence` row.
+Each row includes the record name, source, date, status, and age in days when available.
 The report does not change inventory files or connect to systems.
 
 The command uses the current UTC date. It counts calendar days in UTC.
@@ -145,6 +146,7 @@ netdoc graph inventory/ --format mermaid
 
 The command validates the inventory before it prints a graph. It shows objects, interfaces, network segments, reciprocal interface links, and routing relationships.
 It labels known values and identifies unknown endpoints. It shows configured inventory only.
+It does not show VXLAN overlay references.
 It does not find live devices or test connectivity.
 
 The command writes Mermaid text to standard output. Redirect the output when you want to save a diagram:
@@ -171,7 +173,8 @@ netdoc --generate-id -n 3
 ```
 
 NetDoc prints one integer on each line. It does not read inventory files or check if an ID is in use.
-NetDoc gets the shared `snowflake` generator from `@eliware/common`.
+Run validation after you add an ID. The validator checks that each ID is unique across the inventory.
+NetDoc gets the shared Snowflake ID generator from `@eliware/common`.
 
 ## Inventory format
 
@@ -225,7 +228,8 @@ Network devices can record roles, implementation type, firmware, software, hardw
 
 Network settings can record a default gateway, static routes, BGP peers and prefixes, VRRP, tunnels, and Layer 2 announcements.
 
-Network settings can also record firewall rules, NAT rules, load balancers, listeners, and DHCP scopes.
+Network settings can also record firewall rules, NAT rules, load balancers, listeners, DHCP scopes, and VXLAN overlay references.
+Use `networking.overlaySegmentIds` on a CNI or network-device record to reference VXLAN segments.
 
 Layer 2 settings can record managed or unmanaged operation. Use access mode for one segment. Use trunk mode for tagged segments and an optional PVID segment for untagged traffic.
 
@@ -233,7 +237,15 @@ Layer 2 settings can record managed or unmanaged operation. Use access mode for 
 
 Set `medium` to `ethernet`, `wireless`, `virtual`, `tunnel`, or `other`. Set `vlan` to an integer from 1 through 4094 or to `untagged`.
 
-Use a host address inside each listed network for its gateway. For IPv4 prefixes shorter than `/31`, NetDoc rejects the first and last addresses.
+#### VXLAN encapsulation
+
+Use `encapsulation` only on virtual segments that model VXLAN.
+Set `underlaySegmentId` to the segment that carries VXLAN traffic.
+Set a VNI, UDP port, MTU, and encryption state when those values are known.
+Each endpoint needs `nodeId` and can include `interfaceName` or `underlayAddress` when known.
+NetDoc checks references and confirms that a named interface uses the underlay segment when both IDs are known.
+
+Set a host address from each network as its gateway because NetDoc rejects the first and last addresses for IPv4 prefixes shorter than `/31`.
 
 ### Common fields
 
@@ -241,6 +253,7 @@ Every object needs `version`, `kind`, and `name`. Add `description`, `evidence`,
 
 You can omit `evidence`. Each `evidence` entry needs a source and a basis. Add `checkedOn` when you know the date.
 Set the basis to `configured`, `observed`, `reported`, or `inferred`.
+Write `checkedOn` as a YAML date in `YYYY-MM-DD` format. NetDoc rejects invalid dates.
 
 ### Storage fields
 
@@ -252,7 +265,9 @@ Use `storage.mounts` for mounted file systems. Use `storage.shares` for SMB or N
 
 Use positive signed 64-bit integers for IDs. Write each ID as a YAML integer, without quotes. Add an object ID only when a different record refers to it. A network segment needs an ID because interfaces refer to it.
 
-Use an object's ID for fields such as `residentOn`, `segmentId`, `peerId`, and `connectsTo`. Give an interface an ID when a different interface links to it. Set both `connectsTo` fields to the peer interface ID.
+Use an object's ID for fields such as `residentOn`, `segmentId`, `peerId`, `controllerId`, `nodeId`, `underlaySegmentId`, and `overlaySegmentIds`.
+Use `wirelessNetworkId` to reference an SSID record. Use `deviceId` to reference a load-balancer target.
+Give an interface an ID when a different interface links to it. Set both `connectsTo` fields to the peer interface ID.
 
 IDs must be unique across object and interface records. Every reference must resolve to an object or interface of the expected type.
 
