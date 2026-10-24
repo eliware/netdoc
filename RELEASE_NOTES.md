@@ -25,6 +25,8 @@
 - Escape Mermaid syntax characters and backticks in object and interface labels.
 - Parse scoped IPv6 addresses accepted by Node.js.
 - Reject network prefixes in BGP router IDs and peer addresses.
+- Record allowed DHCP address pairs so later duplicates are found.
+- Check virtual address ranges against non-virtual assignments.
 
 ## 15.0.0 — 2026-10-24
 

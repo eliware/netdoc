@@ -340,6 +340,7 @@ Use `ethernet`, `wireless`, `virtual-ethernet`, `tunnel`, `loopback`, `bridge`, 
 Set an address assignment to `static`, `dhcp`, `dhcp-reservation`, or `virtual`.
 Set `cidr` for `static`, `dhcp-reservation`, and `virtual` assignments.
 You can omit `cidr` for a `dhcp` assignment when no stable address is known.
+NetDoc permits the same virtual address range on multiple interfaces. It reports overlap between virtual and non-virtual assignments.
 
 Use a segment's `vlan` field for a VLAN number or `untagged`. Use access mode for one segment. Use trunk mode for tagged segments and an optional PVID segment.
 

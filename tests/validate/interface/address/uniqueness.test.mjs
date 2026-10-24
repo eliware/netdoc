@@ -62,14 +62,11 @@ test("allows distinct host addresses with the same subnet prefix", () => {
   ).toEqual([]);
 });
 
-test.each([
-  [{ segmentId: 2n }, { assignment: "virtual" }],
-  [{}, { assignment: "static" }],
-])("skips shared or unsegmented addresses", (networkInterface, addressAssignment) => {
+test("skips unsegmented addresses", () => {
   expect(
     validateInterfaceAddressUniqueness(
-      networkInterface,
-      addressAssignment,
+      {},
+      { assignment: "static" },
       { version: 4, bits: 32, prefix: 32, integer: 1n },
       "192.0.2.1",
       { file: "node.yaml", data: { id: 1n } },
@@ -77,6 +74,49 @@ test.each([
       new Map(),
     ),
   ).toEqual([]);
+});
+
+test("allows identical virtual assignments but reports non-virtual reuse", () => {
+  const assignments = new Map();
+  const parsed = { version: 4, bits: 32, prefix: 32, integer: 1n };
+  const record = { file: "node.yaml", data: { id: 1n } };
+  const validate = (assignment) =>
+    validateInterfaceAddressUniqueness(
+      { segmentId: 2n },
+      { assignment },
+      parsed,
+      "192.0.2.1",
+      record,
+      "/interfaces/0/addresses/0/cidr",
+      assignments,
+    );
+
+  expect(validate("virtual")).toEqual([]);
+  expect(validate("virtual")).toEqual([]);
+  expect(validate("static")[0].message).toContain("is in use");
+  expect(
+    validateInterfaceAddressUniqueness(
+      { segmentId: 2n },
+      { assignment: "virtual" },
+      parsed,
+      "192.0.2.1",
+      record,
+      "/interfaces/0/addresses/0/cidr",
+      new Map([
+        [
+          "2:4",
+          [
+            {
+              file: "static.yaml",
+              pointer: "/interfaces/0/addresses/0/cidr",
+              assignment: "static",
+              range: { start: 1n, end: 1n },
+            },
+          ],
+        ],
+      ]),
+    )[0].message,
+  ).toContain("is in use");
 });
 
 test("checks DHCP reservations for duplicate addresses", () => {
@@ -118,6 +158,17 @@ test("allows matching DHCP lease and reservation addresses", () => {
       assignments,
     ),
   ).toEqual([]);
+  expect(
+    validateInterfaceAddressUniqueness(
+      { segmentId: 2n, macAddress: "aa:bb:cc:dd:ee:ff" },
+      { assignment: "dhcp-reservation" },
+      parsed,
+      "192.0.2.1",
+      record,
+      "/interfaces/0/addresses/2/cidr",
+      assignments,
+    ),
+  ).toHaveLength(1);
 });
 
 test("reports a DHCP address conflict when MAC addresses differ", () => {

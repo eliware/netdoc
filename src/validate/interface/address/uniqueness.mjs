@@ -11,7 +11,6 @@ export function validateInterfaceAddressUniqueness(
   pointer,
   assignments,
 ) {
-  if (addressAssignment.assignment === "virtual") return [];
   const segmentIds = new Set(
     [
       networkInterface.segmentId,
@@ -21,12 +20,19 @@ export function validateInterfaceAddressUniqueness(
   if (segmentIds.size === 0) return [];
   const range = addressRange(parsed);
   const diagnostics = [];
+  const currentAssignment = {
+    file: record.file,
+    pointer,
+    assignment: addressAssignment.assignment,
+    macAddress: networkInterface.macAddress,
+    range,
+  };
   for (const segmentId of segmentIds) {
     const key = `${segmentId}:${parsed.version}`;
     const current = assignments.get(key) ?? [];
     const overlaps = current.filter((item) => rangesOverlap(item.range, range));
     const previous = overlaps.find(
-      (item) => !isAllowedDhcpSharing(item, networkInterface, addressAssignment, range),
+      (item) => !isAllowedSharing(item, networkInterface, addressAssignment, range),
     );
     if (previous) {
       diagnostics.push(
@@ -40,15 +46,18 @@ export function validateInterfaceAddressUniqueness(
       );
       continue;
     }
-    if (overlaps.length > 0) continue;
-    current.push({
-      file: record.file,
-      pointer,
-      assignment: addressAssignment.assignment,
-      macAddress: networkInterface.macAddress,
-      range,
-    });
+    current.push(currentAssignment);
     assignments.set(key, current);
   }
   return diagnostics;
+}
+
+function isAllowedSharing(previous, networkInterface, addressAssignment, range) {
+  const identicalRange = previous.range.start === range.start && previous.range.end === range.end;
+  const bothVirtual =
+    previous.assignment === "virtual" && addressAssignment.assignment === "virtual";
+  return (
+    (identicalRange && bothVirtual) ||
+    isAllowedDhcpSharing(previous, networkInterface, addressAssignment, range)
+  );
 }
