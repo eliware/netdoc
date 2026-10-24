@@ -5,11 +5,22 @@ export function validateMacAddresses(records, entitiesById) {
   const macs = new Map();
   for (const record of records) {
     for (const [index, networkInterface] of (record.data.interfaces ?? []).entries()) {
-      const segment =
-        networkInterface.segmentId === undefined
-          ? undefined
-          : entitiesById.get(networkInterface.segmentId);
-      checkMac(networkInterface, record, `/interfaces/${index}`, segment, macs, diagnostics);
+      const segmentIds = new Set([
+        networkInterface.segmentId,
+        ...(networkInterface.wireless?.broadcasts ?? []).map(({ segmentId }) => segmentId),
+      ]);
+      for (const segmentId of segmentIds) {
+        const segment = entitiesById.get(segmentId);
+        checkMac(
+          networkInterface,
+          record,
+          `/interfaces/${index}`,
+          segment,
+          macs,
+          diagnostics,
+          segmentId,
+        );
+      }
     }
   }
   return diagnostics;

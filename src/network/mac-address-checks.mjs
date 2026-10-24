@@ -1,15 +1,23 @@
 import { createDiagnostic } from "../diagnostics.mjs";
 import { normalizeMacAddress } from "../normalize-mac-address.mjs";
 
-export function checkMac(networkInterface, record, pointer, segment, macs, diagnostics) {
+export function checkMac(
+  networkInterface,
+  record,
+  pointer,
+  segment,
+  macs,
+  diagnostics,
+  segmentId = networkInterface.segmentId,
+) {
   if (
     !networkInterface.macAddress ||
-    networkInterface.segmentId === undefined ||
+    segmentId === undefined ||
     segment?.kind !== "network-segment"
   )
     return;
   const normalized = normalizeMacAddress(networkInterface.macAddress);
-  const key = `${networkInterface.segmentId}:${normalized}`;
+  const key = `${segmentId}:${normalized}`;
   const previous = macs.get(key);
   if (previous)
     diagnostics.push(

@@ -22,3 +22,22 @@ test("ignores missing MAC addresses and interfaces without a segment", () => {
   ];
   expect(validateMacAddresses(records, new Map())).toEqual([]);
 });
+
+test("finds duplicate radio MAC addresses on their broadcast segments", () => {
+  const entities = new Map([
+    [1n, { kind: "network-segment", record: { data: { kind: "network-segment" } } }],
+  ]);
+  const records = ["a", "b"].map((name, index) => ({
+    file: `${name}.yaml`,
+    data: {
+      id: BigInt(index + 1),
+      interfaces: [
+        {
+          macAddress: "AA-BB-CC-DD-EE-FF",
+          wireless: { role: "radio", broadcasts: [{ segmentId: 1n }, { segmentId: 1n }] },
+        },
+      ],
+    },
+  }));
+  expect(validateMacAddresses(records, entities)).toHaveLength(1);
+});

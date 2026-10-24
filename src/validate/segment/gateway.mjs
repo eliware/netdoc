@@ -2,7 +2,11 @@ import { createDiagnostic } from "../../diagnostics.mjs";
 import { addressInNetwork } from "../../network/address/membership.mjs";
 
 export function validateSegmentGateway(record, network, index) {
-  if (network.gateway === undefined || addressInNetwork(network.gateway, network.cidr)) return [];
+  if (
+    network.gateway === undefined ||
+    (!network.gateway.includes("/") && addressInNetwork(network.gateway, network.cidr))
+  )
+    return [];
   return [
     createDiagnostic(
       record.file,

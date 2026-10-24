@@ -5,12 +5,16 @@ test("accepts an in-network gateway and reports an outside gateway", () => {
   const record = { file: "segment.yaml", data: { id: 1n } };
   const network = { cidr: "192.0.2.0/24" };
   expect(validateSegmentGateway(record, { ...network, gateway: "192.0.2.1" }, 0)).toEqual([]);
-  expect(validateSegmentGateway(record, { ...network, gateway: "192.0.2.1/24" }, 6)).toEqual([]);
   expect(
     validateSegmentGateway(record, { ...network, gateway: "192.0.3.1" }, 1).map(
       ({ pointer }) => pointer,
     ),
   ).toEqual(["/ipNetworks/1/gateway"]);
+  expect(
+    validateSegmentGateway(record, { ...network, gateway: "192.0.2.1/24" }, 2).map(
+      ({ pointer }) => pointer,
+    ),
+  ).toEqual(["/ipNetworks/2/gateway"]);
   expect(
     validateSegmentGateway(record, { ...network, gateway: "" }, 3).map(({ pointer }) => pointer),
   ).toEqual(["/ipNetworks/3/gateway"]);
