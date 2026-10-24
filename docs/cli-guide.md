@@ -129,9 +129,9 @@ Each recorded date has one of these statuses:
 - `current` means the UTC age is less than or equal to the selected maximum age.
 - `stale` means the UTC age is greater than the selected maximum age.
 - `future` means the date is after the current UTC date.
-- `invalid-date` means the date is not a valid calendar date.
 
-The freshness report is informational. A missing or expired date does not fail inventory validation.
+The report validates the inventory before it checks dates. An invalid `checkedOn` value stops the report and returns validation errors.
+A missing or expired date does not fail inventory validation.
 Set `DAYS` to a positive safe integer.
 Set a limit that matches your inventory inspection period.
 
