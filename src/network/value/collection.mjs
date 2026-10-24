@@ -1,6 +1,16 @@
 import { networkAddressPoolFields } from "../address/pool-fields.mjs";
-import { networkValueFields } from "./fields.mjs";
+import { networkPolicyValueFields } from "../policy/value-fields.mjs";
+import { networkRouteValueFields } from "../route/value-fields.mjs";
+import { networkTunnelValueFields } from "../tunnel/value-fields.mjs";
+import { networkVrrpValueFields } from "../vrrp-value-fields.mjs";
 
 export function collectNetworkValueFields(data) {
-  return [...networkValueFields(data), ...networkAddressPoolFields(data.networking ?? {})];
+  const network = data.networking ?? {};
+  return [
+    ...networkRouteValueFields(network),
+    ...networkVrrpValueFields(network),
+    ...networkTunnelValueFields(network),
+    ...networkPolicyValueFields(network),
+    ...networkAddressPoolFields(network),
+  ];
 }

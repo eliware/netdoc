@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { networkTunnelValueFields } from "../../src/network/tunnel-value-fields.mjs";
+import { networkTunnelValueFields } from "../../../src/network/tunnel/value-fields.mjs";
 
 test("collects tunnel endpoints with and without allowed networks", () => {
   expect(

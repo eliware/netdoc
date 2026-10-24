@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { networkPolicyValueFields } from "../../src/network/policy-value-fields.mjs";
+import { networkPolicyValueFields } from "../../../src/network/policy/value-fields.mjs";
 
 test("combines announcement, firewall, NAT, and load balancer fields in order", () => {
   const fields = networkPolicyValueFields({

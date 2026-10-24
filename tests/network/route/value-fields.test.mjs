@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { networkRouteValueFields } from "../../src/network/route-value-fields.mjs";
-import { validateNetworkAddressFields } from "../../src/validate/network/address/fields.mjs";
+import { networkRouteValueFields } from "../../../src/network/route/value-fields.mjs";
+import { validateNetworkAddressFields } from "../../../src/validate/network/address/fields.mjs";
 
 test("collects static route and BGP addresses and networks", () => {
   expect(

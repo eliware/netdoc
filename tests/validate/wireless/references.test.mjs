@@ -15,16 +15,23 @@ test("combines wireless reference and duplicate broadcast diagnostics", () => {
             ],
           },
         },
+        { wireless: { role: "client", profiles: [{ wirelessNetworkId: 3n, accessPointId: 4n }] } },
       ],
+      wirelessManagement: { controllerId: 5n },
     },
   };
   const diagnostics = validateWirelessReferences(
     record,
-    new Map([[2n, { kind: "network-segment" }]]),
+    new Map([
+      [1n, { kind: "wireless-network" }],
+      [2n, { kind: "network-segment" }],
+      [3n, { kind: "wireless-network" }],
+      [4n, { kind: "network-device", record: { data: { roles: ["router"] } } }],
+      [5n, { kind: "virtual-machine", record: { data: { roles: ["wireless-controller"] } } }],
+    ]),
   );
   expect(diagnostics.map(({ pointer }) => pointer)).toEqual([
-    "/interfaces/0/wireless/broadcasts/0/wirelessNetworkId",
-    "/interfaces/0/wireless/broadcasts/1/wirelessNetworkId",
+    "/interfaces/1/wireless/profiles/0/accessPointId",
     "/interfaces/0/wireless/broadcasts/1",
   ]);
 });
