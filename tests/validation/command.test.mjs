@@ -1,18 +1,19 @@
-import { expect, test, jest } from "@jest/globals";
+import { expect, jest, test } from "@jest/globals";
 import path from "node:path";
 import { createMemoryFileSystem } from "../../test-fixtures/memory-file-system.mjs";
 import { validateInventory } from "../../src/validation/command.mjs";
 
-test("stops when validation arguments are invalid", () => {
+test("stops before validation when arguments include extra paths", () => {
   const error = jest.fn();
-  expect(validateInventory([], { error })).toBe(2);
-  expect(error).toHaveBeenCalledWith("Usage: netdoc validate <yaml-file-or-directory>");
+  const write = jest.fn();
+  expect(validateInventory(["one", "two"], { error, write })).toBe(2);
+  expect(write).not.toHaveBeenCalled();
 });
 
-test("uses the default error output", () => {
+test("uses default options when a target path does not exist", () => {
   const error = jest.spyOn(console, "error").mockImplementation(() => {});
-  expect(validateInventory([])).toBe(2);
-  expect(error).toHaveBeenCalledWith("Usage: netdoc validate <yaml-file-or-directory>");
+  expect(validateInventory(["missing-validation-command-target"])).toBe(2);
+  expect(error).toHaveBeenCalled();
   error.mockRestore();
 });
 

@@ -1,5 +1,5 @@
 import { createDiagnostic } from "../../../diagnostics.mjs";
-import { normalizeMacAddress } from "../../../normalize-mac-address.mjs";
+import { isMatchingDhcpReservation } from "./dhcp-reservation-matching.mjs";
 
 export function validateInterfaceAddressUniqueness(
   networkInterface,
@@ -54,16 +54,4 @@ function addressRange(parsed) {
 
 function rangesOverlap(first, second) {
   return first.start <= second.end && second.start <= first.end;
-}
-
-function isMatchingDhcpReservation(previous, networkInterface, addressAssignment) {
-  const sameDhcpAddress =
-    (previous.assignment === "dhcp" && addressAssignment.assignment === "dhcp-reservation") ||
-    (previous.assignment === "dhcp-reservation" && addressAssignment.assignment === "dhcp");
-  return Boolean(
-    sameDhcpAddress &&
-    previous.macAddress &&
-    networkInterface.macAddress &&
-    normalizeMacAddress(previous.macAddress) === normalizeMacAddress(networkInterface.macAddress),
-  );
 }

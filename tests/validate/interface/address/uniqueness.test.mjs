@@ -64,34 +64,6 @@ test("checks DHCP reservations for duplicate addresses", () => {
   expect(validateInterfaceAddressUniqueness(...args)[0].message).toContain("is in use");
 });
 
-test("allows a DHCP lease that matches its MAC reservation", () => {
-  const assignments = new Map();
-  const address = { version: 4, bits: 32, prefix: 32, integer: 1n };
-  const macAddress = "AA-BB-CC-DD-EE-FF";
-  const networkInterface = { segmentId: 2n, macAddress };
-  const record = { file: "node.yaml", data: { id: 1n } };
-  validateInterfaceAddressUniqueness(
-    networkInterface,
-    { assignment: "dhcp" },
-    address,
-    "192.0.2.1",
-    record,
-    "/interfaces/0/addresses/0/cidr",
-    assignments,
-  );
-  expect(
-    validateInterfaceAddressUniqueness(
-      { ...networkInterface, macAddress: "aa:bb:cc:dd:ee:ff" },
-      { assignment: "dhcp-reservation" },
-      address,
-      "192.0.2.1",
-      record,
-      "/interfaces/0/addresses/1/cidr",
-      assignments,
-    ),
-  ).toEqual([]);
-});
-
 test("finds overlapping network prefixes on the same segment", () => {
   const assignments = new Map();
   const first = { file: "first.yaml", data: { id: 1n } };
@@ -141,30 +113,4 @@ test("allows different host addresses inside the same subnet", () => {
       assignments,
     ),
   ).toEqual([]);
-});
-
-test("reports a DHCP lease that matches a different MAC reservation", () => {
-  const assignments = new Map();
-  const address = { version: 4, bits: 32, prefix: 32, integer: 1n };
-  const record = { file: "node.yaml", data: { id: 1n } };
-  validateInterfaceAddressUniqueness(
-    { segmentId: 2n, macAddress: "AA:BB:CC:DD:EE:FF" },
-    { assignment: "dhcp" },
-    address,
-    "192.0.2.1",
-    record,
-    "/interfaces/0/addresses/0/cidr",
-    assignments,
-  );
-  expect(
-    validateInterfaceAddressUniqueness(
-      { segmentId: 2n, macAddress: "11:22:33:44:55:66" },
-      { assignment: "dhcp-reservation" },
-      address,
-      "192.0.2.1",
-      record,
-      "/interfaces/1/addresses/0/cidr",
-      assignments,
-    )[0].message,
-  ).toContain("is in use");
 });

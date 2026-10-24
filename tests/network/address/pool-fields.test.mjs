@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { networkAddressPoolFields } from "../../src/network/address-pool-fields.mjs";
+import { networkAddressPoolFields } from "../../../src/network/address/pool-fields.mjs";
 
 test("orders load-balancer fields before DHCP fields", () => {
   expect(

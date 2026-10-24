@@ -22,7 +22,7 @@ test("accepts distinct profiles and broadcasts", () => {
   ).toEqual([]);
 });
 
-test("reports repeated profile IDs and repeated network-segment broadcasts", () => {
+test("coordinates repeated profile and broadcast diagnostics", () => {
   const diagnostics = validateWirelessReferenceUniqueness({
     file: "client.yaml",
     data: {

@@ -1,5 +1,5 @@
 import { createDiagnostic } from "../../diagnostics.mjs";
-import { addressInNetwork } from "../../network/containment.mjs";
+import { addressInNetwork } from "../../network/address/membership.mjs";
 
 export function validateSegmentGateway(record, network, index) {
   if (

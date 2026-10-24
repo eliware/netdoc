@@ -1,5 +1,5 @@
 import { createDiagnostic } from "../../../diagnostics.mjs";
-import { prefixInNetwork } from "../../../network/containment.mjs";
+import { prefixInNetwork } from "../../../network/prefix-containment.mjs";
 
 export function validateInterfaceAddressSegment(cidr, record, pointer, segment) {
   const networks = segment?.ipNetworks ?? [];

@@ -1,4 +1,4 @@
-import { networkAddressPoolFields } from "../address-pool-fields.mjs";
+import { networkAddressPoolFields } from "../address/pool-fields.mjs";
 import { networkValueFields } from "./fields.mjs";
 import { validateNetworkAddressFields } from "../../validate/network/address/fields.mjs";
 
