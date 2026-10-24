@@ -28,3 +28,12 @@ test("checks tagged segments and PVID membership on trunk ports", () => {
   ]);
   expect(validateTrunkSwitchPorts([{ data: {} }], new Map())).toEqual([]);
 });
+
+test("skips VLAN checks for PVID references to invalid segment records", () => {
+  const record = {
+    file: "switch.yaml",
+    data: { id: 1n, switch: { ports: [{ mode: "trunk", pvidSegmentId: 5n }] } },
+  };
+  const entities = new Map([[5n, { invalid: true, record: { data: { vlan: 2 } } }]]);
+  expect(validateTrunkSwitchPorts([record], entities)).toEqual([]);
+});
