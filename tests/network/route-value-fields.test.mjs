@@ -1,5 +1,6 @@
 import { expect, test } from "@jest/globals";
 import { networkRouteValueFields } from "../../src/network/route-value-fields.mjs";
+import { validateNetworkAddressFields } from "../../src/validate/network/address/fields.mjs";
 
 test("collects static route and BGP addresses and networks", () => {
   expect(
@@ -29,4 +30,13 @@ test("returns default gateway and BGP fields for an empty routing object", () =>
     ["/networking/routing/defaultGateway", undefined, false],
     ["/networking/routing/bgp/routerId", undefined, false],
   ]);
+});
+
+test("reports invalid route addresses", () => {
+  expect(
+    validateNetworkAddressFields(networkRouteValueFields({ routing: { defaultGateway: "bad" } }), {
+      file: "router.yaml",
+      data: { id: 1n },
+    }).map(({ pointer }) => pointer),
+  ).toEqual(["/networking/routing/defaultGateway"]);
 });

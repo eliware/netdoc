@@ -6,6 +6,6 @@ test("converts compressed and expanded IPv6 addresses to integers", () => {
   expect(ipv6ToBigInt("::")).toBe(0n);
 });
 
-test("converts IPv4-mapped IPv6 addresses", () => {
+test("converts IPv4-mapped IPv6 addresses after suffix expansion", () => {
   expect(ipv6ToBigInt("::ffff:192.0.2.1")).toBe(281473902969345n);
 });

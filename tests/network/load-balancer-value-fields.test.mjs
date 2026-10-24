@@ -1,5 +1,6 @@
 import { expect, test } from "@jest/globals";
 import { networkLoadBalancerValueFields } from "../../src/network/load-balancer-value-fields.mjs";
+import { validateNetworkAddressFields } from "../../src/validate/network/address/fields.mjs";
 
 test("collects listener and target addresses", () => {
   expect(
@@ -16,4 +17,13 @@ test("collects listener and target addresses", () => {
     ],
   ]);
   expect(networkLoadBalancerValueFields({})).toEqual([]);
+});
+
+test("reports invalid listener addresses", () => {
+  expect(
+    validateNetworkAddressFields(
+      networkLoadBalancerValueFields({ loadBalancing: { listeners: [{ address: "bad" }] } }),
+      { file: "router.yaml", data: { id: 1n } },
+    ).map(({ pointer }) => pointer),
+  ).toEqual(["/networking/loadBalancing/listeners/0/address"]);
 });

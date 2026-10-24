@@ -1,5 +1,6 @@
 import { expect, test } from "@jest/globals";
 import { networkNatValueFields } from "../../src/network/nat-value-fields.mjs";
+import { validateNetworkAddressFields } from "../../src/validate/network/address/fields.mjs";
 
 test("collects NAT address and translation fields", () => {
   expect(
@@ -25,4 +26,13 @@ test("collects NAT address and translation fields", () => {
     ["/networking/nat/rules/1/translation", "masquerade", false],
   ]);
   expect(networkNatValueFields({})).toEqual([]);
+});
+
+test("reports invalid NAT addresses", () => {
+  expect(
+    validateNetworkAddressFields(networkNatValueFields({ nat: { rules: [{ source: "bad" }] } }), {
+      file: "router.yaml",
+      data: { id: 1n },
+    }).map(({ pointer }) => pointer),
+  ).toEqual(["/networking/nat/rules/0/source"]);
 });
