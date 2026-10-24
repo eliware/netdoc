@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { formatEvidenceFreshness } from "../../src/report/output.mjs";
+import { formatEvidenceFreshness } from "../../src/report/format.mjs";
 
 test("formats evidence rows and age values", () => {
   expect(

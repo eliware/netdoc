@@ -1,6 +1,6 @@
 import { parseFreshnessArguments } from "./arguments.mjs";
 import { collectEvidenceFreshness } from "./evidence.mjs";
-import { formatEvidenceFreshness } from "./output.mjs";
+import { formatEvidenceFreshness } from "./format.mjs";
 import { runInventoryValidation } from "../validation/run.mjs";
 import { reportValidationErrors } from "../validation/report.mjs";
 import { reportValidationSetupError } from "../validation/setup-result.mjs";

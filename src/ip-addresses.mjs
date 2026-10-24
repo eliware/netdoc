@@ -1,6 +1,5 @@
 import { isIP } from "node:net";
-import { ipv4ToBigInt } from "./ipv4-to-bigint.mjs";
-import { ipv6ToBigInt } from "./ipv6-to-bigint.mjs";
+import { addressToBigInt } from "./ip-addresses/integer.mjs";
 
 export function parseAddress(value) {
   if (typeof value !== "string") return undefined;
@@ -10,6 +9,6 @@ export function parseAddress(value) {
   const bits = version === 4 ? 32 : 128;
   const prefix = prefixText === undefined ? bits : Number(prefixText);
   if (!Number.isInteger(prefix) || prefix < 0 || prefix > bits) return undefined;
-  const integer = version === 4 ? ipv4ToBigInt(address) : ipv6ToBigInt(address);
+  const integer = addressToBigInt(address, version);
   return { version, bits, prefix, integer, first: integer >> BigInt(bits - prefix), text: address };
 }

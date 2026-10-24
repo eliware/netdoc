@@ -2,8 +2,14 @@ import { expect, test } from "@jest/globals";
 import { parseAddress } from "../src/ip-addresses.mjs";
 
 test("parses IPv4 and IPv6 addresses with prefixes", () => {
-  expect(parseAddress("192.0.2.1/24").version).toBe(4);
-  expect(parseAddress("2001:db8::1/64").version).toBe(6);
+  expect(parseAddress("192.0.2.1/24")).toMatchObject({
+    version: 4,
+    integer: 3221225985n,
+  });
+  expect(parseAddress("2001:db8::1/64")).toMatchObject({
+    version: 6,
+    integer: 42540766411282592856903984951653826561n,
+  });
   expect(parseAddress("::/0").version).toBe(6);
   expect(parseAddress("192.0.2.1/33")).toBeUndefined();
   expect(parseAddress("2001:db8::1/129")).toBeUndefined();
