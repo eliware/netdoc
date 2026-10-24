@@ -7,8 +7,8 @@
 - Add a report command that marks inventory source age as current or stale.
 - Add a Mermaid topology command for network inventory.
 - Add JSON output for validation results.
-- Add port mode schemas for access ports, trunk ports, VLANs, and PVIDs.
-- Add wireless schemas for networks, radios, and client profiles.
+- Add Layer 2 port schemas for access ports, trunk ports, VLANs, PVIDs, and internal router ports.
+- Add wireless schemas for SSIDs, radios, client profiles, management state, and controller references.
 - Add DNS names linked to interface addresses.
 - Add configured MTU values with positive 32-bit byte limits on interfaces.
 - Add schema and validator checks for network references, interface addresses, port modes, and VLAN assignments.
@@ -32,6 +32,7 @@
 - Validate wireless network references and address conflicts.
 - Use correct IPv6 address expansion and compression.
 - Clarify inventory source age limits and report invalid command arguments consistently.
+- Clarify that invalid `checkedOn` dates stop the freshness report during validation.
 
 ## 12.0.0 — 2026-10-13
 
