@@ -37,6 +37,24 @@ netdoc --version
 
 The npm package may not have the newest source version. An approved release publishes a version before npm can install it.
 
+### Install in an inventory project
+
+Add NetDoc as a development dependency when inventory is part of an npm project:
+
+```sh
+npm install --save-dev @eliware/netdoc
+```
+
+Run NetDoc through npm:
+
+```sh
+npx netdoc validate inventory/
+npx netdoc --generate-id -n 3
+```
+
+You can also add project scripts that call `netdoc validate inventory/` and `netdoc --generate-id`.
+Run those scripts with `npm run` and their script names.
+
 ## Commands
 
 | Command                         | Result                                            |
@@ -100,6 +118,18 @@ roles:
 
 Use `version: "11.0"` for the current inventory schema. The CLI package version does not change this schema value.
 
+### Suggested workflow
+
+1. Create one YAML file for each object.
+2. Use a separate folder for each object type when that layout helps your team.
+3. Add an ID only when a different object or interface must refer to the record.
+4. Use confirmed values. Keep temporary state and credentials out of inventory.
+5. Run `netdoc validate inventory/` from the inventory project root.
+6. Correct each reported file and YAML path, then run the command again.
+7. Examine the YAML changes and commit them with your inventory project.
+
+NetDoc reads the target file or directory. It does not write inventory files or change settings.
+
 ### Object types
 
 | Type               | Required fields after `version`, `kind`, and `name` | Purpose                                                                   |
@@ -140,7 +170,8 @@ Use `ipNetworks` to list address ranges and optional gateways. NetDoc checks gat
 
 Every object needs `version`, `kind`, and `name`. Add `description`, `evidence`, or `notes` to state stable facts.
 
-Record a source, basis, and date for each fact. Set the basis to `configured`, `observed`, `reported`, or `inferred`.
+You can omit `evidence`. Each `evidence` entry needs a source and a basis. Add `checkedOn` when you know the date.
+Set the basis to `configured`, `observed`, `reported`, or `inferred`.
 
 ### Storage fields
 
@@ -249,6 +280,8 @@ Do not use a previous SSID field to record a client's current access point.
 ### DNS name associations
 
 List complete DNS names that include the host and domain, such as `nas.example.net`, in an address entry's `dnsNames` field.
+Use ASCII letters, digits, and hyphens in each name label. Use a final label with 2 through 63 letters. Do not add a final dot.
+
 Use this field only to associate names with an inventory address. Do not use it to configure DNS.
 Keep DNS zones, record types, TTL values, resolver settings, and PTR records out of NetDoc.
 VyOS remains the source for authoritative DNS configuration.

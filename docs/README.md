@@ -1,3 +1,5 @@
-# User Documentation
+# NetDoc User Documentation
 
-- [NetDoc CLI guide](cli-guide.md)
+- [NetDoc CLI and inventory guide](cli-guide.md)
+
+Use the guide to install NetDoc, create inventory files, print IDs, and validate records.
