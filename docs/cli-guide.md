@@ -480,7 +480,8 @@ addresses:
 | `listeners`       | Layer 4 address, protocol, and `port` details.                                              |
 | `dhcp`            | Network, address range, gateway, and reservations.                                          |
 
-Set each BGP peer's address and remote AS number. Set the local AS number for the device. Use IDs for peers that have inventory records.
+Set the BGP router ID and peer addresses to IP addresses without prefixes. Set the local and remote AS numbers.
+Use IDs for peers that have inventory records.
 
 Set each firewall action to `allow`, `drop`, or `reject`. Use `any`, an address, or a network prefix for rule sources and destinations.
 

@@ -24,6 +24,7 @@
 - Preserve full 64-bit wireless controller IDs.
 - Escape Mermaid syntax characters and backticks in object and interface labels.
 - Parse scoped IPv6 addresses accepted by Node.js.
+- Reject network prefixes in BGP router IDs and peer addresses.
 
 ## 15.0.0 — 2026-10-24
 
