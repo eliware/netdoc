@@ -4,29 +4,25 @@
 
 ### Added
 
-- Add mixed WPA2 and WPA3 wireless modes for personal and enterprise networks.
-- Add VXLAN overlay fields for underlay segments, endpoints, transport settings, MTU, and encryption.
-- Add listener, load-balancer target, and wireless client profile relationships to topology graphs.
-- Show load-balancer address pools, VRRP interface links, and uniquely matched tunnel endpoints in topology graphs.
-- Require a `lastReviewed` date on each inventory object.
+- Add mixed WPA2/WPA3 modes for personal and enterprise wireless networks.
+- Add VXLAN segment fields for VNI, UDP port, MTU, encryption, underlay, and endpoints.
+- Add graph links for listeners, load-balancer targets, wireless profiles, address pools, VRRP interfaces, and matched tunnel endpoints.
+- Require `lastReviewed` on every inventory object.
 
 ### Changed
 
-- Use each object's `lastReviewed` date for freshness reports. Remove per-source date entries.
-- Expand inventory guidance for switches, wireless networks, storage units, VXLAN overlays, and recorded dates.
-- Document the text and JSON validation output formats in the CLI guide.
-- Keep the README command list brief and link to the CLI guide for details.
-- Refactor graph generation and relationship validation into focused modules with matching tests.
+- Use `lastReviewed` for freshness reports. Remove per-source dates.
+- Expand the end-user guide with Layer 2 ports, wireless, storage, VXLAN, graph, and validation details.
+- Organize graph and validation code into focused modules with matching tests.
 
 ### Fixed
 
-- Validate VXLAN endpoint references and interface segment assignments.
-- Preserve full 64-bit wireless controller IDs.
-- Escape Mermaid syntax characters and backticks in object and interface labels.
-- Parse scoped IPv6 addresses accepted by Node.js.
+- Check VXLAN endpoint references and underlay interface segments.
+- Preserve full 64-bit wireless controller IDs and parse scoped IPv6 addresses.
+- Escape Mermaid delimiters in object and interface labels.
 - Reject network prefixes in BGP router IDs and peer addresses.
-- Record allowed DHCP address pairs so later duplicates are found.
-- Check virtual address ranges against non-virtual assignments.
+- Record allowed DHCP lease/reservation pairs so later conflicts are found.
+- Check virtual address ranges against other assignment types and allow repeated virtual ranges.
 
 ## 15.0.0 — 2026-10-24
 
