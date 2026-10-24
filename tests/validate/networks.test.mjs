@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import { validateNetworks } from "../../src/validate/networks.mjs";
 
-test("combines address, MAC, and segment diagnostics", () => {
+test("combines address and MAC diagnostics with valid segment data", () => {
   const records = ["first", "second"].map((name, index) => ({
     file: `${name}.yaml`,
     data: {
@@ -21,7 +21,7 @@ test("combines address, MAC, and segment diagnostics", () => {
     data: {
       kind: "network-segment",
       id: 9n,
-      ipNetworks: [{ cidr: "192.0.2.0/24", gateway: "192.0.3.1" }],
+      ipNetworks: [{ cidr: "192.0.2.0/24", gateway: "192.0.2.1" }],
     },
   });
   const segment = { kind: "network-segment", record: { data: { kind: "network-segment" } } };
@@ -29,7 +29,6 @@ test("combines address, MAC, and segment diagnostics", () => {
   expect(diagnostics.map(({ file, pointer }) => [file, pointer])).toEqual([
     ["first.yaml", "/interfaces/0/addresses/0/cidr"],
     ["second.yaml", "/interfaces/0/macAddress"],
-    ["segment.yaml", "/ipNetworks/0/gateway"],
   ]);
 });
 

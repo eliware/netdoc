@@ -9,12 +9,20 @@ test("coordinates prefix and gateway checks across segment records", () => {
       file: "second.yaml",
       data: {
         kind: "network-segment",
+        ipNetworks: [{ cidr: "192.0.2.0/24", gateway: "192.0.3.1" }],
+      },
+    },
+    {
+      file: "third.yaml",
+      data: {
+        kind: "network-segment",
         ipNetworks: [{ cidr: "bad", gateway: "203.0.113.1" }],
       },
     },
   ];
-  expect(validateSegmentAddresses(records).map(({ pointer }) => pointer)).toEqual([
-    "/ipNetworks/0/cidr",
-    "/ipNetworks/0/gateway",
+  expect(validateSegmentAddresses(records).map(({ file, pointer }) => [file, pointer])).toEqual([
+    ["second.yaml", "/ipNetworks/0/gateway"],
+    ["third.yaml", "/ipNetworks/0/cidr"],
+    ["third.yaml", "/ipNetworks/0/gateway"],
   ]);
 });

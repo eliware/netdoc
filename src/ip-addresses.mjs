@@ -5,8 +5,8 @@ import { ipv6ToBigInt } from "./ipv6-to-bigint.mjs";
 export function parseAddress(value) {
   if (typeof value !== "string") return undefined;
   const [address, prefixText, extra] = value.split("/");
-  if (extra !== undefined || isIP(address) === 0) return undefined;
   const version = isIP(address);
+  if (extra !== undefined || version === 0) return undefined;
   const bits = version === 4 ? 32 : 128;
   const prefix = prefixText === undefined ? bits : Number(prefixText);
   if (!Number.isInteger(prefix) || prefix < 0 || prefix > bits) return undefined;
