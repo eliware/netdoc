@@ -1,11 +1,31 @@
 # Release Notes
 
+## 15.0.1 — 2026-10-24
+
+### Added
+
+- Add mixed WPA2 and WPA3 wireless modes for personal and enterprise networks.
+- Add VXLAN overlay fields for underlay segments, endpoints, transport settings, MTU, and encryption.
+- Add listener, load-balancer target, and wireless client profile relationships to topology graphs.
+- Require a `lastReviewed` date on each inventory object.
+
+### Changed
+
+- Use each object's `lastReviewed` date for freshness reports. Remove per-source date entries.
+- Expand inventory guidance for switches, wireless networks, storage units, VXLAN overlays, and recorded dates.
+- Refactor graph generation and relationship validation into focused modules with matching tests.
+
+### Fixed
+
+- Validate VXLAN endpoint references and interface segment assignments.
+- Preserve full 64-bit wireless controller IDs.
+- Escape Mermaid syntax characters in object and interface labels.
+
 ## 15.0.0 — 2026-10-24
 
 ### Added
 
-- Add a report command that marks each object's recorded date as current, stale, or future.
-- Require a top-level `lastReviewed` date on every inventory object.
+- Add a report command that marks inventory source age as current or stale.
 - Add a Mermaid topology command for network inventory.
 - Add JSON output for validation results.
 - Add Layer 2 port schemas for access ports, trunk ports, VLANs, PVIDs, and internal router ports.
@@ -14,10 +34,6 @@
 - Add configured MTU values with positive 32-bit byte limits on interfaces.
 - Add schema and validator checks for network references, interface addresses, port modes, and VLAN assignments.
 - Add checks for wireless references, unique profiles, unique radio entries, and unique DNS names.
-- Add mixed WPA2/WPA3 personal and enterprise wireless modes.
-- Add VXLAN overlay fields for network segments, underlays, endpoints, transport settings, MTU, and encryption state.
-- Add listener, load-balancer target, and wireless client profile relationships to Mermaid topology graphs.
-- Validate VXLAN overlay references and preserve full 64-bit wireless controller IDs.
 
 ### Changed
 
@@ -35,11 +51,9 @@
 - Validate route targets, gateway hosts, network membership, and segment address ranges.
 - Find conflicting interface addresses and MAC addresses on each segment.
 - Validate wireless network references and address conflicts.
-- Check wireless radio segment assignments when validating VXLAN endpoints.
-- Escape Mermaid syntax characters in object and interface labels.
 - Use correct IPv6 address expansion and compression.
 - Clarify inventory source age limits and report invalid command arguments consistently.
-- Replace individual source entries with one recorded date for each inventory object.
+- Clarify that invalid `checkedOn` dates stop the freshness report during validation.
 
 ## 12.0.0 — 2026-10-13
 
