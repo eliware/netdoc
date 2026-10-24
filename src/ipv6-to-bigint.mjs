@@ -1,6 +1,7 @@
 import { expandIpv4EmbeddedIpv6 } from "./ip/ipv6-expansion.mjs";
 
 export function ipv6ToBigInt(address) {
+  address = address.split("%")[0];
   address = expandIpv4EmbeddedIpv6(address);
   const halves = address.split("::");
   const left = halves[0] ? halves[0].split(":") : [];

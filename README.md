@@ -76,10 +76,13 @@ NetDoc reads inventory and prints results. It does not change files or connect t
 | `netdoc --help`                                        | List commands.                            |
 | `netdoc --version`                                     | Print the package version.                |
 | `netdoc validate <path>`                               | Check YAML files and print text results.  |
+| `netdoc validate <path> --format text`                 | Print validation results as text.         |
 | `netdoc validate <path> --format json`                 | Check YAML files and print JSON results.  |
 | `netdoc report <path> --freshness --max-age-days DAYS` | Report object dates and age.              |
 | `netdoc graph <path> --format mermaid`                 | Print inventory topology as Mermaid text. |
 | `netdoc --generate-id [-n COUNT]`                      | Print one or more Snowflake IDs.          |
+
+Read the [CLI guide](docs/cli-guide.md) for option defaults, errors, and command details.
 
 ## Exit codes
 

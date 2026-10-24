@@ -15,6 +15,7 @@
 - Use each object's `lastReviewed` date for freshness reports. Remove per-source date entries.
 - Expand inventory guidance for switches, wireless networks, storage units, VXLAN overlays, and recorded dates.
 - Document the text and JSON validation output formats in the CLI guide.
+- Keep the README command list brief and link to the CLI guide for details.
 - Refactor graph generation and relationship validation into focused modules with matching tests.
 
 ### Fixed
@@ -22,6 +23,7 @@
 - Validate VXLAN endpoint references and interface segment assignments.
 - Preserve full 64-bit wireless controller IDs.
 - Escape Mermaid syntax characters and backticks in object and interface labels.
+- Parse scoped IPv6 addresses accepted by Node.js.
 
 ## 15.0.0 — 2026-10-24
 
