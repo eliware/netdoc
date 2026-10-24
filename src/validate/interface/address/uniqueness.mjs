@@ -1,5 +1,6 @@
 import { createDiagnostic } from "../../../diagnostics.mjs";
 import { isMatchingDhcpReservation } from "./dhcp-reservation-matching.mjs";
+import { addressRange, rangesOverlap } from "./ranges.mjs";
 
 export function validateInterfaceAddressUniqueness(
   networkInterface,
@@ -43,15 +44,4 @@ export function validateInterfaceAddressUniqueness(
   });
   assignments.set(key, current);
   return [];
-}
-
-function addressRange(parsed) {
-  const hostBits = BigInt(parsed.bits - parsed.prefix);
-  const start = (parsed.integer >> hostBits) << hostBits;
-  if (parsed.integer !== start) return { start: parsed.integer, end: parsed.integer };
-  return { start, end: start + (1n << hostBits) - 1n };
-}
-
-function rangesOverlap(first, second) {
-  return first.start <= second.end && second.start <= first.end;
 }

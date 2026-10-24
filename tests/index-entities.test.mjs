@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import { indexEntities } from "../src/index-entities.mjs";
 
-test("indexes object and interface IDs with their source records", () => {
+test("combines object and interface indexes and preserves invalid records", () => {
   const record = {
     file: "router.yaml",
     data: {
@@ -18,16 +18,12 @@ test("indexes object and interface IDs with their source records", () => {
     record,
     networkInterface: record.data.interfaces[0],
   });
-  expect(indexEntities([{ file: "empty.yaml", data: {} }])).toEqual(new Map());
-});
-
-test("indexes invalid records as reference targets", () => {
-  const record = {
+  const invalid = {
     file: "invalid.yaml",
     data: { kind: "physical-machine", id: 12n, interfaces: [null, { id: 13n, name: "eth0" }] },
   };
-  const entities = indexEntities([], [record]);
-  expect(entities.get(12n)).toMatchObject({ invalid: true, kind: "physical-machine" });
-  expect(entities.get(13n)).toMatchObject({ invalid: true, kind: "interface" });
-  expect(indexEntities([], [{ file: "empty.yaml", data: {} }])).toEqual(new Map());
+  const withInvalid = indexEntities([record], [invalid]);
+  expect(withInvalid.get(12n)).toMatchObject({ invalid: true, kind: "physical-machine" });
+  expect(withInvalid.get(13n)).toMatchObject({ invalid: true, kind: "interface" });
+  expect(indexEntities([{ file: "empty.yaml", data: {} }])).toEqual(new Map());
 });
