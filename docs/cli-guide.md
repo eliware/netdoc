@@ -297,22 +297,22 @@ addresses:
 
 ### Network settings
 
-| Area              | Record                                                                   |
-| ----------------- | ------------------------------------------------------------------------ |
-| `routing`         | A default gateway, static routes, BGP, and VRRP.                         |
-| `tunnels`         | Tunnel type, interface, local address, `port` number, and peer networks. |
-| `l2Announcements` | Address, interface, and optional node ID.                                |
-| `firewall`        | Default action, zones, and rules.                                        |
-| `nat`             | Source or destination rules and address translation.                     |
-| `loadBalancing`   | Address pools, listeners, targets, protocols, and `port` numbers.        |
-| `listeners`       | Layer 4 address, protocol, and `port` details.                           |
-| `dhcp`            | Network, address range, gateway, and reservations.                       |
+| Area              | Record                                                                                      |
+| ----------------- | ------------------------------------------------------------------------------------------- |
+| `routing`         | A default gateway, static routes, BGP, and VRRP.                                            |
+| `tunnels`         | Tunnel type, interface, local address, `listenPort`, and peer networks with `endpointPort`. |
+| `l2Announcements` | Address, interface, and optional node ID.                                                   |
+| `firewall`        | Default action, zones, and rules.                                                           |
+| `nat`             | Source or destination rules and address translation.                                        |
+| `loadBalancing`   | Address pools, listeners, targets, protocols, and `port` numbers.                           |
+| `listeners`       | Layer 4 address, protocol, and `port` details.                                              |
+| `dhcp`            | Network, address range, gateway, and reservations.                                          |
 
 Set each BGP peer's address and remote AS number. Set the local AS number for the device. Use IDs for peers that have inventory records.
 
 Set each firewall action to `allow`, `drop`, or `reject`. Use `any`, an address, or a network prefix for rule sources and destinations.
 
-Set each NAT rule to `source` or `destination`. Use `masquerade` for source NAT. Use an IP address for destination NAT.
+Set each NAT rule to `source` or `destination`. Use an IP address for source and destination NAT. Use `masquerade` only for source NAT.
 
 ## Validation checks
 

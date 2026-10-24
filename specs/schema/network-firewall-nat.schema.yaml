@@ -93,7 +93,7 @@ $defs:
               type: string
             translation:
               type: string
-              description: Use masquerade or an IP address.
+              description: Use an IP address, or use masquerade for source NAT.
             interfaceName:
               type: string
             nodeId:

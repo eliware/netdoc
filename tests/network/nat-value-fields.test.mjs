@@ -36,3 +36,19 @@ test("reports invalid NAT addresses", () => {
     }).map(({ pointer }) => pointer),
   ).toEqual(["/networking/nat/rules/0/source"]);
 });
+
+test("allows masquerade only for source NAT", () => {
+  const fields = networkNatValueFields({
+    nat: {
+      rules: [
+        { type: "source", translation: "masquerade" },
+        { type: "destination", translation: "masquerade" },
+      ],
+    },
+  });
+  expect(
+    validateNetworkAddressFields(fields, { file: "router.yaml", data: { id: 1n } }).map(
+      ({ pointer }) => pointer,
+    ),
+  ).toEqual(["/networking/nat/rules/1/translation"]);
+});
