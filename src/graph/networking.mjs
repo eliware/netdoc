@@ -3,6 +3,7 @@ import { buildRouteElements } from "./networking/routes.mjs";
 import { buildTunnelElements } from "./networking/tunnels.mjs";
 import { buildVrrpElements } from "./networking/vrrp.mjs";
 import { buildLoadBalancingElements } from "./networking/load-balancing.mjs";
+import { buildListenerElements } from "./networking/listeners.mjs";
 
 export function buildNetworkingElements(context) {
   const nodes = [];
@@ -15,6 +16,7 @@ export function buildNetworkingElements(context) {
       buildBgpElements,
       buildVrrpElements,
       buildTunnelElements,
+      buildListenerElements,
       buildLoadBalancingElements,
     ]) {
       const elements = buildElements(recordIndex, source, networking, context);
