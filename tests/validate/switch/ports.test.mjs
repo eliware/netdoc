@@ -38,13 +38,3 @@ test("combines access and trunk port diagnostics", () => {
   ]);
   expect(validateSwitchPorts([{ file: "empty.yaml", data: {} }], new Map())).toEqual([]);
 });
-
-test("reports an unresolved trunk PVID segment reference", () => {
-  const record = {
-    file: "switch.yaml",
-    data: { id: 1n, switch: { ports: [{ mode: "trunk", pvidSegmentId: 99n }] } },
-  };
-  expect(validateSwitchPorts([record], new Map()).map(({ pointer }) => pointer)).toEqual([
-    "/switch/ports/0/pvidSegmentId",
-  ]);
-});

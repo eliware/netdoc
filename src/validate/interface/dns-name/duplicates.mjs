@@ -1,4 +1,4 @@
-import { createDiagnostic } from "../../diagnostics.mjs";
+import { createDiagnostic } from "../../../diagnostics.mjs";
 
 export function validateDnsNameDuplicates(record) {
   const diagnostics = [];
@@ -24,8 +24,4 @@ export function validateDnsNameDuplicates(record) {
     });
   });
   return diagnostics;
-}
-
-export function validateDnsNameDuplicatesAcrossRecords(records) {
-  return records.flatMap((record) => validateDnsNameDuplicates(record));
 }

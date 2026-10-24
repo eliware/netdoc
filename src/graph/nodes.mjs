@@ -1,4 +1,5 @@
-import { interfaceLabel, nodeLine, objectLabel } from "./labels.mjs";
+import { nodeLine } from "./labels.mjs";
+import { interfaceLabel, objectLabel } from "./inventory-labels.mjs";
 
 export function buildInventoryNodes(context) {
   const lines = [];

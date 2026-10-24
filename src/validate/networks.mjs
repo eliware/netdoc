@@ -1,7 +1,7 @@
 import { validateInterfaceAddresses } from "./interface/addresses.mjs";
 import { validateMacAddresses } from "./mac-addresses.mjs";
 import { validateSegmentAddresses } from "./segment/addresses.mjs";
-import { validateDnsNameDuplicatesAcrossRecords } from "./interface/dns-name-duplicates.mjs";
+import { validateDnsNameDuplicatesAcrossRecords } from "./interface/dns-name/validation.mjs";
 
 export function validateNetworks(records, entitiesById) {
   return [
