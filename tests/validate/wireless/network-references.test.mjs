@@ -37,3 +37,12 @@ test("reports missing and wrong-kind wireless network references", () => {
   ]);
   expect(validateWirelessNetworkReferences(record, new Map())).toHaveLength(1);
 });
+
+test("accepts records without wireless interface references", () => {
+  expect(
+    validateWirelessNetworkReferences(
+      { file: "empty.yaml", data: { interfaces: [{}, { wireless: {} }] } },
+      new Map(),
+    ),
+  ).toEqual([]);
+});

@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import { validateWirelessReferences } from "../../../src/validate/wireless/references.mjs";
 
-test("checks broadcast segment references", () => {
+test("combines wireless reference and duplicate broadcast diagnostics", () => {
   const record = {
     file: "ap.yaml",
     data: {
@@ -9,30 +9,30 @@ test("checks broadcast segment references", () => {
         {
           wireless: {
             role: "radio",
-            broadcasts: [{ wirelessNetworkId: 1n, segmentId: 2n }],
+            broadcasts: [
+              { wirelessNetworkId: 1n, segmentId: 2n },
+              { wirelessNetworkId: 1n, segmentId: 2n },
+            ],
           },
         },
       ],
     },
   };
-  const valid = new Map([
-    [1n, { kind: "wireless-network" }],
-    [2n, { kind: "network-segment" }],
+  const diagnostics = validateWirelessReferences(record, new Map());
+  expect(diagnostics.map(({ pointer }) => pointer)).toEqual([
+    "/interfaces/0/wireless/broadcasts/0/wirelessNetworkId",
+    "/interfaces/0/wireless/broadcasts/1/wirelessNetworkId",
+    "/interfaces/0/wireless/broadcasts/0/segmentId",
+    "/interfaces/0/wireless/broadcasts/1/segmentId",
+    "/interfaces/0/wireless/broadcasts/1",
   ]);
-  expect(validateWirelessReferences(record, valid)).toEqual([]);
-  expect(validateWirelessReferences(record, new Map())).toHaveLength(2);
 });
 
-test("does not duplicate errors for invalid broadcast segments", () => {
-  const record = {
-    file: "ap.yaml",
-    data: {
-      interfaces: [{ wireless: { broadcasts: [{ wirelessNetworkId: 1n, segmentId: 2n }] } }],
-    },
-  };
-  const entities = new Map([
-    [1n, { kind: "wireless-network", invalid: true }],
-    [2n, { kind: "network-segment", invalid: true }],
-  ]);
-  expect(validateWirelessReferences(record, entities)).toEqual([]);
+test("accepts records without wireless broadcasts", () => {
+  expect(
+    validateWirelessReferences(
+      { file: "empty.yaml", data: { interfaces: [{}, { wireless: {} }] } },
+      new Map(),
+    ),
+  ).toEqual([]);
 });
