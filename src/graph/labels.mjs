@@ -5,6 +5,10 @@ export function escapeMermaidText(value) {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll("|", "&#124;")
+    .replaceAll("[", "&#91;")
+    .replaceAll("]", "&#93;")
+    .replaceAll("(", "&#40;")
+    .replaceAll(")", "&#41;")
     .replace(/[\r\n]+/g, " ");
 }
 
