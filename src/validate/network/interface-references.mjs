@@ -1,4 +1,4 @@
-import { localInterfaceFields } from "../../local-interface-fields.mjs";
+import { localInterfaceFields } from "../../network/interface-fields.mjs";
 import { validateLocalInterfaceNameFields } from "../local/interface-name-fields.mjs";
 
 export function validateNetworkInterfaceReferences(record) {

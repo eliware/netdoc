@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { addressRange, rangesOverlap } from "../../../../src/validate/interface/address/ranges.mjs";
+import { addressRange, rangesOverlap } from "../../../src/network/address/ranges.mjs";
 
 test("calculates host and prefix address ranges", () => {
   expect(addressRange({ bits: 32, prefix: 32, integer: 3221225985n })).toEqual({

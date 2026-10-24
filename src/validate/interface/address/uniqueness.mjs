@@ -1,6 +1,6 @@
 import { createDiagnostic } from "../../../diagnostics.mjs";
 import { isMatchingDhcpReservation } from "./dhcp-reservation-matching.mjs";
-import { addressRange, rangesOverlap } from "./ranges.mjs";
+import { addressRange, rangesOverlap } from "../../../network/address/ranges.mjs";
 
 export function validateInterfaceAddressUniqueness(
   networkInterface,

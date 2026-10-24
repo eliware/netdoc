@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { localInterfaceFields } from "../src/local-interface-fields.mjs";
+import { localInterfaceFields } from "../../src/network/interface-fields.mjs";
 
 test("collects local interface references", () => {
   expect(
