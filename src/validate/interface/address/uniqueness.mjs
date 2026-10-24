@@ -11,33 +11,44 @@ export function validateInterfaceAddressUniqueness(
   pointer,
   assignments,
 ) {
-  if (addressAssignment.assignment === "virtual" || networkInterface.segmentId === undefined)
-    return [];
-  const key = `${networkInterface.segmentId}:${parsed.version}`;
-  const range = addressRange(parsed);
-  const overlaps = (assignments.get(key) ?? []).filter((item) => rangesOverlap(item.range, range));
-  const previous = overlaps.find(
-    (item) => !isAllowedDhcpSharing(item, networkInterface, addressAssignment, range),
+  if (addressAssignment.assignment === "virtual") return [];
+  const segmentIds = new Set(
+    [
+      networkInterface.segmentId,
+      ...(networkInterface.wireless?.broadcasts ?? []).map(({ segmentId }) => segmentId),
+    ].filter((id) => id !== undefined),
   );
-  if (!previous && overlaps.length > 0) return [];
-  if (previous)
-    return [
-      createDiagnostic(
-        record.file,
-        pointer,
-        record.data.id,
-        `Address ${cidr} is in use at ${previous.file}#${previous.pointer}.`,
-        "Use a unique address on this segment or mark a shared address as virtual.",
-      ),
-    ];
-  const current = assignments.get(key) ?? [];
-  current.push({
-    file: record.file,
-    pointer,
-    assignment: addressAssignment.assignment,
-    macAddress: networkInterface.macAddress,
-    range,
-  });
-  assignments.set(key, current);
-  return [];
+  if (segmentIds.size === 0) return [];
+  const range = addressRange(parsed);
+  const diagnostics = [];
+  for (const segmentId of segmentIds) {
+    const key = `${segmentId}:${parsed.version}`;
+    const current = assignments.get(key) ?? [];
+    const overlaps = current.filter((item) => rangesOverlap(item.range, range));
+    const previous = overlaps.find(
+      (item) => !isAllowedDhcpSharing(item, networkInterface, addressAssignment, range),
+    );
+    if (previous) {
+      diagnostics.push(
+        createDiagnostic(
+          record.file,
+          pointer,
+          record.data.id,
+          `Address ${cidr} is in use at ${previous.file}#${previous.pointer}.`,
+          "Use a unique address on this segment or mark a shared address as virtual.",
+        ),
+      );
+      continue;
+    }
+    if (overlaps.length > 0) continue;
+    current.push({
+      file: record.file,
+      pointer,
+      assignment: addressAssignment.assignment,
+      macAddress: networkInterface.macAddress,
+      range,
+    });
+    assignments.set(key, current);
+  }
+  return diagnostics;
 }

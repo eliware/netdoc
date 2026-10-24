@@ -9,3 +9,9 @@ test("converts compressed and expanded IPv6 addresses to integers", () => {
 test("converts IPv4-mapped IPv6 addresses after suffix expansion", () => {
   expect(ipv6ToBigInt("::ffff:192.0.2.1")).toBe(281473902969345n);
 });
+
+test("converts IPv4-compatible and mixed IPv6 forms with dotted suffixes", () => {
+  expect(ipv6ToBigInt("::192.0.2.1")).toBe(3221225985n);
+  expect(ipv6ToBigInt("2001:db8::192.0.2.1")).toBe(0x20010db80000000000000000c0000201n);
+  expect(ipv6ToBigInt("2001:db8::192.0.2.1")).toBe(ipv6ToBigInt("2001:db8::c000:0201"));
+});

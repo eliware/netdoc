@@ -179,3 +179,29 @@ test("checks later conflicts after an allowed DHCP sharing pair", () => {
   );
   expect(diagnostics[0].message).toContain("is in use at conflict.yaml");
 });
+
+test("checks broadcast segments when an interface has no direct segment", () => {
+  const assignments = new Map();
+  const parsed = { version: 4, bits: 32, prefix: 32, integer: 3221225985n };
+  const first = [
+    { segmentId: 7n },
+    { assignment: "static" },
+    parsed,
+    "192.0.2.1",
+    { file: "first.yaml", data: { id: 1n } },
+    "/interfaces/0/addresses/0/cidr",
+    assignments,
+  ];
+  expect(validateInterfaceAddressUniqueness(...first)).toEqual([]);
+  expect(
+    validateInterfaceAddressUniqueness(
+      { wireless: { broadcasts: [{ segmentId: 7n }] } },
+      { assignment: "static" },
+      parsed,
+      "192.0.2.1",
+      { file: "radio.yaml", data: { id: 2n } },
+      "/interfaces/0/addresses/0/cidr",
+      assignments,
+    )[0].message,
+  ).toContain("is in use at first.yaml");
+});
