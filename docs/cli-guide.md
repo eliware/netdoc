@@ -233,7 +233,7 @@ Layer 2 settings can record managed or unmanaged operation. Use access mode for 
 
 Set `medium` to `ethernet`, `wireless`, `virtual`, `tunnel`, or `other`. Set `vlan` to an integer from 1 through 4094 or to `untagged`.
 
-Use `ipNetworks` to list address ranges and optional gateways. NetDoc checks gateway addresses against the listed network prefix.
+Use a host address inside each listed network for its gateway. For IPv4 prefixes shorter than `/31`, NetDoc rejects the first and last addresses.
 
 ### Common fields
 

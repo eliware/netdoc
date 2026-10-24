@@ -6,6 +6,30 @@ test("accepts an in-network gateway and reports an outside gateway", () => {
   const network = { cidr: "192.0.2.0/24" };
   expect(validateSegmentGateway(record, { ...network, gateway: "192.0.2.1" }, 0)).toEqual([]);
   expect(
+    validateSegmentGateway(record, { ...network, gateway: "192.0.2.0" }, 7).map(
+      ({ pointer }) => pointer,
+    ),
+  ).toEqual(["/ipNetworks/7/gateway"]);
+  expect(
+    validateSegmentGateway(record, { ...network, gateway: "192.0.2.255" }, 8).map(
+      ({ pointer }) => pointer,
+    ),
+  ).toEqual(["/ipNetworks/8/gateway"]);
+  expect(validateSegmentGateway(record, { cidr: "192.0.2.0/31", gateway: "192.0.2.0" }, 9)).toEqual(
+    [],
+  );
+  expect(
+    validateSegmentGateway(record, { cidr: "192.0.2.0/31", gateway: "192.0.2.1" }, 10),
+  ).toEqual([]);
+  expect(
+    validateSegmentGateway(record, { cidr: "2001:db8::/127", gateway: "2001:db8::" }, 11),
+  ).toEqual([]);
+  expect(
+    validateSegmentGateway(record, { cidr: "2001:db8::/64", gateway: "2001:db8::" }, 12).map(
+      ({ pointer }) => pointer,
+    ),
+  ).toEqual(["/ipNetworks/12/gateway"]);
+  expect(
     validateSegmentGateway(record, { ...network, gateway: "192.0.3.1" }, 1).map(
       ({ pointer }) => pointer,
     ),

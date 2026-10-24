@@ -18,7 +18,7 @@ test("collects static route and BGP addresses and networks", () => {
   ).toEqual([
     ["/networking/routing/defaultGateway", "192.0.2.1", false],
     ["/networking/routing/staticRoutes/0/destination", "192.0.2.0/24", true],
-    ["/networking/routing/staticRoutes/0/nextHop", "192.0.2.1", false],
+    ["/networking/routing/staticRoutes/0/nextHop", "192.0.2.1", false, { hostOnly: true }],
     ["/networking/routing/bgp/routerId", "192.0.2.2", false],
     ["/networking/routing/bgp/advertisedPrefixes/0", "198.51.100.0/24", true],
     ["/networking/routing/bgp/peers/0/address", "192.0.2.3", false],
@@ -39,4 +39,12 @@ test("reports invalid route addresses", () => {
       data: { id: 1n },
     }).map(({ pointer }) => pointer),
   ).toEqual(["/networking/routing/defaultGateway"]);
+  expect(
+    validateNetworkAddressFields(
+      networkRouteValueFields({
+        routing: { staticRoutes: [{ destination: "192.0.2.0/24", nextHop: "192.0.2.1/24" }] },
+      }),
+      { file: "router.yaml", data: { id: 1n } },
+    ).map(({ pointer }) => pointer),
+  ).toEqual(["/networking/routing/staticRoutes/0/nextHop"]);
 });
