@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import { validateWirelessDeviceReferences } from "../../../src/validate/wireless/device-references.mjs";
 
-test("reports missing wireless controller and access point targets", () => {
+test("checks the controller when a profile access point resolves", () => {
   const record = {
     file: "client.yaml",
     data: {
@@ -9,5 +9,9 @@ test("reports missing wireless controller and access point targets", () => {
       wirelessManagement: { controllerId: 3n },
     },
   };
-  expect(validateWirelessDeviceReferences(record, new Map())).toHaveLength(2);
+  const diagnostics = validateWirelessDeviceReferences(
+    record,
+    new Map([[2n, { kind: "network-device" }]]),
+  );
+  expect(diagnostics.map(({ pointer }) => pointer)).toEqual(["/wirelessManagement/controllerId"]);
 });

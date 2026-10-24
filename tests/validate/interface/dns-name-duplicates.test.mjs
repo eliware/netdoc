@@ -1,5 +1,8 @@
 import { expect, test } from "@jest/globals";
-import { validateDnsNameDuplicates } from "../../../src/validate/interface/dns-name-duplicates.mjs";
+import {
+  validateDnsNameDuplicates,
+  validateDnsNameDuplicatesAcrossRecords,
+} from "../../../src/validate/interface/dns-name-duplicates.mjs";
 
 const record = (dnsNames) => ({
   file: "nas.yaml",
@@ -26,4 +29,14 @@ test("reports case-insensitive duplicate DNS names with a field path", () => {
       message: "DNS name 'NAS.Example.Net' repeats an earlier name for this address.",
     }),
   ]);
+});
+
+test("collects DNS duplicate diagnostics across records", () => {
+  expect(
+    validateDnsNameDuplicatesAcrossRecords([
+      record(["one.example.net", "ONE.example.net"]),
+      record(["two.example.net", "TWO.example.net"]),
+    ]),
+  ).toHaveLength(2);
+  expect(validateDnsNameDuplicatesAcrossRecords([])).toEqual([]);
 });

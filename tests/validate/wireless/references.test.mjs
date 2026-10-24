@@ -18,12 +18,13 @@ test("combines wireless reference and duplicate broadcast diagnostics", () => {
       ],
     },
   };
-  const diagnostics = validateWirelessReferences(record, new Map());
+  const diagnostics = validateWirelessReferences(
+    record,
+    new Map([[2n, { kind: "network-segment" }]]),
+  );
   expect(diagnostics.map(({ pointer }) => pointer)).toEqual([
     "/interfaces/0/wireless/broadcasts/0/wirelessNetworkId",
     "/interfaces/0/wireless/broadcasts/1/wirelessNetworkId",
-    "/interfaces/0/wireless/broadcasts/0/segmentId",
-    "/interfaces/0/wireless/broadcasts/1/segmentId",
     "/interfaces/0/wireless/broadcasts/1",
   ]);
 });

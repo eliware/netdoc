@@ -25,3 +25,7 @@ export function validateDnsNameDuplicates(record) {
   });
   return diagnostics;
 }
+
+export function validateDnsNameDuplicatesAcrossRecords(records) {
+  return records.flatMap((record) => validateDnsNameDuplicates(record));
+}
