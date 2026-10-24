@@ -15,6 +15,7 @@
 - Add checks for wireless references, unique profiles, unique radio entries, and unique DNS names.
 - Add mixed WPA2/WPA3 personal and enterprise wireless modes.
 - Add VXLAN overlay fields for network segments, underlays, endpoints, transport settings, MTU, and encryption state.
+- Add load-balancer listener and target relationships to Mermaid topology graphs.
 - Validate VXLAN overlay references and preserve full 64-bit wireless controller IDs.
 
 ### Changed
@@ -33,6 +34,8 @@
 - Validate route targets, gateway hosts, network membership, and segment address ranges.
 - Find conflicting interface addresses and MAC addresses on each segment.
 - Validate wireless network references and address conflicts.
+- Link wireless client profiles to segments advertised by matching wireless networks.
+- Check wireless radio segment assignments when validating VXLAN endpoints.
 - Use correct IPv6 address expansion and compression.
 - Clarify inventory source age limits and report invalid command arguments consistently.
 - Clarify that invalid `checkedOn` dates stop the freshness report during validation.

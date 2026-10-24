@@ -32,7 +32,14 @@ test("links interfaces to segments, peer interfaces, and resident hosts", () => 
       kind: "virtual-machine",
       id: 2n,
       residentOn: 1n,
-      interfaces: [{ id: 22n, name: "eth1", connectsTo: 11n, segmentId: 100n }],
+      interfaces: [
+        { id: 22n, name: "eth1", connectsTo: 11n, segmentId: 100n },
+        {
+          name: "wifi0",
+          type: "wireless",
+          wireless: { role: "client", profiles: [{ wirelessNetworkId: 200n }] },
+        },
+      ],
     },
   };
   const segment = { data: { kind: "network-segment", id: 100n } };
@@ -48,7 +55,8 @@ test("links interfaces to segments, peer interfaces, and resident hosts", () => 
     "interface_0_1 -->|radio0 / broadcast wireless network unknown| object_3",
   );
   expect(edges).toContain("interface_0_0 ---|eth0 ↔ eth1| interface_1_0");
-  expect(edges).toHaveLength(8);
+  expect(edges).toContain("interface_1_1 -->|wifi0 / profile private5| object_2");
+  expect(edges).toHaveLength(10);
 });
 
 test("skips missing segment and peer targets", () => {

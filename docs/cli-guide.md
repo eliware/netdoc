@@ -144,7 +144,9 @@ Print a Mermaid flowchart from the inventory:
 netdoc graph inventory/ --format mermaid
 ```
 
-The command validates the inventory before it prints a graph. It shows objects, interfaces, network segments, reciprocal interface links, and routing relationships.
+The command validates the inventory before it prints a graph. It shows objects, interfaces, network segments, reciprocal interface links, routing relationships, and load-balancer listeners and targets.
+
+For a wireless client, the graph links its profiles to segments advertised by matching wireless networks.
 It labels known values and identifies unknown endpoints. It shows configured inventory only.
 It does not show VXLAN overlay references.
 It does not find live devices or test connectivity.

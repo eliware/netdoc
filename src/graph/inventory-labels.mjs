@@ -1,3 +1,5 @@
+import { wirelessProfileNamesOnSegment, wirelessProfileSegments } from "./wireless-profiles.mjs";
+
 export function objectLabel(record) {
   const lines = [record.data.kind, record.data.name];
   if (record.data.kind === "network-segment") {
@@ -7,7 +9,7 @@ export function objectLabel(record) {
   return lines;
 }
 
-export function interfaceLabel(networkInterface) {
+export function interfaceLabel(networkInterface, context) {
   const lines = [networkInterface.name ?? "Interface name unknown"];
   if (networkInterface.type) lines.push(networkInterface.type);
   if (networkInterface.macAddress) lines.push(`MAC: ${networkInterface.macAddress}`);
@@ -15,7 +17,8 @@ export function interfaceLabel(networkInterface) {
   if (addresses.length > 0) lines.push(`Address: ${addresses.join(", ")}`);
   if (
     networkInterface.segmentId === undefined &&
-    !(networkInterface.wireless?.broadcasts ?? []).length
+    !(networkInterface.wireless?.broadcasts ?? []).length &&
+    wirelessProfileSegments(networkInterface, context).size === 0
   )
     lines.push("Segment unknown");
   if (
@@ -36,6 +39,9 @@ export function segmentLabel(networkInterface, segmentId, context) {
       const wirelessNetwork = context.recordById.get(broadcast.wirelessNetworkId);
       labels.push(`broadcast ${wirelessNetwork?.data.name ?? "wireless network unknown"}`);
     }
+  }
+  for (const name of wirelessProfileNamesOnSegment(networkInterface, segmentId, context)) {
+    labels.push(`profile ${name}`);
   }
   const addresses = (networkInterface.addresses ?? []).map(({ cidr }) => cidr).filter(Boolean);
   if (addresses.length > 0) labels.push(addresses.join(", "));

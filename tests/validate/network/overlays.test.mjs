@@ -140,3 +140,44 @@ test("reports an endpoint interface on the wrong underlay segment", () => {
     }),
   ]);
 });
+
+test("uses wireless radio broadcasts to check overlay endpoint segments", () => {
+  const record = {
+    file: "overlay.yaml",
+    data: {
+      kind: "network-segment",
+      encapsulation: {
+        underlaySegmentId: 2n,
+        endpoints: [{ nodeId: 3n, interfaceName: "radio0" }],
+      },
+    },
+  };
+  const makeEntities = (segmentId) =>
+    new Map([
+      [2n, { kind: "network-segment" }],
+      [
+        3n,
+        {
+          kind: "network-device",
+          record: {
+            data: {
+              interfaces: [
+                {
+                  name: "radio0",
+                  wireless: { broadcasts: [{ wirelessNetworkId: 4n, segmentId }] },
+                },
+              ],
+            },
+          },
+        },
+      ],
+    ]);
+
+  expect(validateOverlayReferences(record, makeEntities(2n))).toEqual([]);
+  expect(validateOverlayReferences(record, makeEntities(4n))).toEqual([
+    expect.objectContaining({
+      pointer: "/encapsulation/endpoints/0/interfaceName",
+      message: "Interface 'radio0' does not use the referenced underlay segment.",
+    }),
+  ]);
+});

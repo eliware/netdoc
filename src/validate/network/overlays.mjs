@@ -69,10 +69,14 @@ function validateEndpointInterfaces(record, entitiesById) {
         ),
       ];
     const underlaySegmentId = record.data.encapsulation.underlaySegmentId;
+    const segmentIds = [
+      networkInterface.segmentId,
+      ...(networkInterface.wireless?.broadcasts ?? []).map(({ segmentId }) => segmentId),
+    ].filter((id) => id !== undefined);
     if (
-      networkInterface.segmentId !== undefined &&
       underlaySegmentId !== undefined &&
-      networkInterface.segmentId !== underlaySegmentId
+      segmentIds.length > 0 &&
+      !segmentIds.includes(underlaySegmentId)
     )
       return [
         createDiagnostic(

@@ -7,7 +7,10 @@ export function buildInventoryNodes(context) {
     lines.push(nodeLine(`object_${recordIndex}`, objectLabel(record)));
     (record.data.interfaces ?? []).forEach((networkInterface, interfaceIndex) => {
       lines.push(
-        nodeLine(`interface_${recordIndex}_${interfaceIndex}`, interfaceLabel(networkInterface)),
+        nodeLine(
+          `interface_${recordIndex}_${interfaceIndex}`,
+          interfaceLabel(networkInterface, context),
+        ),
       );
     });
   });

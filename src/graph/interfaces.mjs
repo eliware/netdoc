@@ -1,5 +1,6 @@
 import { edgeLine } from "./labels.mjs";
 import { segmentLabel } from "./inventory-labels.mjs";
+import { wirelessProfileSegments } from "./wireless-profiles.mjs";
 
 export function buildInterfaceEdges(context) {
   const edges = [];
@@ -8,7 +9,7 @@ export function buildInterfaceEdges(context) {
       const interfaceNodeId = `interface_${recordIndex}_${interfaceIndex}`;
       const objectNodeId = context.objectNodeByRecord.get(record);
       edges.push(edgeLine(objectNodeId, interfaceNodeId, "interface", "-.->"));
-      for (const segmentId of segmentIds(networkInterface)) {
+      for (const segmentId of segmentIds(networkInterface, context)) {
         const segmentNodeId = context.objectNodeById.get(segmentId);
         if (segmentNodeId)
           edges.push(
@@ -39,9 +40,10 @@ export function buildInterfaceEdges(context) {
   return edges;
 }
 
-function segmentIds(networkInterface) {
+function segmentIds(networkInterface, context) {
   return new Set([
     networkInterface.segmentId,
     ...(networkInterface.wireless?.broadcasts ?? []).map(({ segmentId }) => segmentId),
+    ...wirelessProfileSegments(networkInterface, context),
   ]);
 }
