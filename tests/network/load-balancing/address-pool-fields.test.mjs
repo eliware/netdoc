@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { loadBalancerAddressPoolFields } from "../src/load-balancer-address-pool-fields.mjs";
+import { loadBalancerAddressPoolFields } from "../../../src/network/load-balancing/address-pool-fields.mjs";
 
 test("collects load-balancer pool addresses", () => {
   expect(

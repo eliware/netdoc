@@ -1,7 +1,9 @@
 import { networkPolicyFields } from "./policy.mjs";
 import { networkRoutingFields } from "./routing.mjs";
-import { networkServiceFields } from "./services.mjs";
 import { networkTunnelFields } from "./tunnel.mjs";
+import { dhcpScopeFields } from "../dhcp/value-fields.mjs";
+import { loadBalancerAddressPoolFields } from "../load-balancing/address-pool-fields.mjs";
+import { networkLoadBalancerValueFields } from "../load-balancing/value-fields.mjs";
 
 export function collectNetworkValueFields(data) {
   const network = data.networking ?? {};
@@ -9,6 +11,8 @@ export function collectNetworkValueFields(data) {
     ...networkRoutingFields(network),
     ...networkTunnelFields(network),
     ...networkPolicyFields(network),
-    ...networkServiceFields(network),
+    ...networkLoadBalancerValueFields(network),
+    ...loadBalancerAddressPoolFields(network),
+    ...dhcpScopeFields(network),
   ];
 }

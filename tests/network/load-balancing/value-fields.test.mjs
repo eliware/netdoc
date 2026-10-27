@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { networkLoadBalancerValueFields } from "../../src/network/load-balancer-value-fields.mjs";
-import { validateNetworkAddressFields } from "../../src/validate/network/address/fields.mjs";
+import { networkLoadBalancerValueFields } from "../../../src/network/load-balancing/value-fields.mjs";
+import { validateNetworkAddressFields } from "../../../src/validate/network/address/fields.mjs";
 
 test("collects listener and target addresses", () => {
   expect(

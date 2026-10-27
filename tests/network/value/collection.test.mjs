@@ -16,6 +16,7 @@ test("collects address fields from routing, policies, pools, and DHCP", () => {
       tunnels: [{ localAddress: "192.0.2.20" }],
       l2Announcements: [{ address: "192.0.2.30" }],
       loadBalancing: {
+        listeners: [{ address: "192.0.2.50", targets: [{ address: "192.0.2.51" }] }],
         addressPools: [{ cidr: "192.0.2.0/24", start: "192.0.2.10", end: "192.0.2.20" }],
       },
       dhcp: {
@@ -41,6 +42,8 @@ test("collects address fields from routing, policies, pools, and DHCP", () => {
     "/networking/routing/vrrp/0/virtualAddresses/0",
     "/networking/tunnels/0/localAddress",
     "/networking/l2Announcements/0/address",
+    "/networking/loadBalancing/listeners/0/address",
+    "/networking/loadBalancing/listeners/0/targets/0/address",
     "/networking/loadBalancing/addressPools/0/cidr",
     "/networking/loadBalancing/addressPools/0/start",
     "/networking/loadBalancing/addressPools/0/end",

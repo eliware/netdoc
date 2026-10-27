@@ -1,5 +1,13 @@
 # Release Notes
 
+## 15.0.2 — 2026-10-26
+
+### Changed
+
+- Update `@eliware/common` and `@eliware/test` to 15.0.1.
+- Organize DHCP and load-balancing address collection into focused modules.
+- Keep load-balancer address collection separate from policy address collection.
+
 ## 15.0.1 — 2026-10-24
 
 ### Added

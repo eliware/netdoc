@@ -1,6 +1,6 @@
 {
   "name": "@eliware/netdoc",
-  "version": "15.0.1",
+  "version": "15.0.2",
   "type": "module",
   "description": "Git-versioned inventory for network infrastructure and systems, with YAML schemas, validation, and Snowflake ID generation.",
   "keywords": [

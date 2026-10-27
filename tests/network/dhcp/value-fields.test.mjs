@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { dhcpScopeFields } from "../src/dhcp-scope-fields.mjs";
+import { dhcpScopeFields } from "../../../src/network/dhcp/value-fields.mjs";
 
 test("collects DHCP scope and reservation addresses", () => {
   expect(
