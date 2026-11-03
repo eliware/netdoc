@@ -1,5 +1,18 @@
 # Release Notes
 
+## 15.1.0 — 2026-11-03
+
+### Added
+
+- Add a NAS target to the Knit deployment.
+
+### Changed
+
+- Set the package version to 15.1.0 in `package.json` and `package-lock.json`.
+- Update `@eliware/test` to 15.1.0.
+- Refresh compatible lockfile dependencies with `npm update`.
+- Run `npm ci` and `npm test` on both the dev and NAS Knit targets.
+
 ## 15.0.2 — 2026-10-27
 
 ### Changed
