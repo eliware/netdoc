@@ -4,17 +4,15 @@ import dhcpScopeFields from "../../../src/network/dhcp/value-fields.mjs";
 test("collects DHCP scope and reservation addresses", () => {
   expect(
     dhcpScopeFields({
-      dhcp: {
-        scopes: [
-          {
-            network: "192.0.2.0/24",
-            rangeStart: "192.0.2.10",
-            rangeEnd: "192.0.2.20",
-            gateway: "192.0.2.1",
-            reservations: [{ address: "192.0.2.11" }],
-          },
-        ],
-      },
+      scopes: [
+        {
+          network: "192.0.2.0/24",
+          rangeStart: "192.0.2.10",
+          rangeEnd: "192.0.2.20",
+          gateway: "192.0.2.1",
+          reservations: [{ address: "192.0.2.11" }],
+        },
+      ],
     }),
   ).toEqual([
     ["/networking/dhcp/scopes/0/network", "192.0.2.0/24", true],
@@ -26,6 +24,6 @@ test("collects DHCP scope and reservation addresses", () => {
 });
 
 test("collects empty DHCP scopes without reservations", () => {
-  expect(dhcpScopeFields({ dhcp: { scopes: [{}] } })).toHaveLength(4);
+  expect(dhcpScopeFields({ scopes: [{}] })).toHaveLength(4);
   expect(dhcpScopeFields({})).toEqual([]);
 });

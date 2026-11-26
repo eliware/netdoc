@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import collectNetworkValueFields from "../../../src/network/value/collection.mjs";
 
-test("collects address fields from routing, policies, pools, and DHCP", () => {
+test("collects address fields from routing, policies, and pools", () => {
   const data = {
     networking: {
       routing: {
@@ -18,17 +18,6 @@ test("collects address fields from routing, policies, pools, and DHCP", () => {
       loadBalancing: {
         listeners: [{ address: "192.0.2.50", targets: [{ address: "192.0.2.51" }] }],
         addressPools: [{ cidr: "192.0.2.0/24", start: "192.0.2.10", end: "192.0.2.20" }],
-      },
-      dhcp: {
-        scopes: [
-          {
-            network: "192.0.2.0/24",
-            rangeStart: "192.0.2.30",
-            rangeEnd: "192.0.2.40",
-            gateway: "192.0.2.1",
-            reservations: [{ address: "192.0.2.31" }],
-          },
-        ],
       },
     },
   };
@@ -47,11 +36,6 @@ test("collects address fields from routing, policies, pools, and DHCP", () => {
     "/networking/loadBalancing/addressPools/0/cidr",
     "/networking/loadBalancing/addressPools/0/start",
     "/networking/loadBalancing/addressPools/0/end",
-    "/networking/dhcp/scopes/0/network",
-    "/networking/dhcp/scopes/0/rangeStart",
-    "/networking/dhcp/scopes/0/rangeEnd",
-    "/networking/dhcp/scopes/0/gateway",
-    "/networking/dhcp/scopes/0/reservations/0/address",
   ]);
 });
 

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import validationJson from "../../src/validation/json-report.mjs";
+import validationJson from "../../../src/validation/json/report.mjs";
 
 test("serializes successful validation as one JSON document", () => {
   expect(

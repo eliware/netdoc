@@ -1,7 +1,7 @@
-export default function dhcpScopeFields(network) {
+export default function dhcpScopeFields(dhcp) {
   const fields = [];
   const add = (path, value, isNetwork = false) => fields.push([path, value, isNetwork]);
-  (network.dhcp?.scopes ?? []).forEach((scope, i) => {
+  (dhcp.scopes ?? []).forEach((scope, i) => {
     add(`/networking/dhcp/scopes/${i}/network`, scope.network, true);
     add(`/networking/dhcp/scopes/${i}/rangeStart`, scope.rangeStart);
     add(`/networking/dhcp/scopes/${i}/rangeEnd`, scope.rangeEnd);
