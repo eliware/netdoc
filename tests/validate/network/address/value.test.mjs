@@ -20,6 +20,8 @@ test("rejects invalid values and special values in other fields", () => {
     false,
   );
   expect(validNetworkAddressValue("192.0.2.1", false, "/listener", { hostOnly: true })).toBe(true);
+  expect(validNetworkAddressValue("2001:db8::1", false, "/routerId", { ipv4: true })).toBe(false);
+  expect(validNetworkAddressValue("192.0.2.1", false, "/routerId", { ipv4: true })).toBe(true);
   expect(validNetworkAddressValue("masquerade", false, "/source")).toBe(false);
   expect(validNetworkAddressValue("masquerade", false, "/translation")).toBe(false);
 });

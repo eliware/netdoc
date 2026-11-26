@@ -19,7 +19,7 @@ test("collects static route and BGP addresses and networks", () => {
     ["/networking/routing/defaultGateway", "192.0.2.1", false],
     ["/networking/routing/staticRoutes/0/destination", "192.0.2.0/24", true],
     ["/networking/routing/staticRoutes/0/nextHop", "192.0.2.1", false, { hostOnly: true }],
-    ["/networking/routing/bgp/routerId", "192.0.2.2", false, { hostOnly: true }],
+    ["/networking/routing/bgp/routerId", "192.0.2.2", false, { hostOnly: true, ipv4: true }],
     ["/networking/routing/bgp/advertisedPrefixes/0", "198.51.100.0/24", true],
     ["/networking/routing/bgp/peers/0/address", "192.0.2.3", false, { hostOnly: true }],
   ]);
@@ -28,7 +28,7 @@ test("collects static route and BGP addresses and networks", () => {
 test("returns default gateway and BGP fields for an empty routing object", () => {
   expect(networkRouteValueFields({})).toEqual([
     ["/networking/routing/defaultGateway", undefined, false],
-    ["/networking/routing/bgp/routerId", undefined, false, { hostOnly: true }],
+    ["/networking/routing/bgp/routerId", undefined, false, { hostOnly: true, ipv4: true }],
   ]);
 });
 
@@ -60,4 +60,15 @@ test("reports invalid route addresses", () => {
       { file: "router.yaml", data: { id: 1n } },
     ).map(({ pointer }) => pointer),
   ).toEqual(["/networking/routing/bgp/routerId", "/networking/routing/bgp/peers/0/address"]);
+});
+
+test("allows IPv6 BGP peer addresses while requiring an IPv4 router ID", () => {
+  expect(
+    validateNetworkAddressFields(
+      networkRouteValueFields({
+        routing: { bgp: { routerId: "2001:db8::1", peers: [{ address: "2001:db8::2" }] } },
+      }),
+      { file: "router.yaml", data: { id: 1n } },
+    ).map(({ pointer }) => pointer),
+  ).toEqual(["/networking/routing/bgp/routerId"]);
 });

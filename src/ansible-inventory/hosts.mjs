@@ -46,6 +46,7 @@ function hostVariables(machine, uniqueName) {
 }
 
 function rejectDuplicateHostnames(hostnames) {
+  // Ansible keys preserve case, so reject names that collide after case folding.
   const seen = new Set();
   for (const hostname of hostnames) {
     const key = hostname.toLowerCase();

@@ -42,6 +42,6 @@ test("collects address fields from routing, policies, and pools", () => {
 test("collects routing fields even when networking is absent", () => {
   expect(collectNetworkValueFields({})).toEqual([
     ["/networking/routing/defaultGateway", undefined, false],
-    ["/networking/routing/bgp/routerId", undefined, false, { hostOnly: true }],
+    ["/networking/routing/bgp/routerId", undefined, false, { hostOnly: true, ipv4: true }],
   ]);
 });

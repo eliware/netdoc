@@ -6,6 +6,7 @@ export default function validNetworkAddressValue(value, network, pointer, option
   if (value === "masquerade") return options.allowMasquerade === true;
   const parsed = parseAddress(value);
   if (!parsed) return false;
+  if (options.ipv4 && parsed.version !== 4) return false;
   if (network) {
     if (!value.includes("/")) return false;
     const hostBits = BigInt(parsed.bits - parsed.prefix);

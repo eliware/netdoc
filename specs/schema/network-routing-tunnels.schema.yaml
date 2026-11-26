@@ -38,6 +38,7 @@ $defs:
             maximum: 4294967295
           routerId:
             type: string
+            format: ipv4
           advertisedPrefixes:
             type: array
             uniqueItems: true

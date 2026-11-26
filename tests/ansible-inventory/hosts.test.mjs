@@ -86,3 +86,14 @@ test("returns no hosts for records without machine kinds", () => {
     hostvars: Object.create(null),
   });
 });
+
+test("omits the NetDoc ID variable when a machine has no ID", () => {
+  const result = buildAnsibleHosts([
+    { data: { kind: "physical-machine", name: "host-without-id" } },
+  ]);
+  expect(result.hostvars["host-without-id"]).toEqual({
+    netdoc_name: "host-without-id",
+    netdoc_kind: "physical-machine",
+    ansible_host: "host-without-id",
+  });
+});

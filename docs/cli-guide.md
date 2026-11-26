@@ -519,7 +519,8 @@ addresses:
 | `listeners`       | Layer 4 address, protocol, and `port` details.                                              |
 | `dhcp`            | Network, address range, gateway, and reservations.                                          |
 
-Set the BGP router ID and peer addresses to IP addresses without prefixes. Set the local and remote AS numbers.
+Set the BGP router ID to an IPv4 address without a prefix. Set peer addresses to IPv4 or IPv6 addresses without prefixes.
+Set the local and remote AS numbers.
 Use IDs for peers that have inventory records.
 
 Set each firewall action to `allow`, `drop`, or `reject`. Use `any`, an address, or a network prefix for rule sources and destinations.
