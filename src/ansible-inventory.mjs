@@ -5,24 +5,14 @@ import reportValidationErrors from "./validation/report-validation-errors.mjs";
 
 export default function runAnsibleInventory(
   args,
-  {
-    env = process.env,
-    write = console.log,
-    error = console.error,
-    validate = runInventoryValidation,
-  } = {},
+  { write = console.log, error = console.error, validate = runInventoryValidation } = {},
 ) {
   const parsed = parseAnsibleInventoryArguments(args);
   if (parsed.error !== undefined) {
     error(parsed.error);
     return 2;
   }
-  const inventoryPath = env.NETDOC_INVENTORY_PATH;
-  if (typeof inventoryPath !== "string" || inventoryPath.trim() === "") {
-    error("Set NETDOC_INVENTORY_PATH to a NetDoc YAML file or inventory directory.");
-    return 2;
-  }
-  const result = validate(inventoryPath);
+  const result = validate(parsed.inventoryPath);
   if (result.error !== undefined) {
     error(result.error);
     return 2;

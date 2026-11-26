@@ -63,7 +63,7 @@ Do not add credentials, keys, secrets, or private data to inventory files.
 
 ## Configuration
 
-Set `NETDOC_INVENTORY_PATH` when you run `netdoc ansible inventory`.
+Pass an inventory file or directory path to commands that read inventory.
 
 ## Operations
 
@@ -81,8 +81,8 @@ NetDoc reads inventory and prints results. It does not change files or connect t
 | `netdoc report <path> --freshness --max-age-days DAYS` | Report object dates and age.              |
 | `netdoc graph <path> --format mermaid`                 | Print inventory topology as Mermaid text. |
 | `netdoc --generate-id [-n COUNT]`                      | Print one or more Snowflake IDs.          |
-| `netdoc ansible inventory --list`                      | Print a validated Ansible inventory.      |
-| `netdoc ansible inventory --host NAME`                 | Print one host's Ansible variables.       |
+| `netdoc ansible <path> --list`                         | Print a validated Ansible inventory.      |
+| `netdoc ansible <path> --host NAME`                    | Print one host's Ansible variables.       |
 
 Read the [CLI guide](docs/cli-guide.md) for option defaults, errors, and command details.
 

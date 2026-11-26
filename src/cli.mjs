@@ -6,7 +6,7 @@ export default function runCli(
 ) {
   if (args.length === 0 || args[0] === "--help") {
     write(
-      "Usage: netdoc [--help] [--version] | validate <path> [--format text|json] | report <path> --freshness --max-age-days DAYS | graph <path> --format mermaid | ansible inventory [--list|--host NAME] | --generate-id [-n COUNT]",
+      "Usage: netdoc [--help] [--version] | validate <path> [--format text|json] | report <path> --freshness --max-age-days DAYS | graph <path> --format mermaid | ansible <path> [--list|--host NAME] | --generate-id [-n COUNT]",
     );
     return 0;
   }

@@ -1,5 +1,4 @@
 import { expect, jest, test } from "@jest/globals";
-import path from "node:path";
 import createDiagnostic from "../src/diagnostics.mjs";
 import runAnsibleInventory from "../src/ansible-inventory.mjs";
 
@@ -24,7 +23,6 @@ test("prints a complete JSON inventory for list requests", () => {
   const validate = validateSuccess();
   expect(
     runAnsibleInventory(["inventory", "--list"], {
-      env: { NETDOC_INVENTORY_PATH: "inventory" },
       write,
       error,
       validate,
@@ -38,7 +36,6 @@ test("prints a complete JSON inventory for list requests", () => {
 test("prints known host variables and an empty object for an unknown host", () => {
   const write = jest.fn();
   const options = {
-    env: { NETDOC_INVENTORY_PATH: "inventory" },
     write,
     error: jest.fn(),
     validate: validateSuccess(),
@@ -60,23 +57,7 @@ test("rejects invalid arguments without loading inventory", () => {
   const validate = validateSuccess();
   expect(runAnsibleInventory(["inventory", "--bad"], { error, validate })).toBe(2);
   expect(error).toHaveBeenCalledWith(
-    "Usage: netdoc ansible inventory --list | --host <inventory-hostname>",
-  );
-  expect(validate).not.toHaveBeenCalled();
-});
-
-test.each([undefined, "", "   "])("requires a nonempty inventory path %s", (inventoryPath) => {
-  const error = jest.fn();
-  const validate = validateSuccess();
-  expect(
-    runAnsibleInventory(["inventory", "--list"], {
-      env: { NETDOC_INVENTORY_PATH: inventoryPath },
-      error,
-      validate,
-    }),
-  ).toBe(2);
-  expect(error).toHaveBeenCalledWith(
-    "Set NETDOC_INVENTORY_PATH to a NetDoc YAML file or inventory directory.",
+    "Usage: netdoc ansible <path> (--list | --host <inventory-hostname>)",
   );
   expect(validate).not.toHaveBeenCalled();
 });
@@ -86,7 +67,6 @@ test("reports path and setup errors without printing JSON", () => {
   const error = jest.fn();
   expect(
     runAnsibleInventory(["inventory", "--list"], {
-      env: { NETDOC_INVENTORY_PATH: "missing" },
       write,
       error,
       validate: jest.fn(() => ({ exitCode: 2, error: "Path does not exist: missing" })),
@@ -100,7 +80,6 @@ test("reports an incomplete validation result as a setup error", () => {
   const error = jest.fn();
   expect(
     runAnsibleInventory(["inventory", "--list"], {
-      env: { NETDOC_INVENTORY_PATH: "inventory" },
       error,
       validate: jest.fn(() => ({ exitCode: 2, diagnostics: [], fileCount: 0 })),
     }),
@@ -108,18 +87,14 @@ test("reports an incomplete validation result as a setup error", () => {
   expect(error).toHaveBeenCalledWith("Inventory validation could not complete.");
 });
 
-test("uses the default process environment and output handlers", () => {
-  const previousPath = process.env.NETDOC_INVENTORY_PATH;
-  process.env.NETDOC_INVENTORY_PATH = path.resolve("test-fixtures/wireless-inventory");
+test("loads the supplied path without an environment variable", () => {
   const write = jest.spyOn(console, "log").mockImplementation(() => {});
   const error = jest.spyOn(console, "error").mockImplementation(() => {});
   try {
-    expect(runAnsibleInventory(["inventory", "--list"])).toBe(0);
+    expect(runAnsibleInventory(["test-fixtures/wireless-inventory", "--list"])).toBe(0);
     expect(JSON.parse(write.mock.calls[0][0])._meta.hostvars).toBeDefined();
     expect(error).not.toHaveBeenCalled();
   } finally {
-    if (previousPath === undefined) delete process.env.NETDOC_INVENTORY_PATH;
-    else process.env.NETDOC_INVENTORY_PATH = previousPath;
     write.mockRestore();
     error.mockRestore();
   }
@@ -131,7 +106,6 @@ test("reports validation errors without printing partial inventory", () => {
   const diagnostic = createDiagnostic("machine.yaml", "/name", undefined, "Invalid name");
   expect(
     runAnsibleInventory(["inventory", "--list"], {
-      env: { NETDOC_INVENTORY_PATH: "inventory" },
       write,
       error,
       validate: jest.fn(() => ({ exitCode: 1, diagnostics: [diagnostic], fileCount: 1 })),
@@ -150,7 +124,6 @@ test("reports inventory mapping conflicts as invalid data", () => {
   ];
   expect(
     runAnsibleInventory(["inventory", "--list"], {
-      env: { NETDOC_INVENTORY_PATH: "inventory" },
       write,
       error,
       validate: jest.fn(() => ({ exitCode: 0, records: conflictingRecords })),

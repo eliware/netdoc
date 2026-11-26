@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Accept the inventory path as an Ansible command argument without an environment variable.
 - Refresh `@types/node` to 26.6.11 in the lockfile.
 - Set the package version to 15.2.1.
 

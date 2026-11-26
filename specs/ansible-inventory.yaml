@@ -1,9 +1,8 @@
 name: Ansible dynamic inventory
 commands:
-  - Run `netdoc ansible inventory --list` to print the complete inventory as JSON.
-  - Run `netdoc ansible inventory --host NAME` to print one host's variables as JSON.
-  - Set `NETDOC_INVENTORY_PATH` to a NetDoc YAML file or inventory directory.
-  - Require `NETDOC_INVENTORY_PATH` for inventory requests.
+  - Run `netdoc ansible <path> --list` to print the complete inventory as JSON.
+  - Run `netdoc ansible <path> --host NAME` to print one host's variables as JSON.
+  - Use a NetDoc YAML file or inventory directory as the path argument.
 validation:
   - Validate the complete selected inventory before each request returns data.
   - Do not return incomplete host data when validation fails.

@@ -13,7 +13,6 @@ NetDoc supports physical machines, virtual machines, network devices, network se
 - Use Node.js 26 or later to run NetDoc.
 - Use npm to install the package.
 - Use a terminal with access to the npm registry for installation.
-- Set `NETDOC_INVENTORY_PATH` only when you export inventory for Ansible.
 - Install Ansible separately when you use Ansible commands.
 
 ## Install and check the command
@@ -69,8 +68,8 @@ Run those scripts with `npm run` and their script names.
 | `netdoc graph <path> --format mermaid`                 | Print inventory topology as Mermaid.              |
 | `netdoc --generate-id`                                 | Print one Snowflake ID.                           |
 | `netdoc --generate-id -n COUNT`                        | Print COUNT Snowflake IDs.                        |
-| `netdoc ansible inventory --list`                      | Print a validated Ansible inventory as JSON.      |
-| `netdoc ansible inventory --host NAME`                 | Print one host's variables as JSON.               |
+| `netdoc ansible <path> --list`                         | Print a validated Ansible inventory as JSON.      |
+| `netdoc ansible <path> --host NAME`                    | Print one host's variables as JSON.               |
 
 Run one command at a time. Replace `<path>` with a YAML file or directory. Set `COUNT` to an integer from 1 through 1000.
 
@@ -182,14 +181,8 @@ NetDoc gets the shared Snowflake ID generator from `@eliware/common`.
 
 ### Export inventory for Ansible
 
-Set `NETDOC_INVENTORY_PATH` to a NetDoc YAML file or inventory directory.
+Pass a NetDoc YAML file or inventory directory as the path argument.
 The command validates the complete inventory before it returns data.
-
-In PowerShell, set the inventory path:
-
-```powershell
-$env:NETDOC_INVENTORY_PATH = "C:\path\to\inventory"
-```
 
 Inspect the inventory with Ansible:
 

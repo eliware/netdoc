@@ -13,7 +13,7 @@ test.each([{ args: [] }, { args: ["--help"] }])("shows usage", ({ args }) => {
   const write = jest.fn();
   expect(runCli(args, { ...handlers(), version: "11.0.0", write })).toBe(0);
   expect(write).toHaveBeenCalledWith(
-    "Usage: netdoc [--help] [--version] | validate <path> [--format text|json] | report <path> --freshness --max-age-days DAYS | graph <path> --format mermaid | ansible inventory [--list|--host NAME] | --generate-id [-n COUNT]",
+    "Usage: netdoc [--help] [--version] | validate <path> [--format text|json] | report <path> --freshness --max-age-days DAYS | graph <path> --format mermaid | ansible <path> [--list|--host NAME] | --generate-id [-n COUNT]",
   );
 });
 
