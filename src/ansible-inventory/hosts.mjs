@@ -17,6 +17,7 @@ export default function buildAnsibleHosts(records) {
       uniqueName: !duplicate,
     };
   });
+  // Check after adding suffixes so generated names also collide with existing hostnames.
   rejectDuplicateHostnames(hosts.map(({ hostname }) => hostname));
 
   const hostvars = Object.create(null);
