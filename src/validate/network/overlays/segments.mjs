@@ -2,6 +2,7 @@ import createDiagnostic from "../../../diagnostics.mjs";
 import validateNetworkSegmentReference from "../segment-reference.mjs";
 
 export default function validateOverlaySegmentReferences(record, entitiesById) {
+  // The networking field references networkConfiguration directly in the object schema.
   const overlayDiagnostics = (record.data.networking?.overlaySegmentIds ?? []).flatMap(
     (id, index) => validateOverlaySegmentId(id, index, record, entitiesById),
   );

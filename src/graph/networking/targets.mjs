@@ -11,9 +11,7 @@ export default function buildLoadBalancingTargetElements(
   const nodes = [];
   const edges = [];
   targets.forEach((target, targetIndex) => {
-    const targetLabel = target.address
-      ? `${target.address}${target.port === undefined ? "" : `:${target.port}`}`
-      : `device ${target.deviceId}${target.port === undefined ? "" : ` port ${target.port}`}`;
+    const targetLabel = formatTargetLabel(target);
     const targetNode = context.objectNodeById.get(target.deviceId);
     if (targetNode) {
       edges.push(edgeLine(listenerNode, targetNode, `target ${targetLabel}`));
@@ -24,4 +22,15 @@ export default function buildLoadBalancingTargetElements(
     edges.push(edgeLine(listenerNode, addressNode, "target"));
   });
   return { nodes, edges };
+}
+
+function formatTargetLabel(target) {
+  const details = [];
+  if (target.deviceId !== undefined) details.push(`device ${target.deviceId}`);
+  if (target.address !== undefined) {
+    details.push(`${target.address}${target.port === undefined ? "" : `:${target.port}`}`);
+  } else if (target.port !== undefined) {
+    details.push(`port ${target.port}`);
+  }
+  return details.join(" ");
 }

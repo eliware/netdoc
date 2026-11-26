@@ -41,7 +41,7 @@ test("renders load-balancer listeners and address or device targets", () => {
   );
   expect(elements.nodes).toContain('listener_target_0_0_1["Load balancer target<br/>10.0.0.3"]');
   expect(elements.edges).toContain("object_0 -->|load balancer listener| listener_0_0");
-  expect(elements.edges).toContain("listener_0_0 -->|target 10.0.0.2:8443| object_1");
+  expect(elements.edges).toContain("listener_0_0 -->|target device 2 10.0.0.2:8443| object_1");
   expect(elements.edges).toContain("listener_0_0 -->|target| listener_target_0_0_1");
   expect(elements.edges).toContain("listener_0_0 -->|target device 2 port 22| object_1");
   expect(elements.edges).toContain("listener_0_0 -->|target device 2| object_1");

@@ -74,3 +74,54 @@ test("accepts matching underlays and interfaces without segment assignments", ()
     validateOverlayEndpointInterfaces(record.data.encapsulation.endpoints, record, entities),
   ).toEqual([]);
 });
+
+test("checks underlay membership through wireless client profiles", () => {
+  const record = {
+    file: "overlay.yaml",
+    data: {
+      encapsulation: {
+        underlaySegmentId: 2n,
+        endpoints: [{ nodeId: 1n, interfaceName: "wlan0" }],
+      },
+    },
+  };
+  const entities = new Map([
+    [
+      1n,
+      {
+        kind: "physical-machine",
+        record: {
+          data: {
+            interfaces: [
+              {
+                name: "wlan0",
+                wireless: { role: "client", profiles: [{ wirelessNetworkId: 3n }] },
+              },
+            ],
+          },
+        },
+      },
+    ],
+    [
+      3n,
+      {
+        kind: "wireless-network",
+        record: {
+          data: {
+            interfaces: [{ wireless: { broadcasts: [{ wirelessNetworkId: 3n, segmentId: 2n }] } }],
+          },
+        },
+      },
+    ],
+  ]);
+
+  expect(
+    validateOverlayEndpointInterfaces(record.data.encapsulation.endpoints, record, entities),
+  ).toEqual([]);
+  entities.get(3n).record.data.interfaces[0].wireless.broadcasts[0].segmentId = 4n;
+  expect(
+    validateOverlayEndpointInterfaces(record.data.encapsulation.endpoints, record, entities).map(
+      ({ pointer }) => pointer,
+    ),
+  ).toEqual(["/encapsulation/endpoints/0/interfaceName"]);
+});

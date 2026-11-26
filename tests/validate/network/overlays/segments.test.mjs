@@ -11,7 +11,10 @@ test("accepts VXLAN overlay and underlay segment references", () => {
   ]);
   expect(
     validateOverlaySegmentReferences(
-      record({ networking: { overlaySegmentIds: [2n] }, encapsulation: { underlaySegmentId: 3n } }),
+      record({
+        networking: { overlaySegmentIds: [2n] },
+        encapsulation: { underlaySegmentId: 3n },
+      }),
       entities,
     ),
   ).toEqual([]);
@@ -47,7 +50,10 @@ test("skips invalid segment records and absent references", () => {
   ]);
   expect(
     validateOverlaySegmentReferences(
-      record({ networking: { overlaySegmentIds: [2n] }, encapsulation: { underlaySegmentId: 3n } }),
+      record({
+        networking: { overlaySegmentIds: [2n] },
+        encapsulation: { underlaySegmentId: 3n },
+      }),
       entities,
     ),
   ).toEqual([]);

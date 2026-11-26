@@ -23,6 +23,7 @@ export default function validateOverlayEndpointInterfaces(endpoints, record, ent
     const segmentIds = [
       networkInterface.segmentId,
       ...(networkInterface.wireless?.broadcasts ?? []).map(({ segmentId }) => segmentId),
+      ...profileSegmentIds(networkInterface, entitiesById),
     ].filter((id) => id !== undefined);
     if (
       underlaySegmentId !== undefined &&
@@ -40,4 +41,19 @@ export default function validateOverlayEndpointInterfaces(endpoints, record, ent
       ];
     return [];
   });
+}
+
+function profileSegmentIds(networkInterface, entitiesById) {
+  const networkIds = new Set(
+    (networkInterface.wireless?.profiles ?? []).map(({ wirelessNetworkId }) => wirelessNetworkId),
+  );
+  const segmentIds = [];
+  for (const entity of entitiesById.values()) {
+    for (const networkInterface of entity.record?.data.interfaces ?? []) {
+      for (const broadcast of networkInterface.wireless?.broadcasts ?? []) {
+        if (networkIds.has(broadcast.wirelessNetworkId)) segmentIds.push(broadcast.segmentId);
+      }
+    }
+  }
+  return segmentIds;
 }
