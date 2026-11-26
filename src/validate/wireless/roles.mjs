@@ -4,6 +4,7 @@ export default function validateWirelessRoles(checks, record, entitiesById) {
   return checks.flatMap(([id, pointer, kinds, role]) => {
     const target = entitiesById.get(id);
     if (!target || target.invalid) return [];
+    // A missing roles array falls through because it cannot satisfy the required role.
     if (!kinds.includes(target.kind) || target.record.data.roles?.includes(role)) return [];
     return [
       createDiagnostic(

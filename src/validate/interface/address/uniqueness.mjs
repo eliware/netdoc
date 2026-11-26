@@ -29,6 +29,7 @@ export default function validateInterfaceAddressUniqueness(
     range,
   };
   for (const segmentId of segmentIds) {
+    // Separate segments may have the same IP address.
     const key = `${segmentId}:${parsed.version}`;
     const current = assignments.get(key) ?? [];
     const overlaps = current.filter((item) => rangesOverlap(item.range, range));

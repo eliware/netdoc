@@ -81,6 +81,7 @@ function rejectDuplicateHostnames(hostnames) {
 }
 
 function normalizeGroupValue(value) {
+  // Fixed prefixes keep group names nonempty when normalization removes the full value.
   return value
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "_")
