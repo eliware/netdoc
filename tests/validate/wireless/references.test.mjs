@@ -46,6 +46,7 @@ test("includes wireless profile and broadcast uniqueness diagnostics", () => {
     {
       file: "client.yaml",
       data: {
+        id: 10n,
         interfaces: [
           {
             wireless: {
@@ -59,12 +60,14 @@ test("includes wireless profile and broadcast uniqueness diagnostics", () => {
         ],
       },
     },
-    new Map(),
-  );
-  expect(diagnostics.map(({ pointer }) => pointer)).toEqual(
-    expect.arrayContaining([
-      "/interfaces/0/wireless/profiles/1",
-      "/interfaces/0/wireless/broadcasts/1",
+    new Map([
+      [1n, { kind: "wireless-network" }],
+      [2n, { kind: "wireless-network" }],
+      [3n, { kind: "network-segment" }],
     ]),
   );
+  expect(diagnostics.map(({ pointer, objectId }) => [pointer, objectId])).toEqual([
+    ["/interfaces/0/wireless/profiles/1", 10n],
+    ["/interfaces/0/wireless/broadcasts/1", 10n],
+  ]);
 });
