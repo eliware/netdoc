@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { createGraphContext } from "../../src/graph/context.mjs";
-import { buildInterfaceEdges } from "../../src/graph/interfaces.mjs";
+import createGraphContext from "../../src/graph/context.mjs";
+import buildInterfaceEdges from "../../src/graph/interfaces.mjs";
 
 test("links interfaces to segments, peer interfaces, and resident hosts", () => {
   const router = {

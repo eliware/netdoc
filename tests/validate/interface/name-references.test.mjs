@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateInterfaceNameReferences } from "../../../src/validate/interface/name-references.mjs";
+import validateInterfaceNameReferences from "../../../src/validate/interface/name-references.mjs";
 
 test("checks parent interface references", () => {
   const record = {

@@ -1,11 +1,11 @@
-import { parseFreshnessArguments } from "./arguments.mjs";
-import { collectReviewFreshness } from "./review-dates.mjs";
-import { formatReviewFreshness } from "./format.mjs";
-import { runInventoryValidation } from "../validation/run.mjs";
-import { reportValidationErrors } from "../validation/report.mjs";
-import { reportValidationSetupError } from "../validation/setup-result.mjs";
+import parseFreshnessArguments from "./arguments.mjs";
+import collectReviewFreshness from "./review-dates.mjs";
+import formatReviewFreshness from "./format.mjs";
+import runInventoryValidation from "../validation/run.mjs";
+import reportValidationErrors from "../validation/report-validation-errors.mjs";
+import reportValidationSetupError from "../validation/setup-result.mjs";
 
-export function reportInventoryFreshness(args, options = {}) {
+export default function reportInventoryFreshness(args, options = {}) {
   const parsed = parseFreshnessArguments(args);
   const error = options.error ?? console.error;
   if (parsed.error !== undefined) {

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { switchPortSegmentFields } from "../../../../../src/validate/switch/port/segment/fields.mjs";
+import switchPortSegmentFields from "../../../../../src/validate/switch/port/segment/fields.mjs";
 
 test("collects access, trunk, and PVID segment fields with pointers", () => {
   const record = {

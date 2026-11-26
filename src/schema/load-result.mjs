@@ -1,6 +1,6 @@
-import { loadSchemaValidators } from "./validators.mjs";
+import loadSchemaValidators from "./validators.mjs";
 
-export function tryLoadSchemaValidators(schemaDirectory) {
+export default function tryLoadSchemaValidators(schemaDirectory) {
   try {
     return { validators: loadSchemaValidators(schemaDirectory) };
   } catch (cause) {

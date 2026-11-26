@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { isAllowedDhcpSharing } from "../../../../../src/validate/interface/address/dhcp/sharing.mjs";
+import isAllowedDhcpSharing from "../../../../../src/validate/interface/address/dhcp/sharing.mjs";
 
 test("allows matching DHCP lease and reservation ranges", () => {
   expect(

@@ -1,8 +1,8 @@
-import { createDiagnostic } from "../diagnostics.mjs";
+import createDiagnostic from "../diagnostics.mjs";
 
 const maximumId = 9223372036854775807n;
 
-export function validateIdentifiers(records) {
+export default function validateIdentifiers(records) {
   const previousIds = new Map();
   const diagnostics = [];
   for (const record of records) {

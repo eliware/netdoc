@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { buildAddressPoolElements } from "../../../src/graph/networking/address-pools.mjs";
+import buildAddressPoolElements from "../../../src/graph/networking/address-pools.mjs";
 
 test("renders CIDR and address-range pools", () => {
   expect(

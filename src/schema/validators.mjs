@@ -1,8 +1,8 @@
 import { pathToFileURL } from "node:url";
 import path from "node:path";
-import { loadSchemaRegistry } from "./registry.mjs";
+import loadSchemaRegistry from "./registry.mjs";
 
-export function loadSchemaValidators(schemaDirectory) {
+export default function loadSchemaValidators(schemaDirectory) {
   const registry = loadSchemaRegistry(schemaDirectory);
   const { ajv, schemaByKind } = registry;
   return Object.fromEntries(

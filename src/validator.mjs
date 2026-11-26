@@ -1,8 +1,8 @@
-import { reportValidationResult } from "./validation/report.mjs";
-import { reportValidationSetupError } from "./validation/setup-result.mjs";
-import { runInventoryValidation } from "./validation/run.mjs";
+import reportValidationResult from "./validation/report.mjs";
+import reportValidationSetupError from "./validation/setup-result.mjs";
+import runInventoryValidation from "./validation/run.mjs";
 
-export function validateTarget(
+export default function validateTarget(
   target,
   {
     write = console.log,

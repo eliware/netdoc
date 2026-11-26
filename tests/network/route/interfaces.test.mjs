@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { routeInterfaceFields } from "../../../src/network/route/interfaces.mjs";
+import routeInterfaceFields from "../../../src/network/route/interfaces.mjs";
 
 test("collects interface names from routes and VRRP groups", () => {
   expect(

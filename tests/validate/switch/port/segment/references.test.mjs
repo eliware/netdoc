@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateSwitchPortSegmentReferences } from "../../../../../src/validate/switch/port/segment/references.mjs";
+import validateSwitchPortSegmentReferences from "../../../../../src/validate/switch/port/segment/references.mjs";
 
 test("reports missing and wrong-kind switch port segment references", () => {
   const record = {

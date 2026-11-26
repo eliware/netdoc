@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateRoutingPeerReferences } from "../../src/validate/routing-peer-references.mjs";
+import validateRoutingPeerReferences from "../../src/validate/routing-peer-references.mjs";
 
 test("checks BGP peer IDs and skips peers without IDs", () => {
   const record = {

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateWirelessBroadcastUniqueness } from "../../../src/validate/wireless/broadcast-uniqueness.mjs";
+import validateWirelessBroadcastUniqueness from "../../../src/validate/wireless/broadcast-uniqueness.mjs";
 
 test("allows different broadcasts and reports repeated network-segment pairs", () => {
   const diagnostics = validateWirelessBroadcastUniqueness({

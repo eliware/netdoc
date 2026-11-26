@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { findEndpointInterface } from "../../../src/graph/networking/endpoint-interfaces.mjs";
+import findEndpointInterface from "../../../src/graph/networking/endpoint-interfaces.mjs";
 
 test("finds one matching host interface address", () => {
   const context = {

@@ -1,4 +1,4 @@
-export function selectRelationshipValidationRecords(records, idDiagnostics) {
+export default function selectRelationshipValidationRecords(records, idDiagnostics) {
   const invalidIds = new Set(
     idDiagnostics
       .map(({ objectId }) => objectId)

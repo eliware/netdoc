@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { addressInNetwork } from "../../../src/network/address/membership.mjs";
+import addressInNetwork from "../../../src/network/address/membership.mjs";
 
 test("checks IPv4 and IPv6 address membership", () => {
   expect(addressInNetwork("192.0.2.8", "192.0.2.0/24")).toBe(true);

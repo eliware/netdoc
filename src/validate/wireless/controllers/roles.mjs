@@ -1,6 +1,6 @@
-import { validateWirelessRoles } from "../roles.mjs";
+import validateWirelessRoles from "../roles.mjs";
 
-export function validateWirelessControllerRoles(record, entitiesById) {
+export default function validateWirelessControllerRoles(record, entitiesById) {
   const controllerId = record.data.wirelessManagement?.controllerId;
   if (controllerId === undefined) return [];
   return validateWirelessRoles(

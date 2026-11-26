@@ -1,5 +1,5 @@
-import { networkPolicyValueFields } from "../policy/value-fields.mjs";
+import networkPolicyValueFields from "../policy/value-fields.mjs";
 
-export function networkPolicyFields(network) {
+export default function networkPolicyFields(network) {
   return networkPolicyValueFields(network);
 }

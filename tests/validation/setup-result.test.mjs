@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { reportValidationSetupError } from "../../src/validation/setup-result.mjs";
+import reportValidationSetupError from "../../src/validation/setup-result.mjs";
 
 test("returns without output when setup succeeds", () => {
   const error = jest.fn();

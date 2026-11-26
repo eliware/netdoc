@@ -1,5 +1,5 @@
-import { validateDnsNameDuplicates } from "./duplicates.mjs";
+import validateDnsNameDuplicates from "./duplicates.mjs";
 
-export function validateDnsNameDuplicatesAcrossRecords(records) {
+export default function validateDnsNameDuplicatesAcrossRecords(records) {
   return records.flatMap((record) => validateDnsNameDuplicates(record));
 }

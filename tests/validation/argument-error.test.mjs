@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { reportValidationArgumentError } from "../../src/validation/argument-error.mjs";
+import reportValidationArgumentError from "../../src/validation/argument-error.mjs";
 
 test("reports invalid JSON-mode arguments as one JSON document", () => {
   const write = jest.fn();

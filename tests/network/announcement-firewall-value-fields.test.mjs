@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { networkAnnouncementFirewallValueFields } from "../../src/network/announcement-firewall-value-fields.mjs";
+import networkAnnouncementFirewallValueFields from "../../src/network/announcement-firewall-value-fields.mjs";
 
 test("collects announcement and firewall address fields", () => {
   expect(

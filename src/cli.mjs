@@ -1,6 +1,6 @@
 import { log as defaultLog } from "@eliware/common";
 
-export function runCli(
+export default function runCli(
   args,
   { version, log = defaultLog, write = console.log, validate, report, graph, generateIds },
 ) {

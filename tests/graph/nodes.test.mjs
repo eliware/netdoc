@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { createGraphContext } from "../../src/graph/context.mjs";
-import { buildInventoryNodes } from "../../src/graph/nodes.mjs";
+import createGraphContext from "../../src/graph/context.mjs";
+import buildInventoryNodes from "../../src/graph/nodes.mjs";
 
 test("builds nodes for inventory records and interfaces", () => {
   const records = [

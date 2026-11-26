@@ -1,6 +1,6 @@
-import { validationJson } from "./json-report.mjs";
+import validationJson from "./json-report.mjs";
 
-export function reportValidationArgumentError(argumentResult, options = {}) {
+export default function reportValidationArgumentError(argumentResult, options = {}) {
   if (argumentResult.format === "json") {
     (options.write ?? console.log)(
       validationJson({

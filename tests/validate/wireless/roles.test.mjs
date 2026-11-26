@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateWirelessRoles } from "../../../src/validate/wireless/roles.mjs";
+import validateWirelessRoles from "../../../src/validate/wireless/roles.mjs";
 
 const record = { file: "client.yaml", data: { id: 1n } };
 const check = [

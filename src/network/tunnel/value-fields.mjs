@@ -1,4 +1,4 @@
-export function networkTunnelValueFields(network) {
+export default function networkTunnelValueFields(network) {
   const fields = [];
   const add = (path, value, isNetwork = false) => fields.push([path, value, isNetwork]);
   (network.tunnels ?? []).forEach((item, i) => {

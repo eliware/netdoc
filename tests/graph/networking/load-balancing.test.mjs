@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { createGraphContext } from "../../../src/graph/context.mjs";
-import { buildLoadBalancingElements } from "../../../src/graph/networking/load-balancing.mjs";
+import createGraphContext from "../../../src/graph/context.mjs";
+import buildLoadBalancingElements from "../../../src/graph/networking/load-balancing.mjs";
 
 test("returns empty elements when no listeners exist", () => {
   expect(buildLoadBalancingElements(0, "object_0", {}, {})).toEqual({ nodes: [], edges: [] });

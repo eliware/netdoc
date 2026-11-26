@@ -1,4 +1,4 @@
-export function networkRouteValueFields(network) {
+export default function networkRouteValueFields(network) {
   const route = network.routing ?? {};
   const fields = [];
   const add = (path, value, isNetwork = false, options) =>

@@ -1,6 +1,6 @@
-import { validateNetworkSegmentReference } from "../network/segment-reference.mjs";
+import validateNetworkSegmentReference from "../network/segment-reference.mjs";
 
-export function validateInterfaceSegmentReferences(record, entitiesById) {
+export default function validateInterfaceSegmentReferences(record, entitiesById) {
   return (record.data.interfaces ?? []).flatMap((networkInterface, index) =>
     validateNetworkSegmentReference(
       networkInterface.segmentId,

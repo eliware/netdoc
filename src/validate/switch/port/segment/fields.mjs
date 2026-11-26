@@ -1,4 +1,4 @@
-export function switchPortSegmentFields(record) {
+export default function switchPortSegmentFields(record) {
   return (record.data.switch?.ports ?? []).flatMap((port, index) => {
     const pointer = `/switch/ports/${index}`;
     const fields = [];

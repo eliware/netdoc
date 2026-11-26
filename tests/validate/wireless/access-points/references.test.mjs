@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateWirelessAccessPointReferences } from "../../../../src/validate/wireless/access-points/references.mjs";
+import validateWirelessAccessPointReferences from "../../../../src/validate/wireless/access-points/references.mjs";
 
 test("validates optional access point references on wireless profiles", () => {
   const record = {

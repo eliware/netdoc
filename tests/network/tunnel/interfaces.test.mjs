@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { tunnelInterfaceFields } from "../../../src/network/tunnel/interfaces.mjs";
+import tunnelInterfaceFields from "../../../src/network/tunnel/interfaces.mjs";
 
 test("collects interface names from tunnel settings", () => {
   expect(tunnelInterfaceFields({ networking: { tunnels: [{ interfaceName: "wg0" }] } })).toEqual([

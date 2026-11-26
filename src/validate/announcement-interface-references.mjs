@@ -1,6 +1,6 @@
-import { createDiagnostic } from "../diagnostics.mjs";
+import createDiagnostic from "../diagnostics.mjs";
 
-export function validateAnnouncementInterfaceReferences(record, entitiesById) {
+export default function validateAnnouncementInterfaceReferences(record, entitiesById) {
   const diagnostics = [];
   for (const [index, entry] of (record.data.networking?.l2Announcements ?? []).entries()) {
     const target = entitiesById.get(entry.nodeId);

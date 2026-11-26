@@ -1,6 +1,6 @@
 import { beforeAll, expect, test } from "@jest/globals";
 import { fileURLToPath } from "node:url";
-import { loadSchemaValidators } from "../../src/schema/validators.mjs";
+import loadSchemaValidators from "../../src/schema/validators.mjs";
 
 const root = fileURLToPath(new URL("../../specs/schema/", import.meta.url));
 let validators;

@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import path from "node:path";
 import { createMemoryFileSystem } from "../../test-fixtures/memory-file-system.mjs";
-import { reportInventoryFreshness } from "../../src/report/command.mjs";
+import reportInventoryFreshness from "../../src/report/command.mjs";
 
 test("reports stale records without failing validation", () => {
   const root = path.resolve("freshness-report-fixture");

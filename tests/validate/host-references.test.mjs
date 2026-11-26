@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateHostReferences } from "../../src/validate/host-references.mjs";
+import validateHostReferences from "../../src/validate/host-references.mjs";
 
 test("checks VM and network-device host kinds", () => {
   const entities = new Map([

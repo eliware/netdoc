@@ -1,9 +1,9 @@
-import { createDiagnostic } from "../../diagnostics.mjs";
-import { addressInNetwork } from "../../network/address/membership.mjs";
-import { addressRange } from "../../network/address/ranges.mjs";
-import { parseAddress } from "../../ip-addresses.mjs";
+import createDiagnostic from "../../diagnostics.mjs";
+import addressInNetwork from "../../network/address/membership.mjs";
+import addressRange from "../../network/address/ranges.mjs";
+import parseAddress from "../../ip-addresses.mjs";
 
-export function validateSegmentGateway(record, network, index) {
+export default function validateSegmentGateway(record, network, index) {
   if (network.gateway === undefined || isUsableGateway(network.gateway, network.cidr)) return [];
   return [
     createDiagnostic(

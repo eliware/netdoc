@@ -1,5 +1,5 @@
-import { validateNetworkAddressValues } from "../../validate/network/address/collection.mjs";
+import validateNetworkAddressValues from "../../validate/network/address/collection.mjs";
 
-export function validateNetworkValues(records) {
+export default function validateNetworkValues(records) {
   return records.flatMap(validateNetworkAddressValues);
 }

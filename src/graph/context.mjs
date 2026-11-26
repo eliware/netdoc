@@ -1,6 +1,6 @@
-import { indexWirelessBroadcastSegments } from "./wireless/broadcast-segments.mjs";
+import indexWirelessBroadcastSegments from "./wireless/broadcast-segments.mjs";
 
-export function createGraphContext(records) {
+export default function createGraphContext(records) {
   const objectNodeByRecord = new Map();
   const objectNodeById = new Map();
   const recordById = new Map();

@@ -1,6 +1,6 @@
-import { createDiagnostic } from "../../diagnostics.mjs";
+import createDiagnostic from "../../diagnostics.mjs";
 
-export function validateWirelessProfileUniqueness(record) {
+export default function validateWirelessProfileUniqueness(record) {
   const diagnostics = [];
   (record.data.interfaces ?? []).forEach((networkInterface, interfaceIndex) => {
     const seen = new Set();

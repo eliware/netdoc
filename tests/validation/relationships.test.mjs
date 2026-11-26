@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateRelationships } from "../../src/validation/relationships.mjs";
+import validateRelationships from "../../src/validation/relationships.mjs";
 
 test("validates references with a shared entity index", () => {
   const record = {

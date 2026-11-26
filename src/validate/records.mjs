@@ -1,7 +1,7 @@
-import { createDiagnostic } from "../diagnostics.mjs";
-import { convertBigIntsForValidation } from "../validation/value-conversion.mjs";
+import createDiagnostic from "../diagnostics.mjs";
+import convertBigIntsForValidation from "../validation/value-conversion.mjs";
 
-export function validateRecords(records, validators) {
+export default function validateRecords(records, validators) {
   const diagnostics = [];
   const validRecords = [];
   for (const record of records) {

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateWirelessControllerRoles } from "../../../../src/validate/wireless/controllers/roles.mjs";
+import validateWirelessControllerRoles from "../../../../src/validate/wireless/controllers/roles.mjs";
 
 test("validates wireless controller roles", () => {
   const record = { file: "ap.yaml", data: { wirelessManagement: { controllerId: 3n } } };

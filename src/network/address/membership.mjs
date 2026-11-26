@@ -1,6 +1,6 @@
-import { parseAddress } from "../../ip-addresses.mjs";
+import parseAddress from "../../ip-addresses.mjs";
 
-export function addressInNetwork(address, network) {
+export default function addressInNetwork(address, network) {
   const parsedAddress = parseAddress(address);
   const parsedNetwork = parseAddress(network);
   return Boolean(

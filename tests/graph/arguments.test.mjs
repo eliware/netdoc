@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseGraphArguments } from "../../src/graph/arguments.mjs";
+import parseGraphArguments from "../../src/graph/arguments.mjs";
 
 test("parses Mermaid graph arguments", () => {
   expect(parseGraphArguments(["inventory", "--format", "mermaid"])).toEqual({

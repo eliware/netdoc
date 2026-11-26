@@ -1,6 +1,6 @@
-import { createDiagnostic } from "../diagnostics.mjs";
+import createDiagnostic from "../diagnostics.mjs";
 
-export function validateTrunkSwitchPorts(records, entitiesById) {
+export default function validateTrunkSwitchPorts(records, entitiesById) {
   const diagnostics = [];
   for (const record of records) {
     for (const [index, port] of (record.data.switch?.ports ?? []).entries()) {

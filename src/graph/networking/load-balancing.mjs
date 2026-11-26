@@ -1,8 +1,9 @@
-import { edgeLine, nodeLine } from "../labels.mjs";
-import { buildAddressPoolElements } from "./address-pools.mjs";
-import { buildLoadBalancingTargetElements } from "./targets.mjs";
+import edgeLine from "../edge-line.mjs";
+import nodeLine from "../node-line.mjs";
+import buildAddressPoolElements from "./address-pools.mjs";
+import buildLoadBalancingTargetElements from "./targets.mjs";
 
-export function buildLoadBalancingElements(index, source, networking, context) {
+export default function buildLoadBalancingElements(index, source, networking, context) {
   const nodes = [];
   const edges = [];
   const pools = buildAddressPoolElements(

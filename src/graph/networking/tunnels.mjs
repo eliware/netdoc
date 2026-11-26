@@ -1,7 +1,8 @@
-import { edgeLine, nodeLine } from "../labels.mjs";
-import { findEndpointInterface } from "./endpoint-interfaces.mjs";
+import edgeLine from "../edge-line.mjs";
+import nodeLine from "../node-line.mjs";
+import findEndpointInterface from "./endpoint-interfaces.mjs";
 
-export function buildTunnelElements(index, source, networking, context) {
+export default function buildTunnelElements(index, source, networking, context) {
   const nodes = [];
   const edges = [];
   (networking.tunnels ?? []).forEach((tunnel, tunnelIndex) => {

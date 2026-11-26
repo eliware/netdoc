@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateInterfaceAddressFormat } from "../../../../src/validate/interface/address/format.mjs";
+import validateInterfaceAddressFormat from "../../../../src/validate/interface/address/format.mjs";
 
 test("returns parsed addresses and reports invalid values", () => {
   const record = { file: "node.yaml", data: { id: 7n } };

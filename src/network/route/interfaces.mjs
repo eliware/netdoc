@@ -1,4 +1,4 @@
-export function routeInterfaceFields(data) {
+export default function routeInterfaceFields(data) {
   const routing = data.networking?.routing ?? {};
   return [
     ...(routing.staticRoutes ?? []).map((item, index) => [

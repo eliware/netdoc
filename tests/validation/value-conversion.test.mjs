@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { convertBigIntsForValidation } from "../../src/validation/value-conversion.mjs";
+import convertBigIntsForValidation from "../../src/validation/value-conversion.mjs";
 
 test("converts nested BigInts and preserves other values", () => {
   const date = new Date("2026-01-01T00:00:00Z");

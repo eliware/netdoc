@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateInventoryArguments } from "../../src/validate/arguments.mjs";
+import validateInventoryArguments from "../../src/validate/arguments.mjs";
 
 test("accepts one path with the default text format", () => {
   expect(validateInventoryArguments(["inventory"])).toEqual({ path: "inventory", format: "text" });

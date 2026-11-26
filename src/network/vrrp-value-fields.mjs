@@ -1,4 +1,4 @@
-export function networkVrrpValueFields(network) {
+export default function networkVrrpValueFields(network) {
   const fields = [];
   (network.routing?.vrrp ?? []).forEach((item, i) =>
     (item.virtualAddresses ?? []).forEach((value, j) =>

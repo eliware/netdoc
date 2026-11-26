@@ -1,7 +1,8 @@
-import { addressInNetwork } from "../../network/address/membership.mjs";
-import { edgeLine, nodeLine } from "../labels.mjs";
+import addressInNetwork from "../../network/address/membership.mjs";
+import edgeLine from "../edge-line.mjs";
+import nodeLine from "../node-line.mjs";
 
-export function buildRouteElements(index, source, networking, context) {
+export default function buildRouteElements(index, source, networking, context) {
   const nodes = [];
   const edges = [];
   addDefaultGateway(index, source, networking, context, nodes, edges);

@@ -1,4 +1,4 @@
-export function loadBalancerAddressPoolFields(network) {
+export default function loadBalancerAddressPoolFields(network) {
   const fields = [];
   const add = (path, value, isNetwork, options) => fields.push([path, value, isNetwork, options]);
   (network.loadBalancing?.addressPools ?? []).forEach((pool, i) => {

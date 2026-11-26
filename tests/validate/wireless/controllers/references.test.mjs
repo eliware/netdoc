@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateWirelessControllerReferences } from "../../../../src/validate/wireless/controllers/references.mjs";
+import validateWirelessControllerReferences from "../../../../src/validate/wireless/controllers/references.mjs";
 
 test("validates controller references on records with wireless client profiles", () => {
   const record = {

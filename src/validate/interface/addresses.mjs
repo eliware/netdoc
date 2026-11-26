@@ -1,6 +1,6 @@
-import { validateInterfaceAddress } from "./address.mjs";
+import validateInterfaceAddress from "./address.mjs";
 
-export function validateInterfaceAddresses(records, entitiesById) {
+export default function validateInterfaceAddresses(records, entitiesById) {
   const diagnostics = [];
   const assignments = new Map();
   for (const record of records) {

@@ -1,8 +1,8 @@
-import { edgeLine } from "./labels.mjs";
-import { segmentLabel } from "./inventory-labels.mjs";
-import { wirelessProfileSegments } from "./wireless-profiles.mjs";
+import edgeLine from "./edge-line.mjs";
+import segmentLabel from "./segment-label.mjs";
+import wirelessProfileSegments from "./wireless/profiles.mjs";
 
-export function buildInterfaceEdges(context) {
+export default function buildInterfaceEdges(context) {
   const edges = [];
   for (const [recordIndex, record] of context.records.entries()) {
     for (const [interfaceIndex, networkInterface] of (record.data.interfaces ?? []).entries()) {

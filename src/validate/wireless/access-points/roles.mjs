@@ -1,6 +1,6 @@
-import { validateWirelessRoles } from "../roles.mjs";
+import validateWirelessRoles from "../roles.mjs";
 
-export function validateWirelessAccessPointRoles(record, entitiesById) {
+export default function validateWirelessAccessPointRoles(record, entitiesById) {
   const checks = [];
   (record.data.interfaces ?? []).forEach((networkInterface, interfaceIndex) => {
     (networkInterface.wireless?.profiles ?? []).forEach((profile, index) => {

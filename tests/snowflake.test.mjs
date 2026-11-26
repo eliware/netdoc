@@ -1,5 +1,5 @@
 import { afterEach, expect, jest, test } from "@jest/globals";
-import { generateIds } from "../src/snowflake.mjs";
+import generateIds from "../src/snowflake.mjs";
 
 afterEach(() => jest.restoreAllMocks());
 

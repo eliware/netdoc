@@ -1,6 +1,6 @@
-import { networkAnnouncementFirewallValueFields } from "../announcement-firewall-value-fields.mjs";
-import { networkNatValueFields } from "../nat-value-fields.mjs";
+import networkAnnouncementFirewallValueFields from "../announcement-firewall-value-fields.mjs";
+import networkNatValueFields from "../nat-value-fields.mjs";
 
-export function networkPolicyValueFields(network) {
+export default function networkPolicyValueFields(network) {
   return [...networkAnnouncementFirewallValueFields(network), ...networkNatValueFields(network)];
 }

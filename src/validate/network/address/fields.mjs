@@ -1,7 +1,7 @@
-import { createDiagnostic } from "../../../diagnostics.mjs";
-import { validNetworkAddressValue } from "./value.mjs";
+import createDiagnostic from "../../../diagnostics.mjs";
+import validNetworkAddressValue from "./value.mjs";
 
-export function validateNetworkAddressFields(fields, record) {
+export default function validateNetworkAddressFields(fields, record) {
   return fields.flatMap(([pointer, value, network, options]) => {
     if (value === undefined || validNetworkAddressValue(value, network, pointer, options))
       return [];

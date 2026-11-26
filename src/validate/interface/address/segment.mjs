@@ -1,7 +1,7 @@
-import { createDiagnostic } from "../../../diagnostics.mjs";
-import { prefixInNetwork } from "../../../network/prefix-containment.mjs";
+import createDiagnostic from "../../../diagnostics.mjs";
+import prefixInNetwork from "../../../network/prefix-containment.mjs";
 
-export function validateInterfaceAddressSegment(cidr, record, pointer, segment) {
+export default function validateInterfaceAddressSegment(cidr, record, pointer, segment) {
   const networks = segment?.ipNetworks ?? [];
   if (networks.length === 0 || networks.some(({ cidr: network }) => prefixInNetwork(cidr, network)))
     return [];

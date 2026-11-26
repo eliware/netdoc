@@ -1,4 +1,4 @@
-export function networkNatValueFields(network) {
+export default function networkNatValueFields(network) {
   const fields = [];
   const add = (path, value, options) =>
     fields.push(options ? [path, value, false, options] : [path, value, false]);

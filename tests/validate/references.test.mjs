@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateReferences } from "../../src/validate/references.mjs";
+import validateReferences from "../../src/validate/references.mjs";
 
 test("coordinates local, segment, object, and connection checks", () => {
   const record = {

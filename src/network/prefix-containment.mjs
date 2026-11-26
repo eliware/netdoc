@@ -1,7 +1,7 @@
-import { addressInNetwork } from "./address/membership.mjs";
-import { parseAddress } from "../ip-addresses.mjs";
+import addressInNetwork from "./address/membership.mjs";
+import parseAddress from "../ip-addresses.mjs";
 
-export function prefixInNetwork(prefix, network) {
+export default function prefixInNetwork(prefix, network) {
   const parsedPrefix = parseAddress(prefix);
   const parsedNetwork = parseAddress(network);
   return Boolean(

@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { networkPolicyFields } from "../../../src/network/value/policy.mjs";
-import { networkPolicyValueFields } from "../../../src/network/policy/value-fields.mjs";
+import networkPolicyFields from "../../../src/network/value/policy.mjs";
+import networkPolicyValueFields from "../../../src/network/policy/value-fields.mjs";
 
 test("collects policy values through the existing policy collector", () => {
   const network = {

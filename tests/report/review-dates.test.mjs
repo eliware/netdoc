@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { collectReviewFreshness } from "../../src/report/review-dates.mjs";
+import collectReviewFreshness from "../../src/report/review-dates.mjs";
 
 test("classifies missing, current, stale, future, and invalid review dates by UTC day", () => {
   const records = [

@@ -1,6 +1,6 @@
-import { validateLocalInterfaceNameFields } from "../../local/interface-name-fields.mjs";
+import validateLocalInterfaceNameFields from "../../local/interface-name-fields.mjs";
 
-export function validateSwitchPortReferences(record) {
+export default function validateSwitchPortReferences(record) {
   const names = new Set((record.data.interfaces ?? []).map(({ name }) => name));
   const fields = (record.data.switch?.ports ?? []).map((port, index) => [
     `/switch/ports/${index}/interfaceName`,

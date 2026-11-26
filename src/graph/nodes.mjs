@@ -1,7 +1,8 @@
-import { nodeLine } from "./labels.mjs";
-import { interfaceLabel, objectLabel } from "./inventory-labels.mjs";
+import nodeLine from "./node-line.mjs";
+import interfaceLabel from "./interface-label.mjs";
+import objectLabel from "./inventory-labels.mjs";
 
-export function buildInventoryNodes(context) {
+export default function buildInventoryNodes(context) {
   const lines = [];
   context.records.forEach((record, recordIndex) => {
     lines.push(nodeLine(`object_${recordIndex}`, objectLabel(record)));

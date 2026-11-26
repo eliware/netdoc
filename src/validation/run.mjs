@@ -1,9 +1,9 @@
-import { tryLoadInventory } from "../inventory-loader.mjs";
-import { tryLoadSchemaValidators } from "../schema/load-result.mjs";
-import { validateRecords } from "../validate/records.mjs";
-import { runValidationPipeline } from "./pipeline.mjs";
+import tryLoadInventory from "../try-load-inventory.mjs";
+import tryLoadSchemaValidators from "../schema/load-result.mjs";
+import validateRecords from "../validate/records.mjs";
+import runValidationPipeline from "./pipeline.mjs";
 
-export function runInventoryValidation(target, options = {}) {
+export default function runInventoryValidation(target, options = {}) {
   const inventoryResult = tryLoadInventory(target, options);
   if (inventoryResult.error !== undefined) return setupError(inventoryResult.error);
   const { inventory } = inventoryResult;

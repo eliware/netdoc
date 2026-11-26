@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateOverlaySegmentReferences } from "../../../../src/validate/network/overlays/segments.mjs";
+import validateOverlaySegmentReferences from "../../../../src/validate/network/overlays/segments.mjs";
 
 const record = (data = {}) => ({ file: "overlay.yaml", data: { id: 1n, ...data } });
 const segment = (kind = "network-segment", data = {}) => ({ kind, record: { data } });

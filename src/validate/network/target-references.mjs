@@ -1,6 +1,6 @@
-import { objectReferenceDiagnostics } from "../../object-reference-diagnostics.mjs";
+import objectReferenceDiagnostics from "../../object-reference-diagnostics.mjs";
 
-export function validateNetworkTargetReferences(record, entitiesById) {
+export default function validateNetworkTargetReferences(record, entitiesById) {
   const network = record.data.networking ?? {};
   const expected = ["physical-machine", "virtual-machine", "network-device"];
   const checks = [];

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateAnnouncementInterfaceReferences } from "../../src/validate/announcement-interface-references.mjs";
+import validateAnnouncementInterfaceReferences from "../../src/validate/announcement-interface-references.mjs";
 
 test("checks announcement interface names on referenced objects", () => {
   const record = {

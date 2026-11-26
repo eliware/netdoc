@@ -1,6 +1,7 @@
-import { edgeLine, nodeLine } from "../labels.mjs";
+import edgeLine from "../edge-line.mjs";
+import nodeLine from "../node-line.mjs";
 
-export function buildVrrpElements(index, source, networking, context) {
+export default function buildVrrpElements(index, source, networking, context) {
   const nodes = [];
   const edges = [];
   (networking.routing?.vrrp ?? []).forEach((group, groupIndex) => {

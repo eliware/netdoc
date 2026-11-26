@@ -7,7 +7,8 @@ generated/
 artifacts/
 test-results/
 .env*
-!.env*.example
+!.env.example
+!**/.env.example
 .DS_Store
 Thumbs.db
 .nyc_output/

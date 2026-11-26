@@ -1,8 +1,8 @@
 import path from "node:path";
-import { createDiagnostic } from "../diagnostics.mjs";
-import { parseYamlFile } from "./parser.mjs";
+import createDiagnostic from "../diagnostics.mjs";
+import parseYamlFile from "./parser.mjs";
 
-export function parseInventoryRecords(files, { cwd, fileSystem }) {
+export default function parseInventoryRecords(files, { cwd, fileSystem }) {
   const records = [];
   const diagnostics = [];
   for (const file of files) {

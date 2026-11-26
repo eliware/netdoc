@@ -1,4 +1,4 @@
-export function indexInterfaceEntities(entitiesById, record, invalid) {
+export default function indexInterfaceEntities(entitiesById, record, invalid) {
   const interfaces = Array.isArray(record.data.interfaces) ? record.data.interfaces : [];
   interfaces.forEach((networkInterface, index) => {
     if (!networkInterface || typeof networkInterface !== "object") return;

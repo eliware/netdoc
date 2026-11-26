@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { runCli } from "../src/cli.mjs";
+import runCli from "../src/cli.mjs";
 
 const handlers = () => ({
   validate: jest.fn(() => 0),

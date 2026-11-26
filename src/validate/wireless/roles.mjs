@@ -1,6 +1,6 @@
-import { createDiagnostic } from "../../diagnostics.mjs";
+import createDiagnostic from "../../diagnostics.mjs";
 
-export function validateWirelessRoles(checks, record, entitiesById) {
+export default function validateWirelessRoles(checks, record, entitiesById) {
   return checks.flatMap(([id, pointer, kinds, role]) => {
     const target = entitiesById.get(id);
     if (!target || target.invalid) return [];

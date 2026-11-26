@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { buildLoadBalancingTargetElements } from "../../../src/graph/networking/targets.mjs";
+import buildLoadBalancingTargetElements from "../../../src/graph/networking/targets.mjs";
 
 test("renders known device targets and standalone target nodes", () => {
   const elements = buildLoadBalancingTargetElements(

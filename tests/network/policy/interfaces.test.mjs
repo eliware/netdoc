@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { policyInterfaceFields } from "../../../src/network/policy/interfaces.mjs";
+import policyInterfaceFields from "../../../src/network/policy/interfaces.mjs";
 
 test("collects interface names from NAT rules and firewall zones", () => {
   expect(

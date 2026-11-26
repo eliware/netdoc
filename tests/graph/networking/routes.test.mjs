@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { createGraphContext } from "../../../src/graph/context.mjs";
-import { buildRouteElements } from "../../../src/graph/networking/routes.mjs";
+import createGraphContext from "../../../src/graph/context.mjs";
+import buildRouteElements from "../../../src/graph/networking/routes.mjs";
 
 test("links route destinations to matching segments and renders unmatched routes", () => {
   const router = { data: { kind: "network-device", networking: {} } };

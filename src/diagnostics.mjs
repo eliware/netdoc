@@ -1,6 +1,6 @@
-import { diagnosticCode } from "./validation/diagnostic-code.mjs";
+import diagnosticCode from "./validation/diagnostic-code.mjs";
 
-export function createDiagnostic(file, pointer, objectId, message, suggestion, code) {
+export default function createDiagnostic(file, pointer, objectId, message, suggestion, code) {
   return {
     code: code ?? diagnosticCode(message),
     severity: "error",

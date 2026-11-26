@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { buildBgpElements } from "../../../src/graph/networking/bgp.mjs";
+import buildBgpElements from "../../../src/graph/networking/bgp.mjs";
 
 test("renders known BGP peers as edges and unknown peers as nodes", () => {
   const result = buildBgpElements(

@@ -2,7 +2,7 @@ import { afterEach, expect, test, jest } from "@jest/globals";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createMemoryFileSystem } from "../test-fixtures/memory-file-system.mjs";
-import { validateTarget } from "../src/validator.mjs";
+import validateTarget from "../src/validator.mjs";
 
 const root = path.resolve("validation-fixture");
 const validRecord =

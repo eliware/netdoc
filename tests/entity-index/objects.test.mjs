@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { indexObjectEntity } from "../../src/entity-index/objects.mjs";
+import indexObjectEntity from "../../src/entity-index/objects.mjs";
 
 test("indexes valid and invalid object IDs", () => {
   const entities = new Map();

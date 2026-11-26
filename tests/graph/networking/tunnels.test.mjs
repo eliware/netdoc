@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { buildTunnelElements } from "../../../src/graph/networking/tunnels.mjs";
+import buildTunnelElements from "../../../src/graph/networking/tunnels.mjs";
 
 test("returns empty tunnel elements when no tunnel config exists", () => {
   expect(buildTunnelElements(0, "object_0", {}, { records: [] })).toEqual({

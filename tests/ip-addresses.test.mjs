@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseAddress } from "../src/ip-addresses.mjs";
+import parseAddress from "../src/ip-addresses.mjs";
 
 test("parses IPv4 and IPv6 addresses with prefixes", () => {
   expect(parseAddress("192.0.2.1/24")).toMatchObject({

@@ -1,7 +1,7 @@
 import { expect, jest, test } from "@jest/globals";
 import path from "node:path";
 import { createMemoryFileSystem } from "../../test-fixtures/memory-file-system.mjs";
-import { graphInventory } from "../../src/graph/command.mjs";
+import graphInventory from "../../src/graph/command.mjs";
 
 test("renders a validated inventory and reports its configured tunnel", () => {
   const root = path.resolve("graph-command-fixture");

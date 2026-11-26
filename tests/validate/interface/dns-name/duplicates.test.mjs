@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateDnsNameDuplicates } from "../../../../src/validate/interface/dns-name/duplicates.mjs";
+import validateDnsNameDuplicates from "../../../../src/validate/interface/dns-name/duplicates.mjs";
 
 const record = (dnsNames) => ({
   file: "nas.yaml",

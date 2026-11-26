@@ -1,6 +1,6 @@
-import { parseAddress } from "../../ip-addresses.mjs";
+import parseAddress from "../../ip-addresses.mjs";
 
-export function findEndpointInterface(address, context) {
+export default function findEndpointInterface(address, context) {
   const endpoint = parseAddress(address);
   if (!endpoint || endpoint.prefix !== endpoint.bits) return undefined;
   const matches = [];

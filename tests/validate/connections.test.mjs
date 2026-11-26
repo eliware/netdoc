@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateConnections } from "../../src/validate/connections.mjs";
+import validateConnections from "../../src/validate/connections.mjs";
 
 test("rejects self links, absent peers, and non-interface peers", () => {
   const record = {

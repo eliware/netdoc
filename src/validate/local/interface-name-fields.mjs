@@ -1,6 +1,6 @@
-import { createDiagnostic } from "../../diagnostics.mjs";
+import createDiagnostic from "../../diagnostics.mjs";
 
-export function validateLocalInterfaceNameFields(fields, record, names) {
+export default function validateLocalInterfaceNameFields(fields, record, names) {
   return fields.flatMap(([pointer, name]) => {
     if (name === undefined || names.has(name)) return [];
     return [

@@ -1,11 +1,11 @@
-import { validateInventoryArguments } from "../validate/arguments.mjs";
-import { runInventoryValidation } from "./run.mjs";
-import { reportValidationResult } from "./report.mjs";
-import { reportValidationSetupError } from "./setup-result.mjs";
-import { validationJson } from "./json-report.mjs";
-import { reportValidationArgumentError } from "./argument-error.mjs";
+import validateInventoryArguments from "../validate/arguments.mjs";
+import runInventoryValidation from "./run.mjs";
+import reportValidationResult from "./report.mjs";
+import reportValidationSetupError from "./setup-result.mjs";
+import validationJson from "./json-report.mjs";
+import reportValidationArgumentError from "./argument-error.mjs";
 
-export function validateInventory(args, options = {}) {
+export default function validateInventory(args, options = {}) {
   const argumentResult = validateInventoryArguments(args);
   if (argumentResult.error !== undefined)
     return reportValidationArgumentError(argumentResult, options);

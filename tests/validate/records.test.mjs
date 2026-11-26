@@ -1,5 +1,5 @@
 import { expect, jest, test } from "@jest/globals";
-import { validateRecords } from "../../src/validate/records.mjs";
+import validateRecords from "../../src/validate/records.mjs";
 
 test("collects valid records and reports unsupported kinds", () => {
   const valid = jest.fn(() => true);

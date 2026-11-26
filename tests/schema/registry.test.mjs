@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { loadSchemaRegistry } from "../../src/schema/registry.mjs";
+import loadSchemaRegistry from "../../src/schema/registry.mjs";
 
 const root = fileURLToPath(new URL("../../specs/schema/", import.meta.url));
 

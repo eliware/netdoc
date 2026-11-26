@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseSnowflakeArguments } from "../src/snowflake-arguments.mjs";
+import parseSnowflakeArguments from "../src/snowflake-arguments.mjs";
 
 test("uses one ID when the command has no options", () => {
   expect(parseSnowflakeArguments([])).toEqual({ count: 1 });

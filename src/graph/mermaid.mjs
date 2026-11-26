@@ -1,10 +1,10 @@
-import { createGraphContext } from "./context.mjs";
-import { buildInterfaceEdges } from "./interfaces.mjs";
-import { buildInventoryNodes } from "./nodes.mjs";
-import { buildNetworkingElements } from "./networking.mjs";
-import { buildResidencyEdges } from "./residency.mjs";
+import createGraphContext from "./context.mjs";
+import buildInterfaceEdges from "./interfaces.mjs";
+import buildInventoryNodes from "./nodes.mjs";
+import buildNetworkingElements from "./networking.mjs";
+import buildResidencyEdges from "./residency.mjs";
 
-export function renderMermaidGraph(records) {
+export default function renderMermaidGraph(records) {
   const context = createGraphContext(records);
   const network = buildNetworkingElements(context);
   const lines = [

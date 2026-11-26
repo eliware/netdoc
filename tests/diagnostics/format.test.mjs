@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { formatDiagnostic } from "../../src/diagnostics/format.mjs";
+import formatDiagnostic from "../../src/diagnostics/format.mjs";
 
 test("formats complete diagnostics", () => {
   expect(

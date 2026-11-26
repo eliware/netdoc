@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { createGraphContext } from "../../src/graph/context.mjs";
-import { buildResidencyEdges } from "../../src/graph/residency.mjs";
+import createGraphContext from "../../src/graph/context.mjs";
+import buildResidencyEdges from "../../src/graph/residency.mjs";
 
 test("links resident virtual machines and network devices to known hosts", () => {
   const host = { data: { kind: "physical-machine", id: 1n } };

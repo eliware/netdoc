@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateSegmentGateway } from "../../../src/validate/segment/gateway.mjs";
+import validateSegmentGateway from "../../../src/validate/segment/gateway.mjs";
 
 test("accepts an in-network gateway and reports an outside gateway", () => {
   const record = { file: "segment.yaml", data: { id: 1n } };

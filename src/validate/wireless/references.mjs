@@ -1,10 +1,10 @@
-import { validateWirelessDeviceReferences } from "./device-references.mjs";
-import { validateWirelessAccessPointRoles } from "./access-points/roles.mjs";
-import { validateWirelessControllerRoles } from "./controllers/roles.mjs";
-import { validateWirelessNetworkReferences } from "./network-references.mjs";
-import { validateWirelessSegmentReferences } from "./segments.mjs";
+import validateWirelessDeviceReferences from "./device-references.mjs";
+import validateWirelessAccessPointRoles from "./access-points/roles.mjs";
+import validateWirelessControllerRoles from "./controllers/roles.mjs";
+import validateWirelessNetworkReferences from "./network-references.mjs";
+import validateWirelessSegmentReferences from "./segments.mjs";
 
-export function validateWirelessReferences(record, entitiesById) {
+export default function validateWirelessReferences(record, entitiesById) {
   return [
     ...validateWirelessNetworkReferences(record, entitiesById),
     ...validateWirelessDeviceReferences(record, entitiesById),

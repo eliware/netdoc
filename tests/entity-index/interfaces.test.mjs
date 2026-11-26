@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { indexInterfaceEntities } from "../../src/entity-index/interfaces.mjs";
+import indexInterfaceEntities from "../../src/entity-index/interfaces.mjs";
 
 test("indexes valid and invalid interface IDs", () => {
   const entities = new Map();

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createGraphContext } from "../../src/graph/context.mjs";
+import createGraphContext from "../../src/graph/context.mjs";
 
 test("indexes object and interface node IDs from records", () => {
   const record = { data: { id: 7n, interfaces: [{ id: 8n }] } };

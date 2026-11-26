@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateObjectReferences } from "../../src/validate/object-references.mjs";
+import validateObjectReferences from "../../src/validate/object-references.mjs";
 
 test("coordinates host and routing peer reference rules", () => {
   const record = {

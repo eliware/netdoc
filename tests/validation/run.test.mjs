@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import path from "node:path";
 import { createMemoryFileSystem } from "../../test-fixtures/memory-file-system.mjs";
-import { runInventoryValidation } from "../../src/validation/run.mjs";
+import runInventoryValidation from "../../src/validation/run.mjs";
 
 test("returns setup errors without records", () => {
   const result = runInventoryValidation("missing", {

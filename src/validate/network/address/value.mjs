@@ -1,6 +1,6 @@
-import { parseAddress } from "../../../ip-addresses.mjs";
+import parseAddress from "../../../ip-addresses.mjs";
 
-export function validNetworkAddressValue(value, network, pointer, options = {}) {
+export default function validNetworkAddressValue(value, network, pointer, options = {}) {
   if (typeof value !== "string") return false;
   if (value === "any") return options.allowAny === true;
   if (value === "masquerade") return options.allowMasquerade === true;

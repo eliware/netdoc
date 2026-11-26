@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateInterfaceAddress } from "../../../src/validate/interface/address.mjs";
+import validateInterfaceAddress from "../../../src/validate/interface/address.mjs";
 
 test("returns a format diagnostic without running later checks", () => {
   const assignments = new Map();

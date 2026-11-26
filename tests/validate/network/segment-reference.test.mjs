@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateNetworkSegmentReference } from "../../../src/validate/network/segment-reference.mjs";
+import validateNetworkSegmentReference from "../../../src/validate/network/segment-reference.mjs";
 
 test("accepts an unset or valid segment reference", () => {
   const record = { file: "node.yaml", data: { id: 1n } };

@@ -1,4 +1,4 @@
-export function policyInterfaceFields(data) {
+export default function policyInterfaceFields(data) {
   const network = data.networking ?? {};
   return [
     ...(network.nat?.rules ?? []).map((item, index) => [

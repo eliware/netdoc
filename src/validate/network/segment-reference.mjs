@@ -1,6 +1,6 @@
-import { createDiagnostic } from "../../diagnostics.mjs";
+import createDiagnostic from "../../diagnostics.mjs";
 
-export function validateNetworkSegmentReference(id, record, pointer, entitiesById) {
+export default function validateNetworkSegmentReference(id, record, pointer, entitiesById) {
   if (id === undefined) return [];
   const target = entitiesById.get(id);
   if (target?.invalid || target?.kind === "network-segment") return [];

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { renderMermaidGraph } from "../../src/graph/mermaid.mjs";
+import renderMermaidGraph from "../../src/graph/mermaid.mjs";
 
 test("renders a Mermaid flowchart from inventory objects", () => {
   expect(

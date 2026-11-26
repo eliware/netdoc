@@ -1,6 +1,6 @@
 import { expect, jest, test } from "@jest/globals";
-import { createDiagnostic } from "../../src/diagnostics.mjs";
-import { reportValidationResult } from "../../src/validation/report.mjs";
+import createDiagnostic from "../../src/diagnostics.mjs";
+import reportValidationResult from "../../src/validation/report.mjs";
 
 test("reports validation success", () => {
   const write = jest.fn();

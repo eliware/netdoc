@@ -1,10 +1,10 @@
-import { parseGraphArguments } from "./arguments.mjs";
-import { renderMermaidGraph } from "./mermaid.mjs";
-import { runInventoryValidation } from "../validation/run.mjs";
-import { reportValidationErrors } from "../validation/report.mjs";
-import { reportValidationSetupError } from "../validation/setup-result.mjs";
+import parseGraphArguments from "./arguments.mjs";
+import renderMermaidGraph from "./mermaid.mjs";
+import runInventoryValidation from "../validation/run.mjs";
+import reportValidationErrors from "../validation/report-validation-errors.mjs";
+import reportValidationSetupError from "../validation/setup-result.mjs";
 
-export function graphInventory(args, options = {}) {
+export default function graphInventory(args, options = {}) {
   const parsed = parseGraphArguments(args);
   const error = options.error ?? console.error;
   if (parsed.error !== undefined) {

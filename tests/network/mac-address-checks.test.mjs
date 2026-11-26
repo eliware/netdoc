@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { checkMac } from "../../src/network/mac-address-checks.mjs";
+import checkMac from "../../src/network/mac-address-checks.mjs";
 
 test("checks duplicate MAC addresses within each segment", () => {
   const diagnostics = [];

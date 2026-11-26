@@ -1,6 +1,6 @@
-import { validateLocalInterfaceNameFields } from "../local/interface-name-fields.mjs";
+import validateLocalInterfaceNameFields from "../local/interface-name-fields.mjs";
 
-export function validateInterfaceNameReferences(record) {
+export default function validateInterfaceNameReferences(record) {
   const interfaces = record.data.interfaces ?? [];
   const names = new Set(interfaces.map((item) => item.name));
   return validateLocalInterfaceNameFields(

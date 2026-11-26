@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { isMatchingDhcpReservation } from "../../../../../src/validate/interface/address/dhcp/reservation-matching.mjs";
+import isMatchingDhcpReservation from "../../../../../src/validate/interface/address/dhcp/reservation-matching.mjs";
 
 test("matches DHCP leases and reservations with the same normalized MAC", () => {
   const lease = { assignment: "dhcp", macAddress: "AA-BB-CC-DD-EE-FF" };

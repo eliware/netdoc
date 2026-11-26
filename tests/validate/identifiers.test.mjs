@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateIdentifiers } from "../../src/validate/identifiers.mjs";
+import validateIdentifiers from "../../src/validate/identifiers.mjs";
 
 test("accepts object and interface IDs without losing integer precision", () => {
   const records = [

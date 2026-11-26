@@ -1,6 +1,6 @@
-import { createDiagnostic } from "../../../diagnostics.mjs";
+import createDiagnostic from "../../../diagnostics.mjs";
 
-export function validateDnsNameDuplicates(record) {
+export default function validateDnsNameDuplicates(record) {
   const diagnostics = [];
   (record.data.interfaces ?? []).forEach((networkInterface, interfaceIndex) => {
     (networkInterface.addresses ?? []).forEach((address, addressIndex) => {

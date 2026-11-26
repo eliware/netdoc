@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { diagnosticCode } from "../../src/validation/diagnostic-code.mjs";
+import diagnosticCode from "../../src/validation/diagnostic-code.mjs";
 
 test.each([
   ["YAML parse error: broken input", "NETDOC_YAML_PARSE_ERROR"],

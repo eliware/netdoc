@@ -1,8 +1,9 @@
-import { createDiagnostic } from "../../../diagnostics.mjs";
-import { isAllowedDhcpSharing } from "./dhcp/sharing.mjs";
-import { addressRange, rangesOverlap } from "../../../network/address/ranges.mjs";
+import createDiagnostic from "../../../diagnostics.mjs";
+import isAllowedDhcpSharing from "./dhcp/sharing.mjs";
+import addressRange from "../../../network/address/ranges.mjs";
+import rangesOverlap from "../../../network/address/ranges-overlap.mjs";
 
-export function validateInterfaceAddressUniqueness(
+export default function validateInterfaceAddressUniqueness(
   networkInterface,
   addressAssignment,
   parsed,

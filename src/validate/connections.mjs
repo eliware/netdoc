@@ -1,6 +1,6 @@
-import { createDiagnostic } from "../diagnostics.mjs";
+import createDiagnostic from "../diagnostics.mjs";
 
-export function validateConnections(records, entitiesById) {
+export default function validateConnections(records, entitiesById) {
   return records.flatMap((record) => {
     const diagnostics = [];
     for (const [index, networkInterface] of (record.data.interfaces ?? []).entries()) {

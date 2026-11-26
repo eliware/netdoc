@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import path from "node:path";
 import { createMemoryFileSystem } from "../../test-fixtures/memory-file-system.mjs";
-import { collectYamlFiles } from "../../src/yaml/file-collection.mjs";
+import collectYamlFiles from "../../src/yaml/file-collection.mjs";
 
 const root = path.resolve("yaml-files-fixture");
 

@@ -1,3 +1,3 @@
-export function normalizeMacAddress(address) {
+export default function normalizeMacAddress(address) {
   return address.toLowerCase().replaceAll("-", ":");
 }

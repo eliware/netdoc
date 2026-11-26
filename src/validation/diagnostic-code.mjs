@@ -15,6 +15,6 @@ const codes = [
   [/^This .* repeats an earlier reference\./, "NETDOC_REFERENCE_DUPLICATE"],
 ];
 
-export function diagnosticCode(message) {
+export default function diagnosticCode(message) {
   return codes.find(([pattern]) => pattern.test(message))?.[1] ?? "NETDOC_VALIDATION_ERROR";
 }

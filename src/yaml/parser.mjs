@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import YAML from "yaml";
 
-export function parseYamlFile(file, intAsBigInt = false, fileSystem = fs) {
+export default function parseYamlFile(file, intAsBigInt = false, fileSystem = fs) {
   const documents = YAML.parseAllDocuments(fileSystem.readFileSync(file, "utf8"), {
     intAsBigInt,
     uniqueKeys: true,

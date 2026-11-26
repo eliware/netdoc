@@ -1,4 +1,4 @@
-export function dhcpScopeFields(network) {
+export default function dhcpScopeFields(network) {
   const fields = [];
   const add = (path, value, isNetwork = false) => fields.push([path, value, isNetwork]);
   (network.dhcp?.scopes ?? []).forEach((scope, i) => {

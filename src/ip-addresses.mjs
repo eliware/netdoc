@@ -1,7 +1,7 @@
 import { isIP } from "node:net";
-import { addressToBigInt } from "./ip-addresses/conversion.mjs";
+import addressToBigInt from "./ip-addresses/conversion.mjs";
 
-export function parseAddress(value) {
+export default function parseAddress(value) {
   if (typeof value !== "string") return undefined;
   const [address, prefixText, extra] = value.split("/");
   const version = isIP(address);

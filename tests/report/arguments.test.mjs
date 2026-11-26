@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { parseFreshnessArguments } from "../../src/report/arguments.mjs";
+import parseFreshnessArguments from "../../src/report/arguments.mjs";
 
 test("parses the freshness report command", () => {
   expect(parseFreshnessArguments(["inventory", "--freshness", "--max-age-days", "30"])).toEqual({

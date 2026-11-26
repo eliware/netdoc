@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateMacAddresses } from "../../src/validate/mac-addresses.mjs";
+import validateMacAddresses from "../../src/validate/mac-addresses.mjs";
 
 test("finds duplicate MAC addresses on one segment across records", () => {
   const entities = new Map([

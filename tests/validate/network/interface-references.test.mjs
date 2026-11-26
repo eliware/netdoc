@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateNetworkInterfaceReferences } from "../../../src/validate/network/interface-references.mjs";
+import validateNetworkInterfaceReferences from "../../../src/validate/network/interface-references.mjs";
 
 test("checks interface references in network settings", () => {
   const record = {

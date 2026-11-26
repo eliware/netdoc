@@ -1,6 +1,6 @@
-import { normalizeMacAddress } from "../../../../normalize-mac-address.mjs";
+import normalizeMacAddress from "../../../../normalize-mac-address.mjs";
 
-export function isMatchingDhcpReservation(previous, networkInterface, addressAssignment) {
+export default function isMatchingDhcpReservation(previous, networkInterface, addressAssignment) {
   const sameDhcpAddress =
     (previous.assignment === "dhcp" && addressAssignment.assignment === "dhcp-reservation") ||
     (previous.assignment === "dhcp-reservation" && addressAssignment.assignment === "dhcp");

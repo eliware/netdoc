@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateInterfaceAddressUniqueness } from "../../../../src/validate/interface/address/uniqueness.mjs";
+import validateInterfaceAddressUniqueness from "../../../../src/validate/interface/address/uniqueness.mjs";
 
 test("finds repeated assigned addresses on the same segment", () => {
   const assignments = new Map();

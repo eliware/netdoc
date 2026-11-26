@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateSwitchPorts } from "../../../src/validate/switch/ports.mjs";
+import validateSwitchPorts from "../../../src/validate/switch/ports.mjs";
 
 test("combines access and trunk port diagnostics", () => {
   const record = {

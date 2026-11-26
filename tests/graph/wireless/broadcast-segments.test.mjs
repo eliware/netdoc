@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { indexWirelessBroadcastSegments } from "../../../src/graph/wireless/broadcast-segments.mjs";
+import indexWirelessBroadcastSegments from "../../../src/graph/wireless/broadcast-segments.mjs";
 
 test("indexes wireless broadcast segments by network ID", () => {
   const records = [

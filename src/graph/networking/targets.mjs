@@ -1,6 +1,7 @@
-import { edgeLine, nodeLine } from "../labels.mjs";
+import edgeLine from "../edge-line.mjs";
+import nodeLine from "../node-line.mjs";
 
-export function buildLoadBalancingTargetElements(
+export default function buildLoadBalancingTargetElements(
   index,
   listenerIndex,
   listenerNode,

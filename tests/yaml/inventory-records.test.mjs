@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import path from "node:path";
 import { createMemoryFileSystem } from "../../test-fixtures/memory-file-system.mjs";
-import { parseInventoryRecords } from "../../src/yaml/inventory-records.mjs";
+import parseInventoryRecords from "../../src/yaml/inventory-records.mjs";
 
 const root = path.resolve("inventory-records-fixture");
 

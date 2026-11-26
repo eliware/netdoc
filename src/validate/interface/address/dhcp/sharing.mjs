@@ -1,6 +1,6 @@
-import { isMatchingDhcpReservation } from "./reservation-matching.mjs";
+import isMatchingDhcpReservation from "./reservation-matching.mjs";
 
-export function isAllowedDhcpSharing(previous, networkInterface, addressAssignment, range) {
+export default function isAllowedDhcpSharing(previous, networkInterface, addressAssignment, range) {
   return Boolean(
     previous.range.start === range.start &&
     previous.range.end === range.end &&

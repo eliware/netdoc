@@ -14,7 +14,7 @@ const identifierKeys = new Set([
   "overlaySegmentIds",
 ]);
 
-export function convertBigIntsForValidation(value, key, identifiers = new Map()) {
+export default function convertBigIntsForValidation(value, key, identifiers = new Map()) {
   // Validate IDs and references from the initial BigInt records before this schema-only conversion.
   if (typeof value === "bigint") {
     if (!identifierKeys.has(key)) {

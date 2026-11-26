@@ -1,9 +1,9 @@
-import { createDiagnostic } from "../../../diagnostics.mjs";
-import { objectReferenceDiagnostics } from "../../../object-reference-diagnostics.mjs";
+import createDiagnostic from "../../../diagnostics.mjs";
+import objectReferenceDiagnostics from "../../../object-reference-diagnostics.mjs";
 
 const endpointKinds = ["physical-machine", "virtual-machine", "network-device"];
 
-export function validateOverlayEndpointReferences(record, entitiesById) {
+export default function validateOverlayEndpointReferences(record, entitiesById) {
   const endpoints = record.data.encapsulation?.endpoints ?? [];
   return [
     ...validateEndpointObjects(endpoints, record, entitiesById),

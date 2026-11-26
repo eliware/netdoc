@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { buildListenerElements } from "../../../src/graph/networking/listeners.mjs";
+import buildListenerElements from "../../../src/graph/networking/listeners.mjs";
 
 test("renders configured listeners and optional addresses", () => {
   expect(

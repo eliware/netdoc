@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateOverlayEndpointReferences } from "../../../../src/validate/network/overlays/endpoints.mjs";
+import validateOverlayEndpointReferences from "../../../../src/validate/network/overlays/endpoints.mjs";
 
 test("validates endpoint objects, interface names, and underlay segments", () => {
   const record = {

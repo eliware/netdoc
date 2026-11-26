@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { runValidationPipeline } from "../../src/validation/pipeline.mjs";
+import runValidationPipeline from "../../src/validation/pipeline.mjs";
 
 test("runs relationship checks when other records have schema errors", () => {
   const records = [

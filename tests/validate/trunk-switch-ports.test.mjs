@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { validateSwitchPorts } from "../../src/validate/switch/ports.mjs";
-import { validateTrunkSwitchPorts } from "../../src/validate/trunk-switch-ports.mjs";
+import validateSwitchPorts from "../../src/validate/switch/ports.mjs";
+import validateTrunkSwitchPorts from "../../src/validate/trunk-switch-ports.mjs";
 
 test("checks tagged segments and PVID membership on trunk ports", () => {
   const record = {

@@ -1,7 +1,7 @@
-import { createDiagnostic } from "../../../diagnostics.mjs";
-import { validateNetworkSegmentReference } from "../segment-reference.mjs";
+import createDiagnostic from "../../../diagnostics.mjs";
+import validateNetworkSegmentReference from "../segment-reference.mjs";
 
-export function validateOverlaySegmentReferences(record, entitiesById) {
+export default function validateOverlaySegmentReferences(record, entitiesById) {
   const overlayDiagnostics = (record.data.networking?.overlaySegmentIds ?? []).flatMap(
     (id, index) => validateOverlaySegmentId(id, index, record, entitiesById),
   );

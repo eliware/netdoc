@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { objectReferenceDiagnostics } from "../src/object-reference-diagnostics.mjs";
+import objectReferenceDiagnostics from "../src/object-reference-diagnostics.mjs";
 
 test("reports references that are missing or have the wrong object kind", () => {
   const record = { file: "node.yaml", data: { id: 4n } };

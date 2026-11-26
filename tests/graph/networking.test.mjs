@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { createGraphContext } from "../../src/graph/context.mjs";
-import { buildNetworkingElements } from "../../src/graph/networking.mjs";
+import createGraphContext from "../../src/graph/context.mjs";
+import buildNetworkingElements from "../../src/graph/networking.mjs";
 
 test("renders gateways, routes, BGP, VRRP, and tunnel relationships", () => {
   const router = {

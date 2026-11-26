@@ -1,7 +1,7 @@
-import { createDiagnostic } from "../diagnostics.mjs";
-import { normalizeMacAddress } from "../normalize-mac-address.mjs";
+import createDiagnostic from "../diagnostics.mjs";
+import normalizeMacAddress from "../normalize-mac-address.mjs";
 
-export function checkMac(
+export default function checkMac(
   networkInterface,
   record,
   pointer,

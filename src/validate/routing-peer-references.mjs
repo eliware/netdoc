@@ -1,6 +1,6 @@
-import { objectReferenceDiagnostics } from "../object-reference-diagnostics.mjs";
+import objectReferenceDiagnostics from "../object-reference-diagnostics.mjs";
 
-export function validateRoutingPeerReferences(record, entitiesById) {
+export default function validateRoutingPeerReferences(record, entitiesById) {
   const peers = record.data.networking?.routing?.bgp?.peers ?? [];
   const checks = peers.flatMap((peer, i) =>
     peer.peerId === undefined

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { indexEntities } from "../src/index-entities.mjs";
+import indexEntities from "../src/index-entities.mjs";
 
 test("combines object and interface indexes and preserves invalid records", () => {
   const record = {

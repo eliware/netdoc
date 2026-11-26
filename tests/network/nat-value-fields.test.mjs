@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { networkNatValueFields } from "../../src/network/nat-value-fields.mjs";
-import { validateNetworkAddressFields } from "../../src/validate/network/address/fields.mjs";
+import networkNatValueFields from "../../src/network/nat-value-fields.mjs";
+import validateNetworkAddressFields from "../../src/validate/network/address/fields.mjs";
 
 test("collects NAT address and translation fields", () => {
   expect(

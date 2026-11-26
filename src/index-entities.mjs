@@ -1,7 +1,7 @@
-import { indexInterfaceEntities } from "./entity-index/interfaces.mjs";
-import { indexObjectEntity } from "./entity-index/objects.mjs";
+import indexInterfaceEntities from "./entity-index/interfaces.mjs";
+import indexObjectEntity from "./entity-index/objects.mjs";
 
-export function indexEntities(records, invalidRecords = []) {
+export default function indexEntities(records, invalidRecords = []) {
   const entitiesById = new Map();
   for (const [record, invalid] of [
     ...invalidRecords.map((record) => [record, true]),

@@ -1,6 +1,6 @@
 const usage = "Usage: netdoc report <path> --freshness --max-age-days DAYS";
 
-export function parseFreshnessArguments(args) {
+export default function parseFreshnessArguments(args) {
   if (
     args.length !== 4 ||
     args[1] !== "--freshness" ||

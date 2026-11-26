@@ -1,9 +1,9 @@
-import { validateLocalReferences } from "./local/references.mjs";
-import { validateInterfaceSegmentReferences } from "./interface/segment-references.mjs";
-import { validateObjectReferences } from "./object-references.mjs";
-import { validateConnections } from "./connections.mjs";
+import validateLocalReferences from "./local/references.mjs";
+import validateInterfaceSegmentReferences from "./interface/segment-references.mjs";
+import validateObjectReferences from "./object-references.mjs";
+import validateConnections from "./connections.mjs";
 
-export function validateReferences(records, entitiesById) {
+export default function validateReferences(records, entitiesById) {
   return [
     ...records.flatMap((record) => [
       ...validateLocalReferences(record),

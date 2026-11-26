@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { createSchemaValidator } from "../src/create-schema-validator.mjs";
+import createSchemaValidator from "../src/create-schema-validator.mjs";
 
 test("configures draft 2020 validation with formats and schema version metadata", () => {
   const ajv = createSchemaValidator();

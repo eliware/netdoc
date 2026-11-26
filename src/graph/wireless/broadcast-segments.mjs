@@ -1,4 +1,4 @@
-export function indexWirelessBroadcastSegments(records) {
+export default function indexWirelessBroadcastSegments(records) {
   const segmentIdsByNetworkId = new Map();
   for (const record of records) {
     for (const networkInterface of record.data.interfaces ?? []) {

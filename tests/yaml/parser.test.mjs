@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import path from "node:path";
 import { createMemoryFileSystem } from "../../test-fixtures/memory-file-system.mjs";
-import { parseYamlFile } from "../../src/yaml/parser.mjs";
+import parseYamlFile from "../../src/yaml/parser.mjs";
 
 const file = path.resolve("yaml-parser-fixture/record.yaml");
 

@@ -1,7 +1,7 @@
-import { createDiagnostic } from "../../diagnostics.mjs";
-import { validNetworkAddressValue } from "../network/address/value.mjs";
+import createDiagnostic from "../../diagnostics.mjs";
+import validNetworkAddressValue from "../network/address/value.mjs";
 
-export function validateSegmentNetworkPrefix(record, network, index) {
+export default function validateSegmentNetworkPrefix(record, network, index) {
   if (validNetworkAddressValue(network.cidr, true, `/ipNetworks/${index}/cidr`)) return [];
   return [
     createDiagnostic(

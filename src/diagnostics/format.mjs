@@ -1,4 +1,4 @@
-export function formatDiagnostic(diagnostic) {
+export default function formatDiagnostic(diagnostic) {
   const location = diagnostic.pointer
     ? `${diagnostic.file}#${diagnostic.pointer}`
     : diagnostic.file;

@@ -1,5 +1,5 @@
-import { networkTunnelValueFields } from "../tunnel/value-fields.mjs";
+import networkTunnelValueFields from "../tunnel/value-fields.mjs";
 
-export function networkTunnelFields(network) {
+export default function networkTunnelFields(network) {
   return networkTunnelValueFields(network);
 }

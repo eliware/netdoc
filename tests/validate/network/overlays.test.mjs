@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateOverlayReferences } from "../../../src/validate/network/overlays.mjs";
+import validateOverlayReferences from "../../../src/validate/network/overlays.mjs";
 
 const vxlanSegment = (id) => ({
   kind: "network-segment",

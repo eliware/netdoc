@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateWirelessNetworkReferences } from "../../../src/validate/wireless/network-references.mjs";
+import validateWirelessNetworkReferences from "../../../src/validate/wireless/network-references.mjs";
 
 test("accepts wireless network IDs that resolve to wireless-network records", () => {
   const record = {

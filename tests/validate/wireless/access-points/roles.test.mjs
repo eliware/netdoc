@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateWirelessAccessPointRoles } from "../../../../src/validate/wireless/access-points/roles.mjs";
+import validateWirelessAccessPointRoles from "../../../../src/validate/wireless/access-points/roles.mjs";
 
 test("validates the required access point role on wireless profiles", () => {
   const record = {

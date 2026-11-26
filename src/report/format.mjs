@@ -1,4 +1,4 @@
-export function formatReviewFreshness(rows, maxAgeDays, now = new Date()) {
+export default function formatReviewFreshness(rows, maxAgeDays, now = new Date()) {
   const today = now.toISOString().slice(0, 10);
   const lines = [
     `Review freshness as of ${today} UTC (maximum age: ${maxAgeDays} days).`,

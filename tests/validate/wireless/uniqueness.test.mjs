@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateWirelessUniqueness } from "../../../src/validate/wireless/uniqueness.mjs";
+import validateWirelessUniqueness from "../../../src/validate/wireless/uniqueness.mjs";
 
 test("accepts distinct profiles and broadcasts", () => {
   expect(

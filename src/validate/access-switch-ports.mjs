@@ -1,6 +1,6 @@
-import { createDiagnostic } from "../diagnostics.mjs";
+import createDiagnostic from "../diagnostics.mjs";
 
-export function validateAccessSwitchPorts(records) {
+export default function validateAccessSwitchPorts(records) {
   const diagnostics = [];
   for (const record of records) {
     const interfaces = new Map((record.data.interfaces ?? []).map((item) => [item.name, item]));

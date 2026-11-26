@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateNetworks } from "../../src/validate/networks.mjs";
+import validateNetworks from "../../src/validate/networks.mjs";
 
 test("combines address and MAC diagnostics with valid segment data", () => {
   const records = ["first", "second"].map((name, index) => ({

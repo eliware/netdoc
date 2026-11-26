@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateInterfaceSegmentReferences } from "../../../src/validate/interface/segment-references.mjs";
+import validateInterfaceSegmentReferences from "../../../src/validate/interface/segment-references.mjs";
 
 test("checks interface segment references", () => {
   const record = {

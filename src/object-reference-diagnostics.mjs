@@ -1,6 +1,6 @@
-import { createDiagnostic } from "./diagnostics.mjs";
+import createDiagnostic from "./diagnostics.mjs";
 
-export function objectReferenceDiagnostics(checks, record, entitiesById) {
+export default function objectReferenceDiagnostics(checks, record, entitiesById) {
   return checks.flatMap(([id, pointer, expected]) => {
     const target = entitiesById.get(id);
     if (target?.invalid) return [];

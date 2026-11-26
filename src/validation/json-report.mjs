@@ -1,4 +1,4 @@
-export function validationJson(result) {
+export default function validationJson(result) {
   const output = {
     status: result.exitCode === 0 ? "passed" : result.exitCode === 1 ? "failed" : "error",
     summary: { files: result.fileCount, errors: result.diagnostics.length },

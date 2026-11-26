@@ -1,6 +1,6 @@
-import { objectReferenceDiagnostics } from "../../object-reference-diagnostics.mjs";
+import objectReferenceDiagnostics from "../../object-reference-diagnostics.mjs";
 
-export function validateWirelessNetworkReferences(record, entitiesById) {
+export default function validateWirelessNetworkReferences(record, entitiesById) {
   const checks = [];
   (record.data.interfaces ?? []).forEach((networkInterface, interfaceIndex) => {
     const wireless = networkInterface.wireless ?? {};

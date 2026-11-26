@@ -1,6 +1,6 @@
-import { edgeLine } from "./labels.mjs";
+import edgeLine from "./edge-line.mjs";
 
-export function buildResidencyEdges(context) {
+export default function buildResidencyEdges(context) {
   const edges = [];
   for (const record of context.records) {
     const child = context.objectNodeByRecord.get(record);

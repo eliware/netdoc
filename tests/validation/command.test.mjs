@@ -2,7 +2,7 @@ import { expect, jest, test } from "@jest/globals";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createMemoryFileSystem } from "../../test-fixtures/memory-file-system.mjs";
-import { validateInventory } from "../../src/validation/command.mjs";
+import validateInventory from "../../src/validation/command.mjs";
 
 const root = path.resolve("command-integration-fixture");
 

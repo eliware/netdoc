@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { collectNetworkValueFields } from "../../../src/network/value/collection.mjs";
+import collectNetworkValueFields from "../../../src/network/value/collection.mjs";
 
 test("collects address fields from routing, policies, pools, and DHCP", () => {
   const data = {

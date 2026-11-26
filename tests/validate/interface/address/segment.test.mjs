@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateInterfaceAddressSegment } from "../../../../src/validate/interface/address/segment.mjs";
+import validateInterfaceAddressSegment from "../../../../src/validate/interface/address/segment.mjs";
 
 test("checks interface address containment in segment networks", () => {
   const record = { file: "node.yaml", data: { id: 1n } };

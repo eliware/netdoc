@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateSwitchPortReferences } from "../../../../src/validate/switch/port/references.mjs";
+import validateSwitchPortReferences from "../../../../src/validate/switch/port/references.mjs";
 
 test("checks switch port references against local interface names", () => {
   const record = {

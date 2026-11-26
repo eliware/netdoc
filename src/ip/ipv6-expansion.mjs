@@ -1,4 +1,4 @@
-export function expandIpv4EmbeddedIpv6(address) {
+export default function expandIpv4EmbeddedIpv6(address) {
   if (!address.includes(".")) return address;
   const lastColon = address.lastIndexOf(":");
   const octets = address

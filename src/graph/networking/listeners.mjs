@@ -1,6 +1,7 @@
-import { edgeLine, nodeLine } from "../labels.mjs";
+import edgeLine from "../edge-line.mjs";
+import nodeLine from "../node-line.mjs";
 
-export function buildListenerElements(index, source, networking) {
+export default function buildListenerElements(index, source, networking) {
   const nodes = [];
   const edges = [];
   (networking.listeners ?? []).forEach((listener, listenerIndex) => {

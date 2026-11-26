@@ -1,4 +1,4 @@
-export function indexObjectEntity(entitiesById, record, invalid) {
+export default function indexObjectEntity(entitiesById, record, invalid) {
   const id = record.data.id;
   if (typeof id !== "bigint") return;
   entitiesById.set(id, {

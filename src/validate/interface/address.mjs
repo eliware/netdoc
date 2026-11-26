@@ -1,8 +1,8 @@
-import { validateInterfaceAddressFormat } from "./address/format.mjs";
-import { validateInterfaceAddressUniqueness } from "./address/uniqueness.mjs";
-import { validateInterfaceAddressSegment } from "./address/segment.mjs";
+import validateInterfaceAddressFormat from "./address/format.mjs";
+import validateInterfaceAddressUniqueness from "./address/uniqueness.mjs";
+import validateInterfaceAddressSegment from "./address/segment.mjs";
 
-export function validateInterfaceAddress(
+export default function validateInterfaceAddress(
   networkInterface,
   assignment,
   record,

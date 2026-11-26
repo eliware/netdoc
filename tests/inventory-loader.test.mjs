@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals";
 import path from "node:path";
 import { createMemoryFileSystem } from "../test-fixtures/memory-file-system.mjs";
-import { loadInventory, tryLoadInventory } from "../src/inventory-loader.mjs";
+import loadInventory from "../src/inventory-loader.mjs";
 
 const root = path.resolve("inventory-fixture");
 
@@ -39,10 +39,6 @@ test("loads valid YAML and reports per-file parse or document errors", () => {
 test.each([undefined, "", "missing.yaml"])("rejects an invalid input path %s", (target) => {
   const fileSystem = createMemoryFileSystem({}, [root]);
   expect(() => loadInventory(target, { cwd: root, fileSystem })).toThrow("Path does not exist:");
-  if (target === "missing.yaml")
-    expect(tryLoadInventory(target, { cwd: root, fileSystem })).toEqual({
-      error: `Path does not exist: ${path.join(root, target)}`,
-    });
 });
 
 test("uses the default working directory and file system", () => {

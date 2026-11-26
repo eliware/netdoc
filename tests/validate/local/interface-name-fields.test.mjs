@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateLocalInterfaceNameFields } from "../../../src/validate/local/interface-name-fields.mjs";
+import validateLocalInterfaceNameFields from "../../../src/validate/local/interface-name-fields.mjs";
 
 test("reports unknown parent and switch interface names", () => {
   const record = { file: "router.yaml", data: { id: 3n } };

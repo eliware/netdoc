@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { selectRelationshipValidationRecords } from "../src/select-relationship-validation-records.mjs";
+import selectRelationshipValidationRecords from "../src/select-relationship-validation-records.mjs";
 
 test("keeps records without identifier errors", () => {
   const records = [

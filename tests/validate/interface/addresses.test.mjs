@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateInterfaceAddresses } from "../../../src/validate/interface/addresses.mjs";
+import validateInterfaceAddresses from "../../../src/validate/interface/addresses.mjs";
 
 test("validates interface addresses across records and their segments", () => {
   const segment = {

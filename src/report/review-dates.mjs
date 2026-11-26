@@ -1,8 +1,9 @@
-import { parseUtcDay, utcDay } from "./utc-date.mjs";
+import parseUtcDay from "./parse-utc-day.mjs";
+import utcDay from "./utc-date.mjs";
 
 const millisecondsPerDay = 86_400_000;
 
-export function collectReviewFreshness(records, maxAgeDays, now = new Date()) {
+export default function collectReviewFreshness(records, maxAgeDays, now = new Date()) {
   const today = utcDay(now);
   return records.map((record) => classifyReviewDate(record, today, maxAgeDays));
 }

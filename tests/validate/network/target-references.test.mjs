@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateNetworkTargetReferences } from "../../../src/validate/network/target-references.mjs";
+import validateNetworkTargetReferences from "../../../src/validate/network/target-references.mjs";
 
 test("checks announcement, NAT, and load-balancer target IDs", () => {
   const record = {

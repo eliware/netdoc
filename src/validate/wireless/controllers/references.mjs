@@ -1,6 +1,6 @@
-import { objectReferenceDiagnostics } from "../../../object-reference-diagnostics.mjs";
+import objectReferenceDiagnostics from "../../../object-reference-diagnostics.mjs";
 
-export function validateWirelessControllerReferences(record, entitiesById) {
+export default function validateWirelessControllerReferences(record, entitiesById) {
   const controllerId = record.data.wirelessManagement?.controllerId;
   if (controllerId === undefined) return [];
   return objectReferenceDiagnostics(

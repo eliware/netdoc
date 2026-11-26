@@ -1,6 +1,6 @@
-import { createDiagnostic } from "../diagnostics.mjs";
+import createDiagnostic from "../diagnostics.mjs";
 
-export function validateDuplicateInterfaceNames(record) {
+export default function validateDuplicateInterfaceNames(record) {
   const interfaces = record.data.interfaces ?? [];
   const names = new Map(interfaces.map((item, index) => [item.name, index]));
   return interfaces.flatMap((networkInterface, index) =>

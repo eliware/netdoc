@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { buildVrrpElements } from "../../../src/graph/networking/vrrp.mjs";
+import buildVrrpElements from "../../../src/graph/networking/vrrp.mjs";
 
 test("renders configured VRRP groups without an interface name", () => {
   expect(

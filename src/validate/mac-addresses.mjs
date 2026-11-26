@@ -1,6 +1,6 @@
-import { checkMac } from "../network/mac-address-checks.mjs";
+import checkMac from "../network/mac-address-checks.mjs";
 
-export function validateMacAddresses(records, entitiesById) {
+export default function validateMacAddresses(records, entitiesById) {
   const diagnostics = [];
   const macs = new Map();
   for (const record of records) {

@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validateDuplicateInterfaceNames } from "../../src/validate/duplicate-interface-names.mjs";
+import validateDuplicateInterfaceNames from "../../src/validate/duplicate-interface-names.mjs";
 
 test("reports duplicate names and accepts unique or absent names", () => {
   const record = {

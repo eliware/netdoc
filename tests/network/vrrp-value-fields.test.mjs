@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { networkVrrpValueFields } from "../../src/network/vrrp-value-fields.mjs";
+import networkVrrpValueFields from "../../src/network/vrrp-value-fields.mjs";
 
 test("collects VRRP virtual addresses", () => {
   expect(

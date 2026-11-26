@@ -1,6 +1,6 @@
-import { objectReferenceDiagnostics } from "../object-reference-diagnostics.mjs";
+import objectReferenceDiagnostics from "../object-reference-diagnostics.mjs";
 
-export function validateHostReferences(record, entitiesById) {
+export default function validateHostReferences(record, entitiesById) {
   const { data } = record;
   const checks = [];
   if (data.kind === "virtual-machine")

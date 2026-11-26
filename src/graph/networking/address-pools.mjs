@@ -1,6 +1,7 @@
-import { edgeLine, nodeLine } from "../labels.mjs";
+import edgeLine from "../edge-line.mjs";
+import nodeLine from "../node-line.mjs";
 
-export function buildAddressPoolElements(index, source, pools) {
+export default function buildAddressPoolElements(index, source, pools) {
   const nodes = [];
   const edges = [];
   pools.forEach((pool, poolIndex) => {

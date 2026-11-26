@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import { validNetworkAddressValue } from "../../../../src/validate/network/address/value.mjs";
+import validNetworkAddressValue from "../../../../src/validate/network/address/value.mjs";
 
 test("accepts addresses, prefixes, and allowed special values", () => {
   expect(validNetworkAddressValue("192.0.2.1", false, "/gateway")).toBe(true);
