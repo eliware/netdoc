@@ -1,5 +1,6 @@
 import createDiagnostic from "../../../diagnostics.mjs";
 import isAllowedDhcpSharing from "./dhcp/sharing.mjs";
+import isAllowedVirtualSharing from "./virtual-sharing.mjs";
 import addressRange from "../../../network/address/ranges.mjs";
 import rangesOverlap from "../../../network/address/ranges-overlap.mjs";
 
@@ -34,7 +35,9 @@ export default function validateInterfaceAddressUniqueness(
     const current = assignments.get(key) ?? [];
     const overlaps = current.filter((item) => rangesOverlap(item.range, range));
     const previous = overlaps.find(
-      (item) => !isAllowedSharing(item, networkInterface, addressAssignment, range),
+      (item) =>
+        !isAllowedVirtualSharing(item, addressAssignment, range) &&
+        !isAllowedDhcpSharing(item, networkInterface, addressAssignment, range),
     );
     if (previous) {
       diagnostics.push(
@@ -52,14 +55,4 @@ export default function validateInterfaceAddressUniqueness(
     assignments.set(key, current);
   }
   return diagnostics;
-}
-
-function isAllowedSharing(previous, networkInterface, addressAssignment, range) {
-  const identicalRange = previous.range.start === range.start && previous.range.end === range.end;
-  const bothVirtual =
-    previous.assignment === "virtual" && addressAssignment.assignment === "virtual";
-  return (
-    (identicalRange && bothVirtual) ||
-    isAllowedDhcpSharing(previous, networkInterface, addressAssignment, range)
-  );
 }
