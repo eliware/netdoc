@@ -26,6 +26,7 @@ export default function validateInterfaceAddress(
       record,
       pointer,
       assignments,
+      entitiesById,
     ),
     ...validateInterfaceAddressSegment(assignment.cidr, record, pointer, segment),
   ];

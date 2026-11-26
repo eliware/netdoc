@@ -49,3 +49,46 @@ test("accepts dynamic or unsegmented interfaces and ignores unknown segment kind
     ),
   ).toEqual([]);
 });
+
+test("checks address conflicts on segments resolved through wireless profiles", () => {
+  const client = (id, file) => ({
+    file,
+    data: {
+      id,
+      interfaces: [
+        {
+          wireless: { role: "client", profiles: [{ wirelessNetworkId: 20n }] },
+          addresses: [{ cidr: "192.0.2.10", assignment: "static" }],
+        },
+      ],
+    },
+  });
+  const records = [client(1n, "first.yaml"), client(2n, "second.yaml")];
+  const entities = new Map([
+    [
+      30n,
+      {
+        kind: "physical-machine",
+        record: {
+          data: {
+            interfaces: [
+              {},
+              {
+                wireless: {
+                  broadcasts: [
+                    { wirelessNetworkId: 99n, segmentId: 8n },
+                    { wirelessNetworkId: 20n, segmentId: 7n },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      },
+    ],
+  ]);
+
+  expect(validateInterfaceAddresses(records, entities).map(({ message }) => message)).toEqual([
+    expect.stringContaining("Address 192.0.2.10 is in use at first.yaml"),
+  ]);
+});

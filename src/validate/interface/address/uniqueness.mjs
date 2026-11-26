@@ -12,11 +12,13 @@ export default function validateInterfaceAddressUniqueness(
   record,
   pointer,
   assignments,
+  entitiesById,
 ) {
   const segmentIds = new Set(
     [
       networkInterface.segmentId,
       ...(networkInterface.wireless?.broadcasts ?? []).map(({ segmentId }) => segmentId),
+      ...wirelessProfileSegmentIds(networkInterface, entitiesById),
     ].filter((id) => id !== undefined),
   );
   if (segmentIds.size === 0) return [];
@@ -55,4 +57,20 @@ export default function validateInterfaceAddressUniqueness(
     assignments.set(key, current);
   }
   return diagnostics;
+}
+
+function wirelessProfileSegmentIds(networkInterface, entitiesById) {
+  const wirelessNetworkIds = new Set(
+    (networkInterface.wireless?.profiles ?? []).map(({ wirelessNetworkId }) => wirelessNetworkId),
+  );
+  const segmentIds = [];
+  for (const entity of entitiesById?.values() ?? []) {
+    for (const item of entity.record?.data.interfaces ?? []) {
+      for (const broadcast of item.wireless?.broadcasts ?? []) {
+        if (wirelessNetworkIds.has(broadcast.wirelessNetworkId))
+          segmentIds.push(broadcast.segmentId);
+      }
+    }
+  }
+  return segmentIds;
 }
