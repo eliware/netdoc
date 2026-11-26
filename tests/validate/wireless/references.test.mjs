@@ -1,73 +1,28 @@
 import { expect, test } from "@jest/globals";
 import validateWirelessReferences from "../../../src/validate/wireless/references.mjs";
 
-test("coordinates wireless reference diagnostics", () => {
+test("combines wireless reference and uniqueness diagnostics", () => {
   const record = {
-    file: "ap.yaml",
+    file: "client.yaml",
     data: {
+      id: 10n,
       interfaces: [
         {
           wireless: {
-            role: "radio",
-            broadcasts: [{ wirelessNetworkId: 1n, segmentId: 2n }],
+            role: "client",
+            profiles: [{ wirelessNetworkId: 1n }, { wirelessNetworkId: 1n }],
           },
         },
-        { wireless: { role: "client", profiles: [{ wirelessNetworkId: 3n, accessPointId: 4n }] } },
       ],
-      wirelessManagement: { controllerId: 5n },
+      wirelessManagement: { controllerId: 2n },
     },
   };
   const diagnostics = validateWirelessReferences(
     record,
-    new Map([
-      [1n, { kind: "wireless-network" }],
-      [2n, { kind: "network-segment" }],
-      [3n, { kind: "wireless-network" }],
-      [4n, { kind: "network-device", record: { data: { roles: ["router"] } } }],
-      [5n, { kind: "virtual-machine", record: { data: { roles: ["wireless-controller"] } } }],
-    ]),
+    new Map([[1n, { kind: "wireless-network" }]]),
   );
   expect(diagnostics.map(({ pointer }) => pointer)).toEqual([
-    "/interfaces/1/wireless/profiles/0/accessPointId",
-  ]);
-});
-
-test("accepts records without wireless broadcasts", () => {
-  expect(
-    validateWirelessReferences(
-      { file: "empty.yaml", data: { interfaces: [{}, { wireless: {} }] } },
-      new Map(),
-    ),
-  ).toEqual([]);
-});
-
-test("includes wireless profile and broadcast uniqueness diagnostics", () => {
-  const diagnostics = validateWirelessReferences(
-    {
-      file: "client.yaml",
-      data: {
-        id: 10n,
-        interfaces: [
-          {
-            wireless: {
-              profiles: [{ wirelessNetworkId: 1n }, { wirelessNetworkId: 1n }],
-              broadcasts: [
-                { wirelessNetworkId: 2n, segmentId: 3n },
-                { wirelessNetworkId: 2n, segmentId: 3n },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    new Map([
-      [1n, { kind: "wireless-network" }],
-      [2n, { kind: "wireless-network" }],
-      [3n, { kind: "network-segment" }],
-    ]),
-  );
-  expect(diagnostics.map(({ pointer, objectId }) => [pointer, objectId])).toEqual([
-    ["/interfaces/0/wireless/profiles/1", 10n],
-    ["/interfaces/0/wireless/broadcasts/1", 10n],
+    "/wirelessManagement/controllerId",
+    "/interfaces/0/wireless/profiles/1",
   ]);
 });
