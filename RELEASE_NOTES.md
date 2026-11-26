@@ -2,11 +2,20 @@
 
 ## 15.2.1 — 2026-11-25
 
+### Added
+
+- Accept an inventory path as an argument to Ansible commands. Do not require an environment variable.
+
 ### Changed
 
-- Accept the inventory path as an Ansible command argument without an environment variable.
-- Refresh `@types/node` to 26.6.11 in the lockfile.
-- Set the package version to 15.2.1.
+- Require an IPv4 address for each BGP router ID. Accept IPv4 or IPv6 addresses for BGP peers.
+- Show device IDs with addresses for load-balancer targets in Mermaid graphs.
+- Organize Ansible, DHCP, graph, and validation code into focused modules with matching tests.
+- Set the package version to 15.2.1 and refresh `@types/node` to 26.6.11.
+
+### Fixed
+
+- Check wireless profile segments when validating VXLAN endpoint underlays and duplicate interface addresses.
 
 ## 15.2.0 — 2026-11-25
 
