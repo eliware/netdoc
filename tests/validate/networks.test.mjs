@@ -1,44 +1,65 @@
 import { expect, test } from "@jest/globals";
 import validateNetworks from "../../src/validate/networks.mjs";
 
-test("combines address and MAC diagnostics with valid segment data", () => {
-  const records = ["first", "second"].map((name, index) => ({
-    file: `${name}.yaml`,
+test("coordinates interface, MAC, segment, and DNS address checks", () => {
+  const first = {
+    file: "first.yaml",
     data: {
       kind: "physical-machine",
-      id: BigInt(index + 1),
+      id: 1n,
       interfaces: [
         {
           segmentId: 9n,
           macAddress: "AA:BB:CC:DD:EE:FF",
-          ...(index === 0 ? { addresses: [{ cidr: "bad", assignment: "static" }] } : {}),
+          addresses: [
+            { cidr: "bad", assignment: "static" },
+            {
+              cidr: "192.0.2.10/24",
+              assignment: "static",
+              dnsNames: ["nas.example.net", "NAS.example.net"],
+            },
+          ],
         },
       ],
     },
-  }));
-  records.push({
+  };
+  const second = {
+    file: "second.yaml",
+    data: {
+      kind: "physical-machine",
+      id: 2n,
+      interfaces: [
+        {
+          segmentId: 9n,
+          macAddress: "AA:BB:CC:DD:EE:FF",
+          addresses: [{ cidr: "192.0.2.11/24", assignment: "static" }],
+        },
+      ],
+    },
+  };
+  const segmentRecord = {
     file: "segment.yaml",
     data: {
       kind: "network-segment",
       id: 9n,
-      ipNetworks: [{ cidr: "192.0.2.0/24", gateway: "192.0.2.1" }],
+      ipNetworks: [{ cidr: "192.0.2.0/24", gateway: "192.0.3.1" }],
     },
-  });
-  const segment = { kind: "network-segment", record: { data: { kind: "network-segment" } } };
-  const diagnostics = validateNetworks(records, new Map([[9n, segment]]));
+  };
+  const segment = { kind: "network-segment", record: segmentRecord };
+  const unaddressed = { file: "unaddressed.yaml", data: { interfaces: [{}] } };
+
+  const diagnostics = validateNetworks(
+    [first, second, segmentRecord, unaddressed],
+    new Map([[9n, segment]]),
+  );
   expect(diagnostics.map(({ file, pointer }) => [file, pointer])).toEqual([
     ["first.yaml", "/interfaces/0/addresses/0/cidr"],
     ["second.yaml", "/interfaces/0/macAddress"],
+    ["segment.yaml", "/ipNetworks/0/gateway"],
+    ["first.yaml", "/interfaces/0/addresses/1/dnsNames/1"],
   ]);
 });
 
-test("allows dynamic or unsegmented interfaces and skips non-segment records", () => {
-  const record = {
-    file: "node.yaml",
-    data: {
-      kind: "physical-machine",
-      interfaces: [{ name: "dynamic", addresses: [{ assignment: "dhcp" }] }, { name: "plain" }],
-    },
-  };
-  expect(validateNetworks([record], new Map())).toEqual([]);
+test("accepts an empty inventory", () => {
+  expect(validateNetworks([], new Map())).toEqual([]);
 });

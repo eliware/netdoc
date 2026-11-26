@@ -40,3 +40,31 @@ test("accepts records without wireless broadcasts", () => {
     ),
   ).toEqual([]);
 });
+
+test("includes wireless profile and broadcast uniqueness diagnostics", () => {
+  const diagnostics = validateWirelessReferences(
+    {
+      file: "client.yaml",
+      data: {
+        interfaces: [
+          {
+            wireless: {
+              profiles: [{ wirelessNetworkId: 1n }, { wirelessNetworkId: 1n }],
+              broadcasts: [
+                { wirelessNetworkId: 2n, segmentId: 3n },
+                { wirelessNetworkId: 2n, segmentId: 3n },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    new Map(),
+  );
+  expect(diagnostics.map(({ pointer }) => pointer)).toEqual(
+    expect.arrayContaining([
+      "/interfaces/0/wireless/profiles/1",
+      "/interfaces/0/wireless/broadcasts/1",
+    ]),
+  );
+});
