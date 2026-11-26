@@ -1,5 +1,6 @@
 import nodeLine from "./node-line.mjs";
-import interfaceLabel from "./interface-label.mjs";
+import interfaceLabel from "./interface/label.mjs";
+import interfaceState from "./interface/state.mjs";
 import objectLabel from "./inventory-labels.mjs";
 
 export default function buildInventoryNodes(context) {
@@ -10,7 +11,7 @@ export default function buildInventoryNodes(context) {
       lines.push(
         nodeLine(
           `interface_${recordIndex}_${interfaceIndex}`,
-          interfaceLabel(networkInterface, context),
+          interfaceLabel(networkInterface, interfaceState(networkInterface, context)),
         ),
       );
     });
