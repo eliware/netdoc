@@ -4,6 +4,7 @@
 
 ### Added
 
+- Add `netdoc ansible inventory` for Ansible inventory exports.
 - Add a NAS target to the Knit deployment checks.
 
 ### Changed

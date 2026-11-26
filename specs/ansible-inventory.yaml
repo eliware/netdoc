@@ -1,0 +1,47 @@
+name: Ansible dynamic inventory
+commands:
+  - Run `netdoc ansible inventory --list` to print the complete inventory as JSON.
+  - Run `netdoc ansible inventory --host NAME` to print one host's variables as JSON.
+  - Set `NETDOC_INVENTORY_PATH` to a NetDoc YAML file or inventory directory.
+  - Require `NETDOC_INVENTORY_PATH` for inventory requests.
+validation:
+  - Validate the complete selected inventory before each request returns data.
+  - Do not return incomplete host data when validation fails.
+  - Write one JSON document to standard output after an inventory request passes.
+  - Write diagnostics to standard error and print no JSON after a failed request.
+hosts:
+  - Create Ansible hosts from `physical-machine` and `virtual-machine` records only.
+  - Use each machine's `name` as its inventory hostname when the name is unique, ignoring case.
+  - When names collide, append an underscore and the record's NetDoc `id` to each hostname.
+  - Report invalid inventory data when a colliding record has no `id`.
+  - Report invalid inventory data when generated hostnames collide with a hostname.
+  - Set `ansible_host` to the machine name only when that name is unique.
+  - Omit `ansible_host` for colliding names so users can define an explicit override.
+  - Do not select a connection address from an interface.
+  - Map `username` to `ansible_user` when the field exists.
+  - Include `netdoc_id` as a decimal string when the record has an ID.
+  - Include `netdoc_name` and `netdoc_kind` for every host.
+  - Include `netdoc_roles` and `netdoc_operating_system` when those fields exist.
+  - Preserve the operating system object's `name` and optional `version` fields.
+  - >-
+    Do not expose interfaces, addresses, DNS names, hardware, notes, credentials, keys, or other
+    fields.
+groups:
+  - Include `_meta.hostvars` in every `--list` response.
+  - Add physical machines to `netdoc_physical_machine`.
+  - Add virtual machines to `netdoc_virtual_machine`.
+  - Add machines with operating systems to `netdoc_os_<name>_<version>` groups.
+  - Omit the version suffix when an operating system has no version.
+  - Add one `netdoc_role_<role>` group for every recorded role.
+  - >-
+    Normalize group values by lowercasing them and replacing each run of non-ASCII letters
+    and digits with one underscore.
+  - Remove leading and trailing underscores from normalized group values.
+  - Report invalid inventory data when distinct values produce the same group name.
+  - Do not emit `all` or `ungrouped` groups.
+errors:
+  - Return code `1` for invalid inventory data.
+  - Return code `2` for invalid arguments, missing paths, or setup errors.
+  - Return an empty JSON object and code `0` for an unknown `--host` name.
+  - Print usage and return code `0` for `netdoc --help`.
+  - Print the package version and return code `0` for `netdoc --version`.

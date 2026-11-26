@@ -24,7 +24,7 @@ Git-versioned inventory for network infrastructure and systems, with YAML schema
 
 ## Features
 
-NetDoc validates YAML, reports date freshness, and prints topology graphs and Snowflake IDs.
+NetDoc validates YAML, reports date freshness, prints topology graphs and Snowflake IDs, and exports machine records for Ansible.
 
 ## Requirements
 
@@ -63,7 +63,7 @@ Do not add credentials, keys, secrets, or private data to inventory files.
 
 ## Configuration
 
-NetDoc has no runtime settings or environment variables.
+Set `NETDOC_INVENTORY_PATH` when you run `netdoc ansible inventory`.
 
 ## Operations
 
@@ -81,6 +81,8 @@ NetDoc reads inventory and prints results. It does not change files or connect t
 | `netdoc report <path> --freshness --max-age-days DAYS` | Report object dates and age.              |
 | `netdoc graph <path> --format mermaid`                 | Print inventory topology as Mermaid text. |
 | `netdoc --generate-id [-n COUNT]`                      | Print one or more Snowflake IDs.          |
+| `netdoc ansible inventory --list`                      | Print a validated Ansible inventory.      |
+| `netdoc ansible inventory --host NAME`                 | Print one host's Ansible variables.       |
 
 Read the [CLI guide](docs/cli-guide.md) for option defaults, errors, and command details.
 

@@ -1,6 +1,6 @@
 # NetDoc CLI Guide
 
-Use this guide to install NetDoc, check inventory YAML, and print Snowflake IDs.
+Use this guide to install NetDoc, check inventory YAML, export Ansible inventory, and print Snowflake IDs.
 
 ## Purpose and limits
 
@@ -13,7 +13,8 @@ NetDoc supports physical machines, virtual machines, network devices, network se
 - Use Node.js 26 or later to run NetDoc.
 - Use npm to install the package.
 - Use a terminal with access to the npm registry for installation.
-- Set no environment variables. NetDoc has no runtime settings.
+- Set `NETDOC_INVENTORY_PATH` only when you export inventory for Ansible.
+- Install Ansible separately when you use Ansible commands.
 
 ## Install and check the command
 
@@ -68,6 +69,8 @@ Run those scripts with `npm run` and their script names.
 | `netdoc graph <path> --format mermaid`                 | Print inventory topology as Mermaid.              |
 | `netdoc --generate-id`                                 | Print one Snowflake ID.                           |
 | `netdoc --generate-id -n COUNT`                        | Print COUNT Snowflake IDs.                        |
+| `netdoc ansible inventory --list`                      | Print a validated Ansible inventory as JSON.      |
+| `netdoc ansible inventory --host NAME`                 | Print one host's variables as JSON.               |
 
 Run one command at a time. Replace `<path>` with a YAML file or directory. Set `COUNT` to an integer from 1 through 1000.
 
@@ -176,6 +179,48 @@ netdoc --generate-id -n 3
 NetDoc prints one integer on each line. It does not read inventory files or check if an ID is in use.
 Run validation after you add an ID. The validator checks that each ID is unique across the inventory.
 NetDoc gets the shared Snowflake ID generator from `@eliware/common`.
+
+### Export inventory for Ansible
+
+Set `NETDOC_INVENTORY_PATH` to a NetDoc YAML file or inventory directory.
+The command validates the complete inventory before it returns data.
+
+In PowerShell, set the inventory path:
+
+```powershell
+$env:NETDOC_INVENTORY_PATH = "C:\path\to\inventory"
+```
+
+Inspect the inventory with Ansible:
+
+```sh
+netdoc ansible inventory --list > ansible-inventory.json
+ansible-inventory -i ansible-inventory.json --list
+```
+
+Inspect one host directly:
+
+```sh
+netdoc ansible inventory --host nas
+```
+
+Save the JSON output, then use it with a playbook:
+
+```sh
+ansible-playbook -i ansible-inventory.json playbook.yml
+```
+
+The command uses each machine name as its inventory hostname.
+It uses the name as `ansible_host` only when no other machine has that name.
+It does not select an interface address.
+It maps `username` to `ansible_user` and exposes selected NetDoc machine fields.
+It groups machines by type, operating system, and role.
+Read the [Ansible inventory specification](../specs/ansible-inventory.yaml) for exact mappings.
+
+The command writes diagnostics to standard error and prints no JSON when it fails.
+Exit code `1` means the inventory data is invalid.
+Exit code `2` means the arguments, path, or setup are invalid.
+An unknown `--host` name returns `{}` and exit code `0`.
 
 ## Inventory format
 

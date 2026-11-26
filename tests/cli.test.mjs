@@ -5,6 +5,7 @@ const handlers = () => ({
   validate: jest.fn(() => 0),
   report: jest.fn(() => 0),
   graph: jest.fn(() => 0),
+  ansible: jest.fn(() => 0),
   generateIds: jest.fn(() => 0),
 });
 
@@ -12,7 +13,7 @@ test.each([{ args: [] }, { args: ["--help"] }])("shows usage", ({ args }) => {
   const write = jest.fn();
   expect(runCli(args, { ...handlers(), version: "11.0.0", write })).toBe(0);
   expect(write).toHaveBeenCalledWith(
-    "Usage: netdoc [--help] [--version] | validate <path> [--format text|json] | report <path> --freshness --max-age-days DAYS | graph <path> --format mermaid | --generate-id [-n COUNT]",
+    "Usage: netdoc [--help] [--version] | validate <path> [--format text|json] | report <path> --freshness --max-age-days DAYS | graph <path> --format mermaid | ansible inventory [--list|--host NAME] | --generate-id [-n COUNT]",
   );
 });
 
@@ -42,6 +43,12 @@ test("forwards report and graph arguments to their commands", () => {
   );
   expect(commands.report).toHaveBeenCalledWith(["inventory", "--freshness"]);
   expect(commands.graph).toHaveBeenCalledWith(["inventory", "--format", "mermaid"]);
+});
+
+test("forwards Ansible inventory arguments to its command", () => {
+  const commands = handlers();
+  expect(runCli(["ansible", "inventory", "--list"], { ...commands, version: "1" })).toBe(0);
+  expect(commands.ansible).toHaveBeenCalledWith(["inventory", "--list"]);
 });
 
 test("reports unknown commands and returns the usage error code", () => {

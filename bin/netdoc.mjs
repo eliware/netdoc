@@ -5,6 +5,7 @@ import generateIds from "../src/snowflake.mjs";
 import validateInventory from "../src/validation/command.mjs";
 import reportInventoryFreshness from "../src/report/command.mjs";
 import graphInventory from "../src/graph/command.mjs";
+import runAnsibleInventory from "../src/ansible-inventory.mjs";
 
 process.exitCode = runCli(process.argv.slice(2), {
   version: packageJson.version,
@@ -12,5 +13,6 @@ process.exitCode = runCli(process.argv.slice(2), {
   validate: (args) => validateInventory(args),
   report: (args) => reportInventoryFreshness(args),
   graph: (args) => graphInventory(args),
+  ansible: (args) => runAnsibleInventory(args),
   generateIds: (args) => generateIds(args, { write: (text) => process.stdout.write(`${text}\n`) }),
 });
