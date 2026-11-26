@@ -1,5 +1,12 @@
 # Release Notes
 
+## 15.2.1 — 2026-11-25
+
+### Changed
+
+- Refresh `@types/node` to 26.6.11 in the lockfile.
+- Set the package version to 15.2.1.
+
 ## 15.2.0 — 2026-11-25
 
 ### Added
