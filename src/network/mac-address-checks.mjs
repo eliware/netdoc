@@ -1,5 +1,5 @@
 import createDiagnostic from "../diagnostics.mjs";
-import normalizeMacAddress from "../normalize-mac-address.mjs";
+import normalizeMacAddress from "./address/mac-normalization.mjs";
 
 export default function checkMac(
   networkInterface,
