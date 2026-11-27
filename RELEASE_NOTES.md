@@ -4,14 +4,21 @@
 
 ### Added
 
-- Record declared application names and network endpoints on physical and virtual machines.
-- Add Ansible application groups and expose each machine's declared application bindings.
-- Validate application names, duplicates, addresses, protocols, ports, and descriptions.
+- Record declared applications and network listeners on physical and virtual machines.
+- Add Ansible application groups and expose application names and listeners as host variables.
+- Validate application names, duplicate names, listener addresses, ports, protocols, and descriptions.
 
 ### Changed
 
 - Document application inventory fields and Ansible output.
-- Set the package version to 15.2.2 and refresh the dependency lockfile.
+- Refine repository guidance and keep detailed command instructions in the CLI guide.
+- Move MAC address normalization and wireless profile checks into focused modules.
+- Set the package version to 15.2.2 and refresh locked dependency versions.
+
+### Fixed
+
+- Report repeated MAC and overlapping IP addresses on segments inferred from wireless client profiles.
+- Keep conflicted address ranges in validation so later overlapping assignments also fail.
 
 ## 15.2.1 — 2026-11-25
 
