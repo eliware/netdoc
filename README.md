@@ -24,75 +24,63 @@ Git-versioned inventory for network infrastructure and systems, with YAML schema
 
 ## Features
 
-NetDoc validates YAML, reports date freshness, prints topology graphs and Snowflake IDs, and exports machine records for Ansible.
+NetDoc checks YAML inventory against schemas and cross-record rules. It reports recorded dates, prints Mermaid topology, generates Snowflake IDs, and exports machine inventory for Ansible.
 
 ## Requirements
 
 - Node.js 26 or later.
-- npm to install the package and run repository checks.
+- npm for package installation and repository checks.
+- Ansible for playbook use of exported inventory.
 
 ## Setup
 
-Install the public package:
+Install the public package with npm:
 
 ```sh
 npm install --global @eliware/netdoc
 ```
 
-The package includes the `netdoc` command, source, schemas, and user guide. Only approved releases publish versions to npm.
+The package provides the `netdoc` command and includes its source, schemas, and user documentation. Approved releases publish package versions to npm.
 
 ## Usage
 
-Run `netdoc --help` to list commands. Read the [CLI guide](docs/cli-guide.md) for command details and the [release notes](RELEASE_NOTES.md) for version history.
+Run `netdoc --help` to view command syntax. Read the [CLI guide](docs/cli-guide.md) for installation, inventory format, command options, examples, validation results, and troubleshooting. See [release notes](RELEASE_NOTES.md) for version changes.
 
 ## Development
 
-Read [AGENTS.md](AGENTS.md), the [documentation index](docs/README.md), and the [specification index](specs/README.md) before you change files.
+Read [AGENTS.md](AGENTS.md), the [documentation index](docs/README.md), and the [specification index](specs/README.md) before making changes.
 
 ## Testing
 
-Run `npm ci` to install locked dependencies. Run `npm test` for repository checks and test coverage.
+Run `npm ci` to install the locked dependencies. Run `npm test` for repository validation.
 
 ## Troubleshooting
 
-If a command fails, read its error and correct the named path, option, or YAML value.
+Read the command error and correct the named path, option, or YAML value. See the [CLI guide](docs/cli-guide.md#troubleshooting) for common problems.
 
 ## Security
 
-Do not add credentials, keys, secrets, or private data to inventory files.
+Keep credentials, keys, secrets, and private data out of inventory files and Git.
 
 ## Configuration
 
-Pass an inventory file or directory path to commands that read inventory.
+NetDoc has no environment configuration. Pass an inventory file or directory path to commands that read inventory.
 
 ## Operations
 
-NetDoc reads inventory and prints results. It does not change files or connect to devices.
+NetDoc reads inventory and prints results. It does not change inventory files, connect to devices, or test live network state.
 
 ## Commands
 
-| Command                                                | Result                                    |
-| ------------------------------------------------------ | ----------------------------------------- |
-| `netdoc --help`                                        | List commands.                            |
-| `netdoc --version`                                     | Print the package version.                |
-| `netdoc validate <path>`                               | Check YAML files and print text results.  |
-| `netdoc validate <path> --format text`                 | Print validation results as text.         |
-| `netdoc validate <path> --format json`                 | Check YAML files and print JSON results.  |
-| `netdoc report <path> --freshness --max-age-days DAYS` | Report object dates and age.              |
-| `netdoc graph <path> --format mermaid`                 | Print inventory topology as Mermaid text. |
-| `netdoc --generate-id [-n COUNT]`                      | Print one or more Snowflake IDs.          |
-| `netdoc ansible <path> --list`                         | Print a validated Ansible inventory.      |
-| `netdoc ansible <path> --host NAME`                    | Print one host's Ansible variables.       |
-
-Read the [CLI guide](docs/cli-guide.md) for option defaults, errors, and command details.
+NetDoc provides validation, freshness reports, topology graphs, ID generation, and Ansible inventory commands. Read the [CLI guide](docs/cli-guide.md#commands) for exact syntax and examples.
 
 ## Exit codes
 
-| Code | Meaning                                                     |
-| ---- | ----------------------------------------------------------- |
-| `0`  | The command completed.                                      |
-| `1`  | YAML data failed a check.                                   |
-| `2`  | Invalid command or path, or NetDoc cannot load its schemas. |
+| Code | Meaning                                                                     |
+| ---- | --------------------------------------------------------------------------- |
+| `0`  | The command completed successfully.                                         |
+| `1`  | Inventory data failed a check.                                              |
+| `2`  | The command, option, or path is invalid, or NetDoc cannot load its schemas. |
 
 ## Support
 
