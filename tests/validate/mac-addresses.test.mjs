@@ -41,3 +41,33 @@ test("finds duplicate radio MAC addresses on their broadcast segments", () => {
   }));
   expect(validateMacAddresses(records, entities)).toHaveLength(1);
 });
+
+test("finds duplicate client MAC addresses on profile segments", () => {
+  const segment = { kind: "network-segment", record: { data: {} } };
+  const accessPoint = {
+    kind: "network-device",
+    record: {
+      data: {
+        interfaces: [{ wireless: { broadcasts: [{ wirelessNetworkId: 3n, segmentId: 1n }] } }],
+      },
+    },
+  };
+  const entities = new Map([
+    [1n, segment],
+    [2n, accessPoint],
+  ]);
+  const records = ["a", "b"].map((name, index) => ({
+    file: `${name}.yaml`,
+    data: {
+      id: BigInt(index + 3),
+      interfaces: [
+        {
+          macAddress: "AA:BB:CC:DD:EE:FF",
+          wireless: { role: "client", profiles: [{ wirelessNetworkId: 3n, accessPointId: 2n }] },
+        },
+      ],
+    },
+  }));
+
+  expect(validateMacAddresses(records, entities)).toHaveLength(1);
+});

@@ -17,6 +17,12 @@ test("validates the required access point role on wireless profiles", () => {
   ]);
   expect(
     validateWirelessAccessPointRoles(
+      record,
+      new Map([[2n, { kind: "network-device", record: { data: {} } }]]),
+    ),
+  ).toHaveLength(1);
+  expect(
+    validateWirelessAccessPointRoles(
       { file: "empty.yaml", data: { interfaces: [{ wireless: { profiles: [{}] } }] } },
       new Map(),
     ),

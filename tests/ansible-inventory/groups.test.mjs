@@ -66,3 +66,14 @@ test("rejects distinct operating systems that normalize to the same group", () =
     ]),
   ).toThrow('Distinct values produce the same Ansible group name "netdoc_os_debian_gnu_linux".');
 });
+
+test("replaces non-ASCII letters with underscores during normalization", () => {
+  expect(
+    buildAnsibleGroups([
+      { hostname: "one", machine: { kind: "physical-machine", roles: ["Róuter"] } },
+    ]),
+  ).toEqual({
+    netdoc_physical_machine: { hosts: ["one"] },
+    netdoc_role_r_uter: { hosts: ["one"] },
+  });
+});

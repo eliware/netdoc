@@ -1,4 +1,4 @@
-import createDiagnostic from "../../diagnostics.mjs";
+import createDiagnostic from "../../../diagnostics.mjs";
 
 export default function validateWirelessProfileUniqueness(record) {
   const diagnostics = [];

@@ -1,4 +1,5 @@
 import checkMac from "../network/mac-address-checks.mjs";
+import wirelessProfileSegmentIds from "./wireless/profile/segment-ids.mjs";
 
 export default function validateMacAddresses(records, entitiesById) {
   const diagnostics = [];
@@ -8,6 +9,7 @@ export default function validateMacAddresses(records, entitiesById) {
       const segmentIds = new Set([
         networkInterface.segmentId,
         ...(networkInterface.wireless?.broadcasts ?? []).map(({ segmentId }) => segmentId),
+        ...wirelessProfileSegmentIds(networkInterface, entitiesById),
       ]);
       for (const segmentId of segmentIds) {
         const segment = entitiesById.get(segmentId);

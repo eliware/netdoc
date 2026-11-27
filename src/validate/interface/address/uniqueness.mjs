@@ -3,6 +3,7 @@ import isAllowedDhcpSharing from "./dhcp/sharing.mjs";
 import isAllowedVirtualSharing from "./virtual-sharing.mjs";
 import addressRange from "../../../network/address/ranges.mjs";
 import rangesOverlap from "../../../network/address/ranges-overlap.mjs";
+import wirelessProfileSegmentIds from "../../wireless/profile/segment-ids.mjs";
 
 export default function validateInterfaceAddressUniqueness(
   networkInterface,
@@ -51,26 +52,9 @@ export default function validateInterfaceAddressUniqueness(
           "Use a unique address on this segment or mark a shared address as virtual.",
         ),
       );
-      continue;
     }
     current.push(currentAssignment);
     assignments.set(key, current);
   }
   return diagnostics;
-}
-
-function wirelessProfileSegmentIds(networkInterface, entitiesById) {
-  const wirelessNetworkIds = new Set(
-    (networkInterface.wireless?.profiles ?? []).map(({ wirelessNetworkId }) => wirelessNetworkId),
-  );
-  const segmentIds = [];
-  for (const entity of entitiesById?.values() ?? []) {
-    for (const item of entity.record?.data.interfaces ?? []) {
-      for (const broadcast of item.wireless?.broadcasts ?? []) {
-        if (wirelessNetworkIds.has(broadcast.wirelessNetworkId))
-          segmentIds.push(broadcast.segmentId);
-      }
-    }
-  }
-  return segmentIds;
 }

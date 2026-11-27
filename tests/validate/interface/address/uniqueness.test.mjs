@@ -116,3 +116,31 @@ test("checks broadcast segments when an interface has no direct segment", () => 
     )[0].message,
   ).toContain("is in use at first.yaml");
 });
+
+test("records a conflicting range so later overlapping ranges also fail", () => {
+  const assignments = new Map();
+  const record = (file, id) => ({ file, data: { id: BigInt(id) } });
+  const check = (networkInterface, cidr, file, id, prefix, integer) =>
+    validateInterfaceAddressUniqueness(
+      networkInterface,
+      { assignment: "static" },
+      { version: 4, bits: 32, prefix, integer: BigInt(integer) },
+      cidr,
+      record(file, id),
+      "/interfaces/0/addresses/0/cidr",
+      assignments,
+    );
+
+  expect(check({ segmentId: 1n }, "192.0.2.128/25", "first.yaml", 1, 25, 3221226112)).toEqual([]);
+  expect(
+    check(
+      { segmentId: 1n, wireless: { broadcasts: [{ segmentId: 2n }] } },
+      "192.0.2.0/24",
+      "second.yaml",
+      2,
+      24,
+      3221225984,
+    ),
+  ).toHaveLength(1);
+  expect(check({ segmentId: 1n }, "192.0.2.1", "third.yaml", 3, 32, 3221225985)).toHaveLength(1);
+});

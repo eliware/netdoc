@@ -58,3 +58,22 @@ test("links broader routes to matching segments", () => {
   ]);
   expect(elements.nodes).toEqual([]);
 });
+
+test("does not link a narrower route to a segment that contains it", () => {
+  const router = { data: { kind: "network-device", networking: {} } };
+  const segment = {
+    data: { kind: "network-segment", ipNetworks: [{ cidr: "192.0.2.0/24" }] },
+  };
+  const context = createGraphContext([router, segment]);
+  const elements = buildRouteElements(
+    0,
+    "object_0",
+    { routing: { staticRoutes: [{ destination: "192.0.2.0/25", nextHop: "192.0.2.1" }] } },
+    context,
+  );
+
+  expect(elements.edges).toEqual(["object_0 -->|static route| route_0_0"]);
+  expect(elements.nodes).toEqual([
+    'route_0_0["Static route<br/>192.0.2.0/25<br/>Next hop: 192.0.2.1"]',
+  ]);
+});

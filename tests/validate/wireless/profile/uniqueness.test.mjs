@@ -1,5 +1,5 @@
 import { expect, test } from "@jest/globals";
-import validateWirelessProfileUniqueness from "../../../src/validate/wireless/profile-uniqueness.mjs";
+import validateWirelessProfileUniqueness from "../../../../src/validate/wireless/profile/uniqueness.mjs";
 
 test("allows distinct client profiles and reports repeated wireless network IDs", () => {
   const diagnostics = validateWirelessProfileUniqueness({
