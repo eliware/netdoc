@@ -21,10 +21,13 @@ hosts:
   - Include `netdoc_id` as a decimal string when the record has an ID.
   - Include `netdoc_name` and `netdoc_kind` for every host.
   - Include `netdoc_roles` and `netdoc_operating_system` when those fields exist.
+  - Include `netdoc_applications` when the machine record declares applications.
+  - Preserve each application name and its bind list in `netdoc_applications`.
   - Preserve the operating system object's `name` and optional `version` fields.
   - >-
-    Do not expose interfaces, addresses, DNS names, hardware, notes, credentials, keys, or other
-    fields.
+    Do not expose interfaces, addresses, DNS names, hardware, notes, credentials, keys,
+    application settings, or package dependency lists.
+  - Include only application names and bind IPs, ports, protocols, and descriptions.
 groups:
   - Include `_meta.hostvars` in every `--list` response.
   - Add physical machines to `netdoc_physical_machine`.
@@ -32,6 +35,7 @@ groups:
   - Add machines with operating systems to `netdoc_os_<name>_<version>` groups.
   - Omit the version suffix when an operating system has no version.
   - Add one `netdoc_role_<role>` group for every recorded role.
+  - Add one `netdoc_application_<name>` group for every declared application.
   - >-
     Normalize group values by lowercasing them and replacing each run of non-ASCII letters
     and digits with one underscore.

@@ -1,5 +1,6 @@
 # Object Schemas
 
+- [Application schema](applications.schema.yaml)
 - [Common schema](common.schema.yaml)
 - [Hardware and storage schema](hardware-storage.schema.yaml)
 - [Interface and Layer 2 composition schema](interface-switch.schema.yaml)

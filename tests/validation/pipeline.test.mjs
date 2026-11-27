@@ -77,3 +77,17 @@ test("does not report references to schema-invalid records as missing", () => {
     }),
   ).toEqual(initialDiagnostics);
 });
+
+test("reports duplicate application names during validation", () => {
+  const record = {
+    file: "machine.yaml",
+    data: { applications: [{ name: "nginx" }, { name: "nginx" }] },
+  };
+  expect(
+    runValidationPipeline({
+      inventoryRecords: [record],
+      validRecords: [record],
+      initialDiagnostics: [],
+    }),
+  ).toEqual([expect.objectContaining({ pointer: "/applications/1/name" })]);
+});

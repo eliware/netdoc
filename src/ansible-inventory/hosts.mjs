@@ -35,6 +35,11 @@ function hostVariables(machine, uniqueName) {
   if (machine.username !== undefined) variables.ansible_user = machine.username;
   if (machine.id !== undefined) variables.netdoc_id = String(machine.id);
   if (machine.roles !== undefined) variables.netdoc_roles = machine.roles;
+  if (machine.applications !== undefined)
+    variables.netdoc_applications = machine.applications.map(({ name, binds }) => ({
+      name,
+      binds: binds.map(({ ip, port, proto, description }) => ({ ip, port, proto, description })),
+    }));
   if (machine.operatingSystem !== undefined) {
     variables.netdoc_operating_system = {
       name: machine.operatingSystem.name,

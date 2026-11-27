@@ -210,6 +210,11 @@ It maps `username` to `ansible_user` and exposes selected NetDoc machine fields.
 It groups machines by type, operating system, and role.
 Read the [Ansible inventory specification](../specs/ansible-inventory.yaml) for exact mappings.
 
+It adds each declared application to a `netdoc_application_<name>` group.
+Host variables include `netdoc_applications` with each application name and listener list.
+If a machine has no `applications` field, NetDoc omits its application groups and variable.
+NetDoc does not include application settings or package dependency lists.
+
 The command writes diagnostics to standard error and prints no JSON when it fails.
 Exit code `1` means the inventory data is invalid.
 Exit code `2` means the arguments, path, or setup are invalid.
@@ -257,6 +262,28 @@ Read the [schema index](../specs/schema/README.md) for all supported fields and 
 ### Machine fields
 
 Physical and virtual machines can record roles, an SSH username, hardware, storage, and an operating system. Do not store passwords or keys.
+
+#### Declared applications
+
+Physical and virtual machine records can include an optional `applications` list.
+Use a stable lowercase name with letters, numbers, and single hyphens, such as `nodejs`.
+Each application needs a `binds` list.
+Use an empty list when the application has no configured network listeners.
+Each listener entry needs an IPv4 or IPv6 address, a port from 1 through 65,535, a `tcp` or `udp` protocol, and a description.
+Wildcard addresses such as `0.0.0.0` and `::` are valid.
+
+```yaml
+applications:
+  - name: nodejs
+    binds:
+      - ip: 127.0.0.1
+        port: 8080
+        proto: tcp
+        description: http
+```
+
+These records describe declared applications and configured listeners. They do not report a full package list or scan live network ports.
+Do not store application settings, credentials, or package dependency lists.
 
 Hardware fields cover the maker, model, CPU, memory, and GPUs. Storage fields cover disks, RAID, partitions, file systems, mounts, and SMB or NFS shares.
 Use `B`, `KB`, `MB`, `GB`, `TB`, `KiB`, `MiB`, `GiB`, or `TiB` for storage capacity.

@@ -1,5 +1,18 @@
 # Release Notes
 
+## 15.2.2 — 2026-11-27
+
+### Added
+
+- Record declared application names and network endpoints on physical and virtual machines.
+- Add Ansible application groups and expose each machine's declared application bindings.
+- Validate application names, duplicates, addresses, protocols, ports, and descriptions.
+
+### Changed
+
+- Document application inventory fields and Ansible output.
+- Set the package version to 15.2.2 and refresh the dependency lockfile.
+
 ## 15.2.1 — 2026-11-25
 
 ### Added

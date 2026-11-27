@@ -25,6 +25,10 @@ properties:
     $ref: common.schema.yaml#/$defs/storage
   operatingSystem:
     $ref: common.schema.yaml#/$defs/operatingSystem
+  applications:
+    type: array
+    items:
+      $ref: applications.schema.yaml#/$defs/application
   interfaces:
     type: array
     items:

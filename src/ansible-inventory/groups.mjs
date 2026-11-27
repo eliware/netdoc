@@ -5,6 +5,13 @@ export default function buildAnsibleGroups(hosts) {
     addOperatingSystemGroup(groups, machine.operatingSystem, hostname);
     for (const role of machine.roles ?? [])
       addGroup(groups, `netdoc_role_${normalizeGroupValue(role)}`, role, hostname);
+    for (const application of machine.applications ?? [])
+      addGroup(
+        groups,
+        `netdoc_application_${normalizeGroupValue(application.name)}`,
+        application.name,
+        hostname,
+      );
   }
   return Object.fromEntries([...groups].map(([name, group]) => [name, { hosts: group.hosts }]));
 }

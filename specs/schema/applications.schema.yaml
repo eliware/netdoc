@@ -1,0 +1,37 @@
+version: "11.0"
+$schema: https://json-schema.org/draft/2020-12/schema
+$defs:
+  application:
+    type: object
+    properties:
+      name:
+        type: string
+        minLength: 1
+        pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        description: A stable, lowercase application name.
+      binds:
+        type: array
+        items:
+          $ref: "#/$defs/bind"
+    required: [name, binds]
+    additionalProperties: false
+  bind:
+    type: object
+    properties:
+      ip:
+        oneOf:
+          - type: string
+            format: ipv4
+          - type: string
+            format: ipv6
+      port:
+        type: integer
+        minimum: 1
+        maximum: 65535
+      proto:
+        enum: [tcp, udp]
+      description:
+        type: string
+        minLength: 1
+    required: [ip, port, proto, description]
+    additionalProperties: false

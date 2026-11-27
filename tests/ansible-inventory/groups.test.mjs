@@ -9,6 +9,7 @@ test("builds normalized groups from machine types, systems, and roles", () => {
         machine: {
           kind: "physical-machine",
           roles: ["Storage Host", "backup"],
+          applications: [{ name: "nodejs", binds: [] }],
           operatingSystem: { name: "Debian GNU/Linux", version: "12.8" },
         },
       },
@@ -17,6 +18,7 @@ test("builds normalized groups from machine types, systems, and roles", () => {
         machine: {
           kind: "physical-machine",
           roles: ["Storage Host"],
+          applications: [{ name: "node-js", binds: [] }],
           operatingSystem: { name: "Debian GNU/Linux", version: "12.8" },
         },
       },
@@ -34,6 +36,8 @@ test("builds normalized groups from machine types, systems, and roles", () => {
     netdoc_os_debian_gnu_linux_12_8: { hosts: ["NAS", "nas backup"] },
     netdoc_role_storage_host: { hosts: ["NAS", "nas backup"] },
     netdoc_role_backup: { hosts: ["NAS"] },
+    netdoc_application_nodejs: { hosts: ["NAS"] },
+    netdoc_application_node_js: { hosts: ["nas backup"] },
     netdoc_virtual_machine: { hosts: ["worker-1"] },
     netdoc_os_alpine_linux: { hosts: ["worker-1"] },
   });

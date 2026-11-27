@@ -1,5 +1,6 @@
 export const schemaFiles = Object.freeze([
   "common.schema.yaml",
+  "applications.schema.yaml",
   "hardware-storage.schema.yaml",
   "network-interface.schema.yaml",
   "network-interface-addresses.schema.yaml",

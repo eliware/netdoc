@@ -3,6 +3,7 @@ import { schemaFiles } from "../../src/schema/manifest.mjs";
 
 test("lists every schema file", () => {
   expect([...schemaFiles].sort()).toEqual([
+    "applications.schema.yaml",
     "common.schema.yaml",
     "hardware-storage.schema.yaml",
     "interface-switch.schema.yaml",
